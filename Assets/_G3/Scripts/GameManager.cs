@@ -122,8 +122,7 @@ public class GameManager : MonoBehaviour {
     }
 
     void ShowInput(string GameObjectName) {
-        foreach (GameObject go in uiInputs) {
-            Debug.Log(go.name);
+        foreach (GameObject go in uiInputs) {            
             if (go.name == GameObjectName) {
                 go.SetActive(true);
             }
