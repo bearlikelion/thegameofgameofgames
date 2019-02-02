@@ -8,6 +8,9 @@ using TMPro;
 
 public class GameManager : MonoBehaviour {
     
+    private int strikeCount = 0;
+    private int correctAnswers = 0;
+
     private Questions questions = new Questions();
 
     private TrueFalse currentTF;
@@ -16,18 +19,26 @@ public class GameManager : MonoBehaviour {
     private WordScramble currentWS;
     private static List<WordScramble> unansweredWS;
 
-    enum questionTypes {
+    private FillBlank currentFB;
+    private static List<FillBlank> unansweredFB;
+
+    enum categories {
         TrueFalse,
-        WordScramble
+        WordScramble,
+        FillBlank
     };
+
+    private categories categoryIs;
 
     private GameObject[] uiInputs;
 
+    [SerializeField] private InputField inputField;
     [SerializeField] private TextMeshProUGUI categoryText;
     [SerializeField] private TextMeshProUGUI questionText;
-    [SerializeField] private InputField inputField;
-    [SerializeField] private Text trueAnswerText;
-    [SerializeField] private Text falseAnswerText;
+    [SerializeField] private TextMeshProUGUI correctText;
+    [SerializeField] private TextMeshProUGUI strikeText;
+    // [SerializeField] private Text trueAnswerText;
+    // [SerializeField] private Text falseAnswerText;
     [SerializeField] private float timeBetweenQuestions = 1.0f;
 
     private void Start () {        
@@ -37,10 +48,15 @@ public class GameManager : MonoBehaviour {
         }
 
         // Word Scramble        
-        inputField.onEndEdit.AddListener(WSGuess);
+        inputField.onEndEdit.AddListener(SubmitText);
 
         if (unansweredWS == null || unansweredWS.Count == 0) {
             unansweredWS = questions.WSWords.ToList<WordScramble>();
+        }
+
+        // Fill in the blank
+        if (unansweredFB == null || unansweredFB.Count == 0) {
+            unansweredFB = questions.FBlank.ToList<FillBlank>();
         }
 
         uiInputs = GameObject.FindGameObjectsWithTag("UserInput");
@@ -50,13 +66,15 @@ public class GameManager : MonoBehaviour {
     }
 
     void SetCurrentQuestion() {
-        var typeCount = questionTypes.GetNames(typeof(questionTypes)).Length;        
-        var categoryIs = (questionTypes)Random.Range(0, typeCount);        
+        var typeCount = categories.GetNames(typeof(categories)).Length;        
+        categoryIs = (categories)Random.Range(0, typeCount);        
 
-        if (categoryIs == questionTypes.TrueFalse) {
+        if (categoryIs == categories.TrueFalse) {
             TrueorFalse();
-        } else if (categoryIs == questionTypes.WordScramble) {
+        } else if (categoryIs == categories.WordScramble) {
             WordScramble();
+        } else if (categoryIs == categories.FillBlank) {
+            FillInTheBlank();
         }
     }
 
@@ -71,20 +89,8 @@ public class GameManager : MonoBehaviour {
         questionText.text = currentTF.question;
     }
 
-    public void TFSelect (bool answer) {
-        if (currentTF.answer && answer == true) { // if currentQuestion is True and answer is True            
-            Debug.Log("Correct");
-        } else if (!currentTF.answer && !answer) { // if currentQuestion is False and answer is False            
-            Debug.Log("Correct");
-        } else { // otherwise you're wrong            
-            Debug.Log("Wrong!");
-        }
-
-        StartCoroutine(NextQuestion());
-    }
-
     void WordScramble() {
-        ShowInput("WordScramble");
+        ShowInput("TextInput");
 
         int randomWSIndex = Random.Range(0, unansweredWS.Count);
         currentWS = unansweredWS[randomWSIndex];
@@ -96,7 +102,72 @@ public class GameManager : MonoBehaviour {
         questionText.text = scrambledText;
     }
 
-    string ScrambleWord (string word) {
+    void FillInTheBlank() {
+        ShowInput("TextInput");
+
+        int randomFBIndex = Random.Range(0, unansweredFB.Count);
+        currentFB = unansweredFB[randomFBIndex];
+        unansweredFB.Remove(currentFB);
+
+        categoryText.text = currentFB.Category;        
+        questionText.text = currentFB.question;
+    }
+
+    public void TFSelect (bool answer) {
+        if (currentTF.answer && answer == true) { // if currentQuestion is True and answer is True            
+            CorrectAnswer();
+        } else if (!currentTF.answer && !answer) { // if currentQuestion is False and answer is False            
+            CorrectAnswer();
+        } else { // otherwise you're wrong            
+            WrongAnswer();
+        }
+
+        StartCoroutine(NextQuestion());
+    }
+
+    public void SubmitText(string guess) {
+        if (categoryIs == categories.WordScramble) {
+            if (guess == currentWS.word) CorrectAnswer();
+            else WrongAnswer();            
+        } else if (categoryIs == categories.FillBlank) {
+            if (guess == currentFB.answer) CorrectAnswer();
+            else WrongAnswer();                            
+        }
+    }
+
+    private void CorrectAnswer() {
+        Debug.Log("Correct");
+        correctAnswers++;        
+        correctText.text = "Correct: " + correctAnswers.ToString();
+        StartCoroutine(NextQuestion());
+    }
+
+    private void WrongAnswer() {
+        Debug.Log("Wrong!");
+        strikeCount++;
+
+        string strikes = "";
+
+        for (int i = 0; i < strikeCount; i++) {
+            strikes += " [X] ";
+        }
+
+        strikeText.text = strikes;
+
+        if (inputField.text != "") {
+            inputField.text = "";
+        }
+    }
+
+    private void ShowInput(string GameObjectName) {
+        foreach (GameObject go in uiInputs) {            
+            if (go.name == GameObjectName) {
+                go.SetActive(true);
+            }
+        }
+    }
+
+    private string ScrambleWord (string word) {
         char[] chars = new char[word.Length];
         System.Random rand = new System.Random(10000);        
         int index = 0;
@@ -109,38 +180,17 @@ public class GameManager : MonoBehaviour {
         }        
         return new string(chars);
     }
-
-    public void WSGuess(string guess) {            
-        if (guess == currentWS.word) {
-            Debug.Log("Correct!");
-
-            inputField.text = "";
-            StartCoroutine(NextQuestion());
-        } else {
-            Debug.Log("Wrong!");
-        }
-    }
-
-    void ShowInput(string GameObjectName) {
-        foreach (GameObject go in uiInputs) {            
-            if (go.name == GameObjectName) {
-                go.SetActive(true);
-            }
-        }
-    }
-
-    void HideInputs() {
+    private void HideInputs() {
         var Inputs = GameObject.FindGameObjectsWithTag("UserInput");
         foreach (var input in Inputs) {
             input.SetActive(false);
         }
     }
 
-    IEnumerator NextQuestion() {        
+    IEnumerator NextQuestion() {
         yield return new WaitForSeconds(timeBetweenQuestions);
 
         HideInputs();        
-        SetCurrentQuestion();
-        // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SetCurrentQuestion();        
     }
 }

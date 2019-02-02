@@ -25,19 +25,48 @@ public class Questions {
     // Word Scramble
     public WordScramble[] WSWords = {
         new WordScramble {
-            word = "cowbell"
+            word = "that"
         },
         new WordScramble {
-            word = "marshmellow"
+            word = "foot"
         },
         new WordScramble {
-            word = "pillow"
+            word = "light"
         },
         new WordScramble {
-            word = "headache"
+            word = "space"
         },
         new WordScramble {
-            word = "orange"
+            word = "hair"
+        },
+        new WordScramble {
+            word = "milk"
+        },
+        new WordScramble {
+            word = "cat"
+        },
+        new WordScramble {
+            word = "coat"
+        },
+    };
+
+    // Fill in the Blank
+    public FillBlank[] FBlank = {
+        new FillBlank {
+            question = "Stone ____ Steve Austin",
+            answer = "cold"
+        },
+        new FillBlank {
+            question = "Cat in the ____",
+            answer = "hat"
+        },       
+        new FillBlank {
+            question = "A spoonful of _____",
+            answer = "sugar"
+        }, 
+        new FillBlank {
+            question = "Cow jumped over the ____",
+            answer = "moon"
         },
     };
 }
