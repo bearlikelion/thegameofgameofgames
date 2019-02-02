@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using TMPro;
 
 public class GameManager : MonoBehaviour {
     
@@ -28,28 +27,38 @@ public class GameManager : MonoBehaviour {
         FillBlank
     };
 
-    private categories categoryIs;
+    enum colors {
+        black,
+        blue,
+        cyan,
+        gray,
+        green,
+        grey,
+        magenta,
+        red,        
+        yellow
+    }    
 
+    private categories categoryIs;
     private GameObject[] uiInputs;
 
+    [SerializeField] private float timeBetweenQuestions = 0f;
     [SerializeField] private InputField inputField;
-    [SerializeField] private TextMeshProUGUI categoryText;
-    [SerializeField] private TextMeshProUGUI questionText;
-    [SerializeField] private TextMeshProUGUI correctText;
-    [SerializeField] private TextMeshProUGUI strikeText;
-    // [SerializeField] private Text trueAnswerText;
-    // [SerializeField] private Text falseAnswerText;
-    [SerializeField] private float timeBetweenQuestions = 1.0f;
+    [SerializeField] private Text categoryText;
+    [SerializeField] private Text questionText;
+    [SerializeField] private Text correctText;
+    [SerializeField] private Text strikeText;   
 
-    private void Start () {        
+    private void Start () {
+        inputField.onEndEdit.AddListener(SubmitText);
+        strikeText.text = "";
+
         // Load True False Questions
         if (unansweredTF == null || unansweredTF.Count == 0) {
             unansweredTF = questions.TFQuestions.ToList<TrueFalse>();
         }
 
-        // Word Scramble        
-        inputField.onEndEdit.AddListener(SubmitText);
-
+        // Word Scramble               
         if (unansweredWS == null || unansweredWS.Count == 0) {
             unansweredWS = questions.WSWords.ToList<WordScramble>();
         }
@@ -66,8 +75,42 @@ public class GameManager : MonoBehaviour {
     }
 
     void SetCurrentQuestion() {
-        var typeCount = categories.GetNames(typeof(categories)).Length;        
-        categoryIs = (categories)Random.Range(0, typeCount);        
+        var typeCount = categories.GetNames(typeof(categories)).Length;
+        var backgrounds = colors.GetNames(typeof(colors)).Length;
+
+        categoryIs = (categories)Random.Range(0, typeCount);
+        var bgColor = (colors)Random.Range(0, backgrounds);
+
+        // TODO: Fix background colors to shades of purple, add background textures
+        switch (bgColor) {
+            case colors.black:
+                Camera.main.backgroundColor = Color.black;
+                break;
+            case colors.blue:
+                Camera.main.backgroundColor = Color.blue;
+                break;
+            case colors.cyan:
+                Camera.main.backgroundColor = Color.cyan;
+                break;
+            case colors.gray:
+                Camera.main.backgroundColor = Color.gray;
+                break;
+            case colors.green:
+                Camera.main.backgroundColor = Color.green;
+                break;
+            case colors.grey:
+                Camera.main.backgroundColor = Color.grey;
+                break;
+            case colors.magenta:
+                Camera.main.backgroundColor = Color.magenta;
+                break;
+            case colors.red:
+                Camera.main.backgroundColor = Color.red;
+                break;
+            case colors.yellow:
+                Camera.main.backgroundColor = Color.yellow;
+                break;
+        }
 
         if (categoryIs == categories.TrueFalse) {
             TrueorFalse();
@@ -75,6 +118,63 @@ public class GameManager : MonoBehaviour {
             WordScramble();
         } else if (categoryIs == categories.FillBlank) {
             FillInTheBlank();
+        }        
+    }
+
+    // TODO: Correct answer sound
+    // TODO: Correct answer text
+    private void CorrectAnswer () {
+        Debug.Log("Correct");
+        correctAnswers++;
+        correctText.text = "Correct: " + correctAnswers.ToString();
+
+        StartCoroutine(NextQuestion());
+    }
+
+    // TODO: Wrong answer sound
+    // TODO: Wrong answer text
+    private void WrongAnswer () {
+        Debug.Log("Wrong!");
+        strikeCount++;
+
+        string strikes = "";
+        for (int i = 0; i < strikeCount; i++) {
+            strikes += " [X] ";
+        }
+        strikeText.text = strikes;
+
+        StartCoroutine(NextQuestion());
+    }
+
+    public void TFSelect (bool answer) {
+        if (currentTF.answer && answer) CorrectAnswer();
+        else if (!currentTF.answer && !answer) CorrectAnswer();
+        else WrongAnswer();
+    }
+
+    public void SubmitText (string guess) {
+        if (categoryIs == categories.WordScramble) {
+            if (guess == currentWS.word) CorrectAnswer();
+            else WrongAnswer();
+        } else if (categoryIs == categories.FillBlank) {
+            if (guess == currentFB.answer) CorrectAnswer();
+            else WrongAnswer();
+        }
+
+        if (inputField.text != "") inputField.text = "";
+    }
+
+    private void HideInputs () {
+        foreach (var input in uiInputs) {
+            input.SetActive(false);
+        }
+    }
+
+    private void ShowInput (string GameObjectName) {
+        foreach (GameObject go in uiInputs) {
+            if (go.name == GameObjectName) {
+                go.SetActive(true);
+            }
         }
     }
 
@@ -113,84 +213,25 @@ public class GameManager : MonoBehaviour {
         questionText.text = currentFB.question;
     }
 
-    public void TFSelect (bool answer) {
-        if (currentTF.answer && answer == true) { // if currentQuestion is True and answer is True            
-            CorrectAnswer();
-        } else if (!currentTF.answer && !answer) { // if currentQuestion is False and answer is False            
-            CorrectAnswer();
-        } else { // otherwise you're wrong            
-            WrongAnswer();
-        }
-
-        StartCoroutine(NextQuestion());
-    }
-
-    public void SubmitText(string guess) {
-        if (categoryIs == categories.WordScramble) {
-            if (guess == currentWS.word) CorrectAnswer();
-            else WrongAnswer();            
-        } else if (categoryIs == categories.FillBlank) {
-            if (guess == currentFB.answer) CorrectAnswer();
-            else WrongAnswer();                            
-        }
-    }
-
-    private void CorrectAnswer() {
-        Debug.Log("Correct");
-        correctAnswers++;        
-        correctText.text = "Correct: " + correctAnswers.ToString();
-        StartCoroutine(NextQuestion());
-    }
-
-    private void WrongAnswer() {
-        Debug.Log("Wrong!");
-        strikeCount++;
-
-        string strikes = "";
-
-        for (int i = 0; i < strikeCount; i++) {
-            strikes += " [X] ";
-        }
-
-        strikeText.text = strikes;
-
-        if (inputField.text != "") {
-            inputField.text = "";
-        }
-    }
-
-    private void ShowInput(string GameObjectName) {
-        foreach (GameObject go in uiInputs) {            
-            if (go.name == GameObjectName) {
-                go.SetActive(true);
-            }
-        }
-    }
-
     private string ScrambleWord (string word) {
+        int index = 0;
         char[] chars = new char[word.Length];
         System.Random rand = new System.Random(10000);        
-        int index = 0;
-        while (word.Length > 0) { // Get a random number between 0 and the length of the word. 
-            int next = rand.Next(0, word.Length - 1); // Take the character from the random position 
-                                                      //and add to our char array. 
-            chars[index] = word[next];                // Remove the character from the word. 
+        
+        while (word.Length > 0) {
+            int next = rand.Next(0, word.Length - 1);
+            chars[index] = word[next];
             word = word.Substring(0, next) + word.Substring(next + 1);
             ++index;
-        }        
+        }
         return new string(chars);
     }
-    private void HideInputs() {
-        var Inputs = GameObject.FindGameObjectsWithTag("UserInput");
-        foreach (var input in Inputs) {
-            input.SetActive(false);
-        }
-    }
 
-    IEnumerator NextQuestion() {
-        yield return new WaitForSeconds(timeBetweenQuestions);
-
+    IEnumerator NextQuestion() {       
         HideInputs();        
-        SetCurrentQuestion();        
+        SetCurrentQuestion();
+
+        // yield return new WaitForSeconds(timeBetweenQuestions);
+        yield break;
     }
 }
