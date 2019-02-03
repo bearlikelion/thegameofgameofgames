@@ -6,9 +6,10 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
-    
+        
     private int strikeCount = 0;
     private int correctAnswers = 0;
+    private float timeLeft = 10.0f;
 
     private Questions questions = new Questions();
 
@@ -30,11 +31,11 @@ public class GameManager : MonoBehaviour {
     private categories categoryIs;
     private GameObject[] uiInputs;
 
-    [SerializeField] private float timeBetweenQuestions = 0f;
+    [SerializeField] private float timeBetweenQuestions = 1.0f;
     [SerializeField] private InputField inputField;
     [SerializeField] private Text categoryText;
     [SerializeField] private Text questionText;
-    [SerializeField] private Text correctText;
+    [SerializeField] private Text timerText;
     [SerializeField] private Text strikeText;   
 
     private void Start () {
@@ -62,9 +63,18 @@ public class GameManager : MonoBehaviour {
         SetCurrentQuestion();        
     }
 
+    private void Update() {
+        timeLeft -= Time.deltaTime;
+        if ( timeLeft < 0 )
+        {
+            GameOver();
+        }
+    }
+
     void SetCurrentQuestion() {
         var typeCount = categories.GetNames(typeof(categories)).Length;
-        categoryIs = (categories)Random.Range(0, typeCount);
+        categoryIs = (categories)Random.Range(0, typeCount);        
+        timeLeft = 10.0f;
 
         if (categoryIs == categories.TrueFalse) {
             TrueorFalse();
@@ -72,7 +82,9 @@ public class GameManager : MonoBehaviour {
             WordScramble();
         } else if (categoryIs == categories.FillBlank) {
             FillInTheBlank();
-        }        
+        }      
+
+        StartCoroutine(StartTimer());  
     }
 
     // TODO: Correct answer sound
@@ -136,11 +148,15 @@ public class GameManager : MonoBehaviour {
         ShowInput("TrueorFalse");
 
         int randomTFIndex = Random.Range(0, unansweredTF.Count);
-        currentTF = unansweredTF[randomTFIndex];
-        unansweredTF.Remove(currentTF);
+        if (unansweredTF[randomTFIndex] != null) {
+            currentTF = unansweredTF[randomTFIndex];
+            unansweredTF.Remove(currentTF);
 
-        categoryText.text = currentTF.Category;
-        questionText.text = currentTF.question;
+            categoryText.text = currentTF.Category;
+            questionText.text = currentTF.question;
+        } else {
+            SetCurrentQuestion();
+        }        
     }
 
     void WordScramble() {
@@ -182,10 +198,13 @@ public class GameManager : MonoBehaviour {
     }
 
     IEnumerator NextQuestion() {       
-        HideInputs();        
+        HideInputs(); 
         SetCurrentQuestion();
 
-        // yield return new WaitForSeconds(timeBetweenQuestions);
+        yield return new WaitForSeconds(timeBetweenQuestions);        
+    }
+
+    IEnumerator StartTimer() {
         yield break;
     }
 }

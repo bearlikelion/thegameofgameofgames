@@ -25,12 +25,6 @@ public class Questions {
     // Word Scramble
     public WordScramble[] WSWords = {
         new WordScramble {
-            word = "that"
-        },
-        new WordScramble {
-            word = "foot"
-        },
-        new WordScramble {
             word = "light"
         },
         new WordScramble {
@@ -47,6 +41,36 @@ public class Questions {
         },
         new WordScramble {
             word = "coat"
+        },
+        new WordScramble {
+            word = "earth"
+        },
+        new WordScramble {
+            word = "gold"
+        },
+        new WordScramble {
+            word = "plant"
+        },
+        new WordScramble {
+            word = "rain"
+        },
+        new WordScramble {
+            word = "water"
+        },
+        new WordScramble {
+            word = "heart"
+        },
+        new WordScramble {
+            word = "cold"
+        },
+        new WordScramble {
+            word = "water"
+        },
+        new WordScramble {
+            word = "rice"
+        },
+        new WordScramble {
+            word = "bird"
         },
     };
 
