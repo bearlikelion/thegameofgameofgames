@@ -27,18 +27,6 @@ public class GameManager : MonoBehaviour {
         FillBlank
     };
 
-    enum colors {
-        black,
-        blue,
-        cyan,
-        gray,
-        green,
-        grey,
-        magenta,
-        red,        
-        yellow
-    }    
-
     private categories categoryIs;
     private GameObject[] uiInputs;
 
@@ -76,41 +64,7 @@ public class GameManager : MonoBehaviour {
 
     void SetCurrentQuestion() {
         var typeCount = categories.GetNames(typeof(categories)).Length;
-        var backgrounds = colors.GetNames(typeof(colors)).Length;
-
         categoryIs = (categories)Random.Range(0, typeCount);
-        var bgColor = (colors)Random.Range(0, backgrounds);
-
-        // TODO: Fix background colors to shades of purple, add background textures
-        switch (bgColor) {
-            case colors.black:
-                Camera.main.backgroundColor = Color.black;
-                break;
-            case colors.blue:
-                Camera.main.backgroundColor = Color.blue;
-                break;
-            case colors.cyan:
-                Camera.main.backgroundColor = Color.cyan;
-                break;
-            case colors.gray:
-                Camera.main.backgroundColor = Color.gray;
-                break;
-            case colors.green:
-                Camera.main.backgroundColor = Color.green;
-                break;
-            case colors.grey:
-                Camera.main.backgroundColor = Color.grey;
-                break;
-            case colors.magenta:
-                Camera.main.backgroundColor = Color.magenta;
-                break;
-            case colors.red:
-                Camera.main.backgroundColor = Color.red;
-                break;
-            case colors.yellow:
-                Camera.main.backgroundColor = Color.yellow;
-                break;
-        }
 
         if (categoryIs == categories.TrueFalse) {
             TrueorFalse();
