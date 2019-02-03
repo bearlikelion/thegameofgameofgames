@@ -442,8 +442,11 @@ MonoBehaviour:
   inputField: {fileID: 645304177}
   categoryText: {fileID: 620269572}
   questionText: {fileID: 911268570}
-  correctText: {fileID: 1777564787}
+  timerText: {fileID: 1777564787}
   strikeText: {fileID: 820791049}
+  wrongText: {fileID: 1284975755}
+  correctText: {fileID: 924417530}
+  timesupText: {fileID: 1617005575}
 --- !u!1 &645304175
 GameObject:
   m_ObjectHideFlags: 0
@@ -1118,7 +1121,6 @@ GameObject:
   - component: {fileID: 1217785374}
   - component: {fileID: 1217785373}
   - component: {fileID: 1217785372}
-  - component: {fileID: 1217785371}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1126,17 +1128,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1217785371
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1217785370}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ce5f4d815dec524e9360690ebf62197, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1217785372
 MonoBehaviour:
   m_ObjectHideFlags: 0

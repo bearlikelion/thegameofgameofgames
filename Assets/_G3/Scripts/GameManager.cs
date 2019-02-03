@@ -6,7 +6,9 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
-        
+            
+    private int localCategory;
+    private bool timeUp = false;
     private int strikeCount = 0;
     private int correctAnswers = 0;
     private float timeLeft = 10.0f;
@@ -21,22 +23,19 @@ public class GameManager : MonoBehaviour {
 
     private FillBlank currentFB;
     private static List<FillBlank> unansweredFB;
-
-    enum categories {
-        TrueFalse,
-        WordScramble,
-        FillBlank
-    };
-
-    private categories categoryIs;
     private GameObject[] uiInputs;
 
     [SerializeField] private float timeBetweenQuestions = 1.0f;
     [SerializeField] private InputField inputField;
     [SerializeField] private Text categoryText;
     [SerializeField] private Text questionText;
+    
     [SerializeField] private Text timerText;
     [SerializeField] private Text strikeText;   
+    
+    [SerializeField] private Text wrongText;    
+    [SerializeField] private Text correctText;
+    [SerializeField] private Text timesupText;
 
     private void Start () {
         inputField.onEndEdit.AddListener(SubmitText);
@@ -57,50 +56,77 @@ public class GameManager : MonoBehaviour {
             unansweredFB = questions.FBlank.ToList<FillBlank>();
         }
 
-        uiInputs = GameObject.FindGameObjectsWithTag("UserInput");
+        uiInputs = GameObject.FindGameObjectsWithTag("UserInput");                        
 
         HideInputs();
         SetCurrentQuestion();        
     }
 
     private void Update() {
-        timeLeft -= Time.deltaTime;
-        if ( timeLeft < 0 )
-        {
-            GameOver();
+        timeLeft -= Time.deltaTime;        
+        if ( timeLeft < 0 && timeUp == false ) {
+            timeUp = true;
+            TimesUp();
+            timeLeft = 0;
         }
+        timerText.text = "Time Left: " + Mathf.Round(timeLeft).ToString();
     }
 
     void SetCurrentQuestion() {
-        var typeCount = categories.GetNames(typeof(categories)).Length;
-        categoryIs = (categories)Random.Range(0, typeCount);        
+        timeUp = false;
         timeLeft = 10.0f;
+        List<int> categoryList = new List<int>();
 
-        if (categoryIs == categories.TrueFalse) {
+        // TODO: 3 strikes you're out
+
+        if (unansweredFB.Count > 0) {
+            categoryList.Add(0);            
+        }
+
+        if (unansweredTF.Count > 0) {
+            categoryList.Add(1);
+        }
+
+        if (unansweredWS.Count > 0) {
+            categoryList.Add(2);
+        }
+
+        localCategory = categoryList[Random.Range(0,categoryList.Count)];
+
+        // TODO: Out of questions! -- Game Over
+
+        if (localCategory == 1) {
             TrueorFalse();
-        } else if (categoryIs == categories.WordScramble) {
+        } else if (localCategory == 2) {
             WordScramble();
-        } else if (categoryIs == categories.FillBlank) {
+        } else if (localCategory == 0) {
             FillInTheBlank();
-        }      
-
-        StartCoroutine(StartTimer());  
+        }        
     }
 
-    // TODO: Correct answer sound
-    // TODO: Correct answer text
+    private void TimesUp() {
+        Debug.Log("Times Up");
+
+        HideInputs();
+        timesupText.gameObject.SetActive(true);    
+        StartCoroutine(NextQuestion());        
+    }
+
+    // TODO: Correct answer sound    
     private void CorrectAnswer () {
         Debug.Log("Correct");
-        correctAnswers++;
-        correctText.text = "Correct: " + correctAnswers.ToString();
+        HideInputs();
+        correctText.gameObject.SetActive(true);
 
+        correctAnswers++;        
         StartCoroutine(NextQuestion());
     }
 
     // TODO: Wrong answer sound
-    // TODO: Wrong answer text
     private void WrongAnswer () {
         Debug.Log("Wrong!");
+        HideInputs();
+        wrongText.gameObject.SetActive(true);
         strikeCount++;
 
         string strikes = "";
@@ -108,7 +134,6 @@ public class GameManager : MonoBehaviour {
             strikes += " [X] ";
         }
         strikeText.text = strikes;
-
         StartCoroutine(NextQuestion());
     }
 
@@ -119,10 +144,10 @@ public class GameManager : MonoBehaviour {
     }
 
     public void SubmitText (string guess) {
-        if (categoryIs == categories.WordScramble) {
+        if (localCategory == 2) {
             if (guess == currentWS.word) CorrectAnswer();
             else WrongAnswer();
-        } else if (categoryIs == categories.FillBlank) {
+        } else if (localCategory == 0) {
             if (guess == currentFB.answer) CorrectAnswer();
             else WrongAnswer();
         }
@@ -134,6 +159,10 @@ public class GameManager : MonoBehaviour {
         foreach (var input in uiInputs) {
             input.SetActive(false);
         }
+
+        wrongText.gameObject.SetActive(false);
+        correctText.gameObject.SetActive(false);
+        timesupText.gameObject.SetActive(false);
     }
 
     private void ShowInput (string GameObjectName) {
@@ -148,15 +177,11 @@ public class GameManager : MonoBehaviour {
         ShowInput("TrueorFalse");
 
         int randomTFIndex = Random.Range(0, unansweredTF.Count);
-        if (unansweredTF[randomTFIndex] != null) {
-            currentTF = unansweredTF[randomTFIndex];
-            unansweredTF.Remove(currentTF);
+        currentTF = unansweredTF[randomTFIndex];
+        unansweredTF.Remove(currentTF);
 
-            categoryText.text = currentTF.Category;
-            questionText.text = currentTF.question;
-        } else {
-            SetCurrentQuestion();
-        }        
+        categoryText.text = currentTF.Category;
+        questionText.text = currentTF.question;     
     }
 
     void WordScramble() {
@@ -198,13 +223,8 @@ public class GameManager : MonoBehaviour {
     }
 
     IEnumerator NextQuestion() {       
+        yield return new WaitForSeconds(timeBetweenQuestions);
         HideInputs(); 
-        SetCurrentQuestion();
-
-        yield return new WaitForSeconds(timeBetweenQuestions);        
-    }
-
-    IEnumerator StartTimer() {
-        yield break;
+        SetCurrentQuestion();           
     }
 }

@@ -20,6 +20,22 @@ public class Questions {
             question = "If you cut an earthworm in half, both halves can regrow their body",
             answer = false
         },
+        new TrueFalse {
+            question = "Adults have fewer bones than babies do",
+            answer = true
+        },
+        new TrueFalse {
+            question = "Birds are dinosaurs",
+            answer = true
+        },
+        new TrueFalse {
+            question = "Popeye’s nephews are named Peepeye, Poopeye, Pipeye and Pupeye",
+            answer = true
+        },
+        new TrueFalse {
+            question = "A slug’s blood is green",
+            answer = true
+        },
     };
 
     // Word Scramble

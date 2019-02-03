@@ -9,9 +9,6 @@ public class SceneControl : MonoBehaviour {
 	public int timeToRise = 3;
 	public Text introText;
 
-	private Camera cam;
-	private GameObject ellen;
-
 	private GameObject menu;
 	private GameObject intro;
 	private GameObject ready;
@@ -25,17 +22,13 @@ public class SceneControl : MonoBehaviour {
 	private bool showStarted = false;
 	private bool readyCheck = false;
 
-	private void Start() {
-		cam = Camera.main;
-		
+	private void Start() {	
 		menu = GameObject.Find("Canvas/Menu");
 		intro = GameObject.Find("Canvas/IntroText");
 		ready = GameObject.Find("Canvas/ReadyCheck");
 
 		intro.SetActive(false);
 		ready.SetActive(false);
-
-		ellen = GameObject.Find("EllenDeCube");		
 		risingPlatform = GameObject.Find("Platform/Rising");
 	}
 
