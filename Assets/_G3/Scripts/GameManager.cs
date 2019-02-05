@@ -9,16 +9,15 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour {
 
     bool timeUp = false;
-    int localCategory;
-    int strikeCount = 0;
-    int correctAnswers = 0;
+    int localCategory;    
     float timeLeft = 10.0f;
     float timeBetweenQuestions = 1.0f;
 
+    public int strikeCount = 0;
+    public int correctAnswers = 0;    
     public AudioClip timerClip, wrongClip, correctClip, timeupClip;
 
     private AudioSource audioSource;
-
     private Questions questions = new Questions();
 
     private FillBlank currentFB;
@@ -55,13 +54,19 @@ public class GameManager : MonoBehaviour {
     }
 
     private void Update () {
-        timeLeft -= Time.deltaTime;
-        if (timeLeft > 0) {
-            timerText.text = "Time Left: " + Mathf.Round(timeLeft).ToString();
-        } else if (timeLeft < 0 && timeUp == false) {
-            timerText.text = "Time Left: 0";
-            TimesUp();
+        if (timerText != null) {
+            timeLeft -= Time.deltaTime;
+            if (timeLeft > 0) {
+                timerText.text = "Time Left: " + Mathf.Round(timeLeft).ToString();
+            } else if (timeLeft < 0 && timeUp == false) {
+                timerText.text = "Time Left: 0";
+                TimesUp();
+            }
         }
+    }
+
+    void GameOver() {        
+        SceneManager.LoadScene("Credits");
     }
 
     void SetCurrentQuestion () {
@@ -70,28 +75,26 @@ public class GameManager : MonoBehaviour {
         List<int> categoryList = new List<int>();
 
         if (strikeCount >= 3) {
-            // TODO: 3 strikes you're out
-            Debug.Log("YOU LOSE");
+            audioSource.Stop();
+            GameOver();
         }
 
         if (unansweredFB != null && unansweredFB.Count > 0) categoryList.Add(0);
         if (unansweredTF != null && unansweredTF.Count > 0) categoryList.Add(1);
         if (unansweredWS != null && unansweredWS.Count > 0) categoryList.Add(2);
-
-        // TODO: Start countdown sound
-        audioSource.PlayOneShot(timerClip, 0.25f);
-
+                    
         if (categoryList.Count > 0) {
             categoryText.text = "";
             questionText.text = "";
+            audioSource.PlayOneShot(timerClip, 0.25f);
 
             localCategory = categoryList[Random.Range(0, categoryList.Count)];
             if (localCategory == 0) FillInTheBlank();
             else if (localCategory == 1) TrueorFalse();
             else if (localCategory == 2) WordScramble();
         } else {
-            // TODO: Out of questions! -- Game Over
-            Debug.Log("Out of questions!");
+            audioSource.Stop();
+            GameOver();
         }
     }
 
@@ -130,15 +133,17 @@ public class GameManager : MonoBehaviour {
             strikes += " [X] ";
         }
 
-        strikeText.text = strikes;
+        strikeText.text = strikes;        
         strikeGO.transform.localPosition = Vector3.zero;
-        strikeGO.transform.DOScale(1, 1).OnComplete(moveStrikes);       
-        StartCoroutine(NextQuestion());
+        strikeGO.transform.DOScale(1, 1).OnComplete(moveStrikes);               
     }
 
     void moveStrikes() {
-        strikeGO.transform.DOScale(new Vector3(0.25f, 0.25f, 0.25f), 1);
-        strikeGO.transform.DOLocalMove(new Vector3(290f, 215f, 0f), 1);
+        if (strikeCount < 3) {
+            strikeGO.transform.DOScale(new Vector3(0.25f, 0.25f, 0.25f), 1);
+            strikeGO.transform.DOLocalMove(new Vector3(290f, 215f, 0f), 1);
+        }
+        StartCoroutine(NextQuestion());
     }
 
     void TrueorFalse () {
@@ -154,6 +159,8 @@ public class GameManager : MonoBehaviour {
 
     void WordScramble () {
         ShowInput("TextInput");
+        inputField.Select();
+        inputField.ActivateInputField();
 
         int randomWSIndex = Random.Range(0, unansweredWS.Count);
         currentWS = unansweredWS[randomWSIndex];
@@ -167,6 +174,8 @@ public class GameManager : MonoBehaviour {
 
     void FillInTheBlank () {
         ShowInput("TextInput");
+        inputField.Select();
+        inputField.ActivateInputField();
 
         int randomFBIndex = Random.Range(0, unansweredFB.Count);
         currentFB = unansweredFB[randomFBIndex];
@@ -187,16 +196,17 @@ public class GameManager : MonoBehaviour {
     }
 
     public void SubmitText (string guess) {
-        if (localCategory == 2) {
-            if (guess == currentWS.word) CorrectAnswer();
-            else WrongAnswer();
-            questionText.DOText(currentWS.word, 1);
-        } else if (localCategory == 0) {
-            if (guess == currentFB.answer) CorrectAnswer();
-            else WrongAnswer();
+        if (guess != "") {
+            if (localCategory == 2) {
+                if (guess == currentWS.word) CorrectAnswer();
+                else WrongAnswer();
+                questionText.DOText(currentWS.word, 1);
+            } else if (localCategory == 0) {
+                if (guess == currentFB.answer) CorrectAnswer();
+                else WrongAnswer();
+            }
+            inputField.text = "";
         }
-
-        if (inputField.text != "") inputField.text = "";
     }
 
     private void HideInputs () {

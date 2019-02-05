@@ -417,6 +417,7 @@ GameObject:
   - component: {fileID: 621610186}
   - component: {fileID: 621610187}
   - component: {fileID: 621610188}
+  - component: {fileID: 621610189}
   m_Layer: 0
   m_Name: '--- GameManager ---'
   m_TagString: Untagged
@@ -448,6 +449,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f395c789cd177e84ca44bda648d2ab99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  strikeCount: 0
+  correctAnswers: 0
   timerClip: {fileID: 8300000, guid: 43d394703eaf7a243b2fcf376fbe2870, type: 3}
   wrongClip: {fileID: 8300000, guid: 7391cbef755f6e5438368e343c54308c, type: 3}
   correctClip: {fileID: 8300000, guid: b8414f6fe40ad3d40be2a922cfb1387e, type: 3}
@@ -540,6 +543,17 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+--- !u!114 &621610189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 621610185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c317e0d39e6c3345812eef2ea2cc79b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &645304175
 GameObject:
   m_ObjectHideFlags: 0
