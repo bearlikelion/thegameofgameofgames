@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneControl : MonoBehaviour {
 
-	public int timeToRise = 3;
+	public float timeToRise = 1.5f;
 	public Text introText;
 
 	private GameObject menu;
@@ -69,7 +69,7 @@ public class SceneControl : MonoBehaviour {
 	IEnumerator StartInto() {
 		yield return new WaitForSeconds(timeToRise);
 		intro.SetActive(true);
-		StartCoroutine(AnimateText("Hi! I'm Ellen DeCube, and welcome to my Game of Game of Games! Today we are going play some trivia games for a chance to win... bragging rights.    Are you ready?!"));		
+		StartCoroutine(AnimateText("Hi! I'm Ellen DeCube, and welcome to my Game of Game of Games! Today we are going play some trivia games for a chance to win... bragging rights. Are you ready?!"));		
 	}
 
 	IEnumerator AnimateText(string strComplete){
