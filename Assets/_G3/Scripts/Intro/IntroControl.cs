@@ -6,76 +6,54 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class IntroControl : MonoBehaviour {
-	
-	public Text introText;
+    public GameObject ellen;
+    public RectTransform ready1, ready2;
+	private GameObject menu, intro, risingPlatform;
+    private Text text;
 
-	private GameObject menu;
-	private GameObject intro;
-	private GameObject ready;
+    public bool showStarted = false;	
 
-	private GameObject risingPlatform;
-
-	float t;
-
-    public bool showStarted = false;
-	private bool readyCheck = false;
-
-	private void Start() {	
-		menu = GameObject.Find("Canvas/Menu");
-		intro = GameObject.Find("Canvas/IntroText");
-		ready = GameObject.Find("Canvas/ReadyCheck");
+	private void Start() {
+        menu = GameObject.Find("Canvas/Menu");
+        intro = GameObject.Find("Canvas/IntroText");        
         risingPlatform = GameObject.Find("Platform/Rising");
+        text = GameObject.Find("Canvas/IntroText/Text").GetComponent<Text>();
 
-        if (intro != null) intro.SetActive(false);
-        if (ready != null) ready.SetActive(false);   
-        
         if (showStarted) {
             BeginShow();
         }
 	}
 
-	private void Update() {
-		if (readyCheck) {
-			if (ready.activeSelf == false) {
-				ready.SetActive(true);
-			}
-		}
-	}
-
 	// TODO: Game Intro Music
-	public void BeginShow() {
-		Debug.Log("Lets start the show!");
-
-        risingPlatform.transform.DOMoveY(3, 1.5f);
-        menu.SetActive(false);                
-
+	private void BeginShow() {
+        Debug.Log("Lets start the show!");                
         showStarted = true;
-		StartCoroutine(StartInto());
+        menu.SetActive(false);
+        ellen.transform.DOShakeRotation(5, new Vector3(0, 90, 0), 1);
+        ellen.transform.DOPunchPosition(new Vector3(0.5f, 0, 0), 5, 3);
+        risingPlatform.transform.DOMoveY(3, 5f).OnComplete(IntroPanel);        
+    }
+
+    private void IntroPanel() {
+        intro.transform.DOScale(Vector3.one, 1).OnComplete(IntroText);        
+    }
+
+    private void IntroText() {        
+        string intro = "Hi! I'm Ellen DeCube, and welcome to my Game of Game of Games! Today we are going play some trivia games for a chance to win... <i>bragging rights</i>. <b>Are you ready?!</b>";
+        text.DOText(intro, 7).OnComplete(ReadyCheck);
+    }
+
+    private void ReadyCheck() {
+        ready1.DOLocalMoveX(-150, 1);
+        ready2.DOLocalMoveX(150, 1);
+    }
+	
+	private void StartQuestions() {
+        text.text = "";
+        text.DOText("Perfect! Let's get to it!", 3).OnComplete(LoadQuestionScene);	
 	}
 
-	// TODO: Show Credits
-	public void ShowCredits() {
-		Debug.Log("Show credits");
-	}
-
-	public void StartQuestions() {
-		SceneManager.LoadScene("Questions");
-	}
-
-	IEnumerator StartInto() {
-		yield return new WaitForSeconds(1.5f);
-		intro.SetActive(true);
-		StartCoroutine(AnimateText("Hi! I'm Ellen DeCube, and welcome to my Game of Game of Games! Today we are going play some trivia games for a chance to win... bragging rights. Are you ready?!"));		
-	}
-
-	IEnumerator AnimateText(string strComplete){
-		int i = 0;
-		introText.text = "";
-		while( i < strComplete.Length ){
-			introText.text += strComplete[i++];
-			yield return new WaitForSeconds(0.025F);
-		}
-
-		readyCheck = true;
-	}
+    private void LoadQuestionScene() {        
+        SceneManager.LoadScene("Questions");
+    }
 }

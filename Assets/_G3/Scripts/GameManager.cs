@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using DG.Tweening;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,33 +8,34 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
-    private int localCategory;
-    private bool timeUp = false;
-    private int strikeCount = 0;
-    private int correctAnswers = 0;
-    private float timeLeft = 10.0f;
+    bool timeUp = false;
+    int localCategory;
+    int strikeCount = 0;
+    int correctAnswers = 0;
+    float timeLeft = 10.0f;
+    float timeBetweenQuestions = 1.0f;
+
+    public AudioClip timerClip, wrongClip, correctClip, timeupClip;
+
+    private AudioSource audioSource;
 
     private Questions questions = new Questions();
 
+    private FillBlank currentFB;
     private TrueFalse currentTF;
-    private static List<TrueFalse> unansweredTF;
-
     private WordScramble currentWS;
+    private static List<FillBlank> unansweredFB;
+    private static List<TrueFalse> unansweredTF;
     private static List<WordScramble> unansweredWS;
 
-    private FillBlank currentFB;
-    private static List<FillBlank> unansweredFB;
     private GameObject[] uiInputs;
 
-    [SerializeField] private float timeBetweenQuestions = 1.0f;
+    [SerializeField] private GameObject strikeGO;
     [SerializeField] private InputField inputField;
     [SerializeField] private Text categoryText;
     [SerializeField] private Text questionText;
-
     [SerializeField] private Text timerText;
     [SerializeField] private Text strikeText;
-
-    [SerializeField] private Text wrongText;
     [SerializeField] private Text correctText;
     [SerializeField] private Text timesupText;
 
@@ -41,24 +43,14 @@ public class GameManager : MonoBehaviour {
         inputField.onEndEdit.AddListener(SubmitText);
         strikeText.text = "";
 
-        // Load True False Questions
-        if (unansweredTF == null || unansweredTF.Count == 0) {
-            unansweredTF = questions.TFQuestions.ToList<TrueFalse>();
-        }
-
-        // Word Scramble               
-        if (unansweredWS == null || unansweredWS.Count == 0) {
-            unansweredWS = questions.WSWords.ToList<WordScramble>();
-        }
-
-        // Fill in the blank
-        if (unansweredFB == null || unansweredFB.Count == 0) {
-            unansweredFB = questions.FBlank.ToList<FillBlank>();
-        }
+        // if (unansweredTF == null || unansweredTF.Count == 0) unansweredTF = questions.TFQuestions.ToList<TrueFalse>(); // True False
+        // if (unansweredWS == null || unansweredWS.Count == 0) unansweredWS = questions.WSWords.ToList<WordScramble>(); // Word Scramble
+        if (unansweredFB == null || unansweredFB.Count == 0) unansweredFB = questions.FBlank.ToList<FillBlank>(); // Fill in the blank
 
         uiInputs = GameObject.FindGameObjectsWithTag("UserInput");
+        audioSource = GetComponent<AudioSource>();
 
-        HideInputs();
+        HideInputs();        
         SetCurrentQuestion();
     }
 
@@ -77,70 +69,111 @@ public class GameManager : MonoBehaviour {
         timeLeft = 10.0f;
         List<int> categoryList = new List<int>();
 
-        // TODO: 3 strikes you're out
         if (strikeCount >= 3) {
-
+            // TODO: 3 strikes you're out
+            Debug.Log("YOU LOSE");
         }
 
-        if (unansweredFB.Count > 0) {
-            categoryList.Add(0);
-        }
+        if (unansweredFB != null && unansweredFB.Count > 0) categoryList.Add(0);
+        if (unansweredTF != null && unansweredTF.Count > 0) categoryList.Add(1);
+        if (unansweredWS != null && unansweredWS.Count > 0) categoryList.Add(2);
 
-        if (unansweredTF.Count > 0) {
-            categoryList.Add(1);
-        }
+        // TODO: Start countdown sound
+        audioSource.PlayOneShot(timerClip, 0.25f);
 
-        if (unansweredWS.Count > 0) {
-            categoryList.Add(2);
-        }
+        if (categoryList.Count > 0) {
+            categoryText.text = "";
+            questionText.text = "";
 
-        localCategory = categoryList[Random.Range(0, categoryList.Count)];
-
-        // TODO: Out of questions! -- Game Over
-
-        if (localCategory == 1) {
-            TrueorFalse();
-        } else if (localCategory == 2) {
-            WordScramble();
-        } else if (localCategory == 0) {
-            FillInTheBlank();
+            localCategory = categoryList[Random.Range(0, categoryList.Count)];
+            if (localCategory == 0) FillInTheBlank();
+            else if (localCategory == 1) TrueorFalse();
+            else if (localCategory == 2) WordScramble();
+        } else {
+            // TODO: Out of questions! -- Game Over
+            Debug.Log("Out of questions!");
         }
     }
 
+    // Times up
     private void TimesUp () {
-        Debug.Log("Times Up");
+        audioSource.Stop();
+        audioSource.PlayOneShot(timeupClip, 0.25f);
 
         timeUp = true;
         HideInputs();
-        timesupText.gameObject.SetActive(true); // TODO: Results Tween
+        timesupText.transform.DOScale(1, 1);
         StartCoroutine(NextQuestion());
     }
 
-    // TODO: Correct answer sound    
-    private void CorrectAnswer () {
-        Debug.Log("Correct");
+    // Correct answer   
+    private void CorrectAnswer () {   
+        audioSource.Stop();
+        audioSource.PlayOneShot(correctClip, 0.25f);
 
         HideInputs();
-        correctAnswers++;
-        correctText.gameObject.SetActive(true); // TODO: Results Tween
+        correctAnswers++;        
+        correctText.transform.DOScale(1, 1);
         StartCoroutine(NextQuestion());
     }
 
-    // TODO: Wrong answer sound
-    private void WrongAnswer () {
-        Debug.Log("Wrong!");
+    // Wrong answer
+    private void WrongAnswer () {       
+        audioSource.Stop();
+        audioSource.PlayOneShot(wrongClip, 0.25f);
 
         HideInputs();
-        strikeCount++;
-        wrongText.gameObject.SetActive(true); // TODO: Results Tween        
+        strikeCount++;            
 
         string strikes = "";
         for (int i = 0; i < strikeCount; i++) {
             strikes += " [X] ";
         }
 
-        strikeText.text = strikes; // TODO: Tween strikes form center to top left
+        strikeText.text = strikes;
+        strikeGO.transform.localPosition = Vector3.zero;
+        strikeGO.transform.DOScale(1, 1).OnComplete(moveStrikes);       
         StartCoroutine(NextQuestion());
+    }
+
+    void moveStrikes() {
+        strikeGO.transform.DOScale(new Vector3(0.25f, 0.25f, 0.25f), 1);
+        strikeGO.transform.DOLocalMove(new Vector3(290f, 215f, 0f), 1);
+    }
+
+    void TrueorFalse () {
+        ShowInput("TrueorFalse");
+
+        int randomTFIndex = Random.Range(0, unansweredTF.Count);
+        currentTF = unansweredTF[randomTFIndex];
+        unansweredTF.Remove(currentTF);
+
+        categoryText.text = currentTF.Category;
+        questionText.DOText(currentTF.question, 1);
+    }
+
+    void WordScramble () {
+        ShowInput("TextInput");
+
+        int randomWSIndex = Random.Range(0, unansweredWS.Count);
+        currentWS = unansweredWS[randomWSIndex];
+        unansweredWS.Remove(currentWS);
+
+        string scrambledText = ScrambleWord(currentWS.word);
+
+        categoryText.text = currentWS.Category;
+        questionText.DOText(scrambledText, 1);
+    }
+
+    void FillInTheBlank () {
+        ShowInput("TextInput");
+
+        int randomFBIndex = Random.Range(0, unansweredFB.Count);
+        currentFB = unansweredFB[randomFBIndex];
+        unansweredFB.Remove(currentFB);
+
+        categoryText.text = currentFB.Category;
+        questionText.DOText(currentFB.question, 1);
     }
 
     public void TFSelect (bool answer) {
@@ -157,6 +190,7 @@ public class GameManager : MonoBehaviour {
         if (localCategory == 2) {
             if (guess == currentWS.word) CorrectAnswer();
             else WrongAnswer();
+            questionText.DOText(currentWS.word, 1);
         } else if (localCategory == 0) {
             if (guess == currentFB.answer) CorrectAnswer();
             else WrongAnswer();
@@ -170,53 +204,18 @@ public class GameManager : MonoBehaviour {
             input.SetActive(false);
         }
 
-        wrongText.gameObject.SetActive(false);
-        correctText.gameObject.SetActive(false);
-        timesupText.gameObject.SetActive(false);
+        correctText.transform.localScale = Vector3.zero;
+        timesupText.transform.localScale = Vector3.zero;
     }
 
     private void ShowInput (string GameObjectName) {
         foreach (GameObject go in uiInputs) {
             if (go.name == GameObjectName) {
                 go.SetActive(true);
+                go.transform.DOScale(1, 1);                                
             }
         }
-    }
-
-    void TrueorFalse () {
-        ShowInput("TrueorFalse");
-
-        int randomTFIndex = Random.Range(0, unansweredTF.Count);
-        currentTF = unansweredTF[randomTFIndex];
-        unansweredTF.Remove(currentTF);
-
-        categoryText.text = currentTF.Category;
-        questionText.text = currentTF.question;
-    }
-
-    void WordScramble () {
-        ShowInput("TextInput");
-
-        int randomWSIndex = Random.Range(0, unansweredWS.Count);
-        currentWS = unansweredWS[randomWSIndex];
-        unansweredWS.Remove(currentWS);
-
-        string scrambledText = ScrambleWord(currentWS.word);
-
-        categoryText.text = currentWS.Category;
-        questionText.text = scrambledText;
-    }
-
-    void FillInTheBlank () {
-        ShowInput("TextInput");
-
-        int randomFBIndex = Random.Range(0, unansweredFB.Count);
-        currentFB = unansweredFB[randomFBIndex];
-        unansweredFB.Remove(currentFB);
-
-        categoryText.text = currentFB.Category;
-        questionText.text = currentFB.question;
-    }
+    }    
 
     private string ScrambleWord (string word) {
         int index = 0;

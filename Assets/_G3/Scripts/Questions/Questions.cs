@@ -53,9 +53,6 @@ public class Questions {
             word = "milk"
         },
         new WordScramble {
-            word = "cat"
-        },
-        new WordScramble {
             word = "coat"
         },
         new WordScramble {
@@ -66,9 +63,6 @@ public class Questions {
         },
         new WordScramble {
             word = "plant"
-        },
-        new WordScramble {
-            word = "rain"
         },
         new WordScramble {
             word = "water"
@@ -97,7 +91,7 @@ public class Questions {
             answer = "cold"
         },
         new FillBlank {
-            question = "Cat in the ____",
+            question = "Cat in the ___",
             answer = "hat"
         },       
         new FillBlank {
