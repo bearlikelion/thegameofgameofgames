@@ -91,11 +91,11 @@ public class Questions {
             answer = "cold"
         },
         new FillBlank {
-            question = "Cat in the ___",
+            question = "Cat in the ____",
             answer = "hat"
         },       
         new FillBlank {
-            question = "A spoonful of _____",
+            question = "A spoonful of ____",
             answer = "sugar"
         }, 
         new FillBlank {

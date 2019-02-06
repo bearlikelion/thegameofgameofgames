@@ -29,8 +29,8 @@ public class IntroControl : MonoBehaviour {
         Debug.Log("Lets start the show!");                
         showStarted = true;
         menu.SetActive(false);
-        ellen.transform.DOShakeRotation(5, new Vector3(0, 90, 0), 1);
-        ellen.transform.DOPunchPosition(new Vector3(0.5f, 0, 0), 5, 3);
+        ellen.transform.DOShakeRotation(25f, new Vector3(0, 90, 0), 1).SetLoops(-1, LoopType.Yoyo).SetSpeedBased();
+        ellen.transform.DOPunchPosition(new Vector3(0.5f, 0, 0), 25f, 3).SetSpeedBased().SetLoops(-1, LoopType.Yoyo);
         risingPlatform.transform.DOMoveY(3, 5f).OnComplete(IntroPanel);        
     }
 
@@ -40,7 +40,7 @@ public class IntroControl : MonoBehaviour {
 
     private void IntroText() {        
         string intro = "Hi! I'm Ellen DeCube, and welcome to my Game of Game of Games! Today we are going play some trivia games for a chance to win... <i>bragging rights</i>. <b>Are you ready?!</b>";
-        text.DOText(intro, 7).OnComplete(ReadyCheck);
+        text.DOText(intro, 25f).SetEase(Ease.Unset).SetSpeedBased().OnComplete(ReadyCheck);
     }
 
     private void ReadyCheck() {
@@ -50,7 +50,7 @@ public class IntroControl : MonoBehaviour {
 	
 	private void StartQuestions() {
         text.text = "";
-        text.DOText("Perfect! Let's get to it!", 3).OnComplete(LoadQuestionScene);	
+        text.DOText("Perfect! Let's get to it!", 25f).SetEase(Ease.Unset).SetSpeedBased().OnComplete(LoadQuestionScene);	
 	}
 
     private void LoadQuestionScene() {        

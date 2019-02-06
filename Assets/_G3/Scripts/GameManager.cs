@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour {
     bool timeUp = false;
     int localCategory;    
     float timeLeft = 10.0f;
-    float timeBetweenQuestions = 1.0f;
+    float timeBetweenQuestions = 1.5f;
 
     public int strikeCount = 0;
     public int correctAnswers = 0;    
@@ -42,8 +42,8 @@ public class GameManager : MonoBehaviour {
         inputField.onEndEdit.AddListener(SubmitText);
         strikeText.text = "";
 
-        // if (unansweredTF == null || unansweredTF.Count == 0) unansweredTF = questions.TFQuestions.ToList<TrueFalse>(); // True False
-        // if (unansweredWS == null || unansweredWS.Count == 0) unansweredWS = questions.WSWords.ToList<WordScramble>(); // Word Scramble
+        if (unansweredTF == null || unansweredTF.Count == 0) unansweredTF = questions.TFQuestions.ToList<TrueFalse>(); // True False
+        if (unansweredWS == null || unansweredWS.Count == 0) unansweredWS = questions.WSWords.ToList<WordScramble>(); // Word Scramble
         if (unansweredFB == null || unansweredFB.Count == 0) unansweredFB = questions.FBlank.ToList<FillBlank>(); // Fill in the blank
 
         uiInputs = GameObject.FindGameObjectsWithTag("UserInput");
@@ -57,15 +57,25 @@ public class GameManager : MonoBehaviour {
         if (timerText != null) {
             timeLeft -= Time.deltaTime;
             if (timeLeft > 0) {
-                timerText.text = "Time Left: " + Mathf.Round(timeLeft).ToString();
+                timerText.text = Mathf.Round(timeLeft).ToString();
             } else if (timeLeft < 0 && timeUp == false) {
-                timerText.text = "Time Left: 0";
+                timerText.text = "0";
                 TimesUp();
             }
         }
+
+        if (localCategory == 1) {
+            if (Input.GetKeyDown(KeyCode.F)) TFSelect(false);
+            if (Input.GetKeyDown(KeyCode.T)) TFSelect(true);            
+        }        
     }
 
-    void GameOver() {        
+    public void StopSound() {
+        // STOP THIS DAMN TICKING NOISE
+        audioSource.Stop();
+    }
+
+    void GameOver() {
         SceneManager.LoadScene("Credits");
     }
 
@@ -103,8 +113,8 @@ public class GameManager : MonoBehaviour {
         audioSource.Stop();
         audioSource.PlayOneShot(timeupClip, 0.25f);
 
-        timeUp = true;
         HideInputs();
+        timeUp = true;        
         timesupText.transform.DOScale(1, 1);
         StartCoroutine(NextQuestion());
     }
@@ -195,15 +205,20 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public void SubmitText (string guess) {
+    public void SubmitText (string guess) {        
         if (guess != "") {
+            guess = guess.ToLower();
+
             if (localCategory == 2) {
                 if (guess == currentWS.word) CorrectAnswer();
                 else WrongAnswer();
+
                 questionText.DOText(currentWS.word, 1);
             } else if (localCategory == 0) {
                 if (guess == currentFB.answer) CorrectAnswer();
                 else WrongAnswer();
+                string replace = "____";                
+                questionText.DOText(currentFB.question.Replace(replace, "<i>"+currentFB.answer+"</i>"), 1);
             }
             inputField.text = "";
         }
