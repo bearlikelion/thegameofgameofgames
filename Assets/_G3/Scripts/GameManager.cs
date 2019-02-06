@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
+    public MultipleChoice[] multipleChoice;
+
     bool timeUp = false;
     int localCategory;    
     float timeLeft = 10.0f;
