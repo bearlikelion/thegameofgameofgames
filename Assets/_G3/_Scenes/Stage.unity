@@ -726,7 +726,7 @@ MonoBehaviour:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 18
     m_FontStyle: 0
-    m_BestFit: 1
+    m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 40
     m_Alignment: 3
@@ -1784,6 +1784,18 @@ Prefab:
     - target: {fileID: 4414781717475570, guid: c7bf0f721f7ab4bd2a0281419592c293, type: 2}
       propertyPath: m_RootOrder
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4763538396384428, guid: c7bf0f721f7ab4bd2a0281419592c293, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4763538396384428, guid: c7bf0f721f7ab4bd2a0281419592c293, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4763538396384428, guid: c7bf0f721f7ab4bd2a0281419592c293, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c7bf0f721f7ab4bd2a0281419592c293, type: 2}
