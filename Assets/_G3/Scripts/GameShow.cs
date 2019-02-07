@@ -56,8 +56,8 @@ public class GameShow : MonoBehaviour {
 
 	public void CorrectAnswer() {
 		Debug.Log("Correct!");
-		audioSource.PlayOneShot(correctSound);
-		timerStarted = false;
+        StopTimer();
+        audioSource.PlayOneShot(correctSound);		
 		correct++;
 
 		StartCoroutine(NextQuestion());
@@ -65,17 +65,22 @@ public class GameShow : MonoBehaviour {
 
 	public void WrongAnswer() {
 		Debug.Log("Wrong!");
-		audioSource.PlayOneShot(wrongSound);
-		timerStarted = false;
+        StopTimer();
+        audioSource.PlayOneShot(wrongSound);		
 		strikes++;
 
 		StartCoroutine(NextQuestion());
 	}
 
+    private void StopTimer() {
+        audioSource.Stop();
+        timerStarted = false;
+    }
+
 	private void TimesUp() {
 		Debug.Log("Times Up!");
-		audioSource.PlayOneShot(missedSound);
-		timerStarted = false;
+        StopTimer();
+        audioSource.PlayOneShot(missedSound);        
 	}
 
 	private void CountdownTimer() {
@@ -83,16 +88,16 @@ public class GameShow : MonoBehaviour {
 		timerText.text = Mathf.Round(timeLeft).ToString();
 		timerImage.fillAmount -= 1.0f / countdown * Time.deltaTime;
 
-		if (timerImage.fillAmount <= 0.66f && timerImage.fillAmount > 0.33f) {
-			timerImage.DOColor(Color.yellow, 1);
-			timerText.DOColor(Color.yellow, 1);
-		} else if (timerImage.fillAmount <= 0.33f) {
-			timerImage.DOColor(Color.red, 1);
-			timerText.DOColor(Color.red, 1);
+		if (timerImage.fillAmount <= 0.66f && timerImage.fillAmount > 0.33f && timerImage.color != Color.yellow) {
+			timerImage.color = Color.yellow;
+			timerText.color = Color.yellow;
+		} else if (timerImage.fillAmount <= 0.33f && timerImage.color != Color.red) {
+			timerImage.color = Color.red;
+			timerText.color = Color.red;
 		}
 
 		if (timerImage.fillAmount == 0) {
-			// TimesUp();
+            // TimesUp();
 			WrongAnswer();
 		}
 	}
