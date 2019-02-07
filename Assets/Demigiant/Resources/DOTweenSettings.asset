@@ -23,12 +23,12 @@ MonoBehaviour:
   defaultAutoPlay: 3
   defaultUpdateType: 0
   defaultTimeScaleIndependent: 0
-  defaultEaseType: 6
-  defaultEaseOvershootOrAmplitude: 1.70158
+  defaultEaseType: 0
+  defaultEaseOvershootOrAmplitude: 0
   defaultEasePeriod: 0
   defaultAutoKill: 1
-  defaultLoopType: 0
-  storeSettingsLocation: 0
+  defaultLoopType: 1
+  storeSettingsLocation: 2
   modules:
     showPanel: 0
     audioEnabled: 1

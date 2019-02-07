@@ -48,7 +48,7 @@ public class Credits : MonoBehaviour {
         text.DOText(outro, 25f).SetSpeedBased().OnComplete(RollCredits);
     }
     
-    // TODO: ROLL CREDITS
+    // ROLL CREDITS
     void RollCredits() {
         textPanel.gameObject.SetActive(false);
         creditsPanel.transform.DOLocalMoveY(-53f, 5f);
