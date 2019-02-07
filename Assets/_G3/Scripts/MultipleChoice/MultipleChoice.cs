@@ -2,22 +2,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MultipleChoice : MonoBehaviour {	
 	
-	private GameShow _gameShow;		
-	public GameObject userInput;	
 	public GameObject buttonPrefab;
 
-	private string category = "Multiple Choice";	
-
-	[SerializeField]
-	private MCQuestions[] _questions;
+	private GameShow _gameShow;		
+	private GameObject userInput;
+	
+	private MCQuestions _current;
 	private List<MCQuestions> unanswered;
+
+	[SerializeField] 
+	private MCQuestions[] _questions;	
+
+	public int Count {
+		get { return unanswered.Count; }
+	}
 
 	// Use this for initialization
 	void Start () {
 		_gameShow = GameObject.Find("GameShow").GetComponent<GameShow>();
+		userInput = GameObject.Find("Canvas/UserInput");
 
 		if (unanswered == null) {
 			unanswered = _questions.ToList<MCQuestions>();
@@ -28,31 +35,49 @@ public class MultipleChoice : MonoBehaviour {
 	
 	void SetQuestion() {		
 		int r = Random.Range(0, unanswered.Count);
-		MCAnswers[] answers = unanswered[r].answers;
+		_current = unanswered[r];
+		unanswered.Remove(unanswered[r]); // Remove question from list
 
-		_gameShow.SetCategory(category);
-		_gameShow.SetQuestion(unanswered[r].question);
+		_gameShow.Category = "Multiple Choice";
+		_gameShow.Question = _current.question;		
+		MakeAnswerButtons();
+		
+		_gameShow.StartQuestion();
+	}
 
-		Debug.Log(answers.Count());
+	void MakeAnswerButtons() {		
+		List<float> positions = new List<float>();
 
-        if (answers.Count() == 2)
-        {
-
+        if (_current.answers.Count() == 2) {
+			positions.Add(-150);
+			positions.Add(150);
+        } else if (_current.answers.Count() == 3) {
+			positions.Add(-225);
+			positions.Add(0);
+			positions.Add(225);
         }
-        if (answers.Count() > 4) {
+
+		foreach (MCAnswers answer in _current.answers) {
+			int r = Random.Range(0, positions.Count);			
+			GameObject button = Instantiate(buttonPrefab);
+			button.transform.SetParent(userInput.transform);
+						
+			button.transform.localPosition = new Vector3(positions[r], 0, 0);
+			button.transform.localScale = Vector3.one;
+			button.tag = "UserInput";
 			
+			button.GetComponent<Button>().onClick.AddListener(() => SelectAnswer(answer.correctAnswer));
+			button.GetComponentInChildren<Text>().text = answer.choice;
+			positions.Remove(positions[r]);
 		}
+	}
 
-		// TODO: set answer buttons
-
-		// Button to be evenly spaced and random
-		// Support 2, 3, 4 answers
-		// If more than 4 answers random select 3 + answer
-
-		// foreach (var answer in answers) {
-			// GameObject button = Instantiate(buttonPrefab);
-			// button.transform.SetParent(userInput.transform);			
-		// }
+	void SelectAnswer(bool isCorrect) {
+		if (isCorrect) {			
+			_gameShow.CorrectAnswer();
+		} else {			
+			_gameShow.WrongAnswer();
+		}		
 	}
 
 }

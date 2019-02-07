@@ -24,7 +24,7 @@ public class IntroControl : MonoBehaviour {
         }
 	}
 
-	// TODO: Game Intro Music
+	// Begin the show
 	private void BeginShow() {
         Debug.Log("Lets start the show!");                
         showStarted = true;
