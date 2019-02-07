@@ -31,7 +31,7 @@ public class IntroControl : MonoBehaviour {
         menu.SetActive(false);
         ellen.transform.DOShakeRotation(25f, new Vector3(0, 90, 0), 1).SetLoops(-1, LoopType.Yoyo).SetSpeedBased();
         ellen.transform.DOPunchPosition(new Vector3(0.5f, 0, 0), 25f, 3).SetSpeedBased().SetLoops(-1, LoopType.Yoyo);
-        risingPlatform.transform.DOMoveY(5, 5f).OnComplete(IntroPanel);        
+        risingPlatform.transform.DOMoveY(3, 5f).OnComplete(IntroPanel);        
     }
 
     private void IntroPanel() {
@@ -54,6 +54,6 @@ public class IntroControl : MonoBehaviour {
 	}
 
     private void LoadQuestionScene() {        
-        SceneManager.LoadScene("Questions");
+        SceneManager.LoadScene("NewQuestions");
     }
 }

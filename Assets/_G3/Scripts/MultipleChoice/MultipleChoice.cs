@@ -4,81 +4,120 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MultipleChoice : MonoBehaviour {	
+public class MultipleChoice : MonoBehaviour, Category {	
 	
 	public GameObject buttonPrefab;
 
 	private GameShow _gameShow;		
 	private GameObject userInput;
+    private string _category = "Multiple Choice";
 	
 	private MCQuestions _current;
 	private List<MCQuestions> unanswered;
+    private System.Random rnd = new System.Random();
 
-	[SerializeField] 
-	private MCQuestions[] _questions;	
+    [SerializeField]
+    private MCQuestions[] _questions;
 
-	public int Count {
+    public string Category {
+        get { return _category; }
+    }
+
+    public int Count {
 		get { return unanswered.Count; }
 	}
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		_gameShow = GameObject.Find("GameShow").GetComponent<GameShow>();
 		userInput = GameObject.Find("Canvas/UserInput");
 
 		if (unanswered == null) {
 			unanswered = _questions.ToList<MCQuestions>();
-		}
-
-		SetQuestion();
+		}        
 	}
-	
-	void SetQuestion() {		
+
+    public void SetQuestion () {        
 		int r = Random.Range(0, unanswered.Count);
 		_current = unanswered[r];
 		unanswered.Remove(unanswered[r]); // Remove question from list
 
-		_gameShow.Category = "Multiple Choice";
+		_gameShow.Category = _category;
 		_gameShow.Question = _current.question;		
 		MakeAnswerButtons();
-		
-		_gameShow.StartQuestion();
 	}
 
-	void MakeAnswerButtons() {        
-		List<float> positionsX = new List<float>();
-        List<float> positionsY = new List<float>();
+	void MakeAnswerButtons() {
+        List<string> answers = new List<string>();
+        List<Vector3> positions = new List<Vector3>();
+        string[] choices = _current.choices.OrderBy(x => rnd.Next()).ToArray();
 
-        if (_current.answers.Count() == 2) {
-			positionsX.Add(-150);
-			positionsX.Add(150);
-        } else if (_current.answers.Count() == 3) {
-			positionsX.Add(-225);
-			positionsX.Add(0);
-			positionsX.Add(225);
+        answers.Add(_current.answer);        
+        int randomChoices = Random.Range(1, _current.choices.Count());
+        if (randomChoices > 6) randomChoices = 6; // Cannot have more than 6 choices
+
+        for (int i = 0; i < randomChoices; i++) {            
+            answers.Add(choices[i]);
+        }
+        
+        if (answers.Count() == 2) {
+            positions.Add(new Vector3(-150, 0, 0));
+            positions.Add(new Vector3(150, 0, 0));
+        } else if (answers.Count() == 3) {
+            positions.Add(new Vector3(-225, 0, 0));
+            positions.Add(new Vector3(0, 0, 0));
+            positions.Add(new Vector3(225, 0, 0));
+        } else if (answers.Count() == 4) {
+            positions.Add(new Vector3(-150, 30, 0));
+            positions.Add(new Vector3(-150, -30, 0));
+            positions.Add(new Vector3(150, 30, 0));
+            positions.Add(new Vector3(150, -30, 0));
+        } else if (answers.Count() == 5) {
+            positions.Add(new Vector3(-225, 30, 0));
+            positions.Add(new Vector3(-225, -30, 0));
+            positions.Add(new Vector3(0, 0, 0));
+            positions.Add(new Vector3(225, 30, 0));
+            positions.Add(new Vector3(225, -30, 0));
+        } else if (answers.Count() == 6) {
+            positions.Add(new Vector3(-225, 30, 0));
+            positions.Add(new Vector3(-225, -30, 0));
+            positions.Add(new Vector3(0, 30, 0));
+            positions.Add(new Vector3(0, -30, 0));
+            positions.Add(new Vector3(225, 30, 0));
+            positions.Add(new Vector3(225, -30, 0));
         }
 
-		foreach (MCAnswers answer in _current.answers) {
-			int r = Random.Range(0, positionsX.Count);			
-			GameObject button = Instantiate(buttonPrefab);
-			button.transform.SetParent(userInput.transform);
-						
-			button.transform.localPosition = new Vector3(positionsX[r], 0, 0);
-			button.transform.localScale = Vector3.one;
-			button.tag = "UserInput";
-			
-			button.GetComponent<Button>().onClick.AddListener(() => SelectAnswer(answer.correctAnswer));
-			button.GetComponentInChildren<Text>().text = answer.choice;
-			positionsX.Remove(positionsX[r]);
-		}
-	}
+        foreach (string answer in answers) {            
+            int r = Random.Range(0, positions.Count);
+            GameObject button = Instantiate(buttonPrefab);
+            button.tag = "UserInput";                        
+            button.transform.SetParent(userInput.transform);
+            button.transform.localPosition = positions[r];
+            button.transform.localScale = Vector3.one;
 
-	void SelectAnswer(bool isCorrect) {
-		if (isCorrect) {			
+            button.GetComponentInChildren<Text>().text = answer;
+            button.GetComponent<Button>().onClick.AddListener(() => SelectAnswer(button, answers.First() == answer));
+            positions.Remove(positions[r]);
+        }
+    }
+
+	void SelectAnswer(GameObject button, bool isCorrect) {
+        Image image = button.GetComponent<Image>();
+        Text text = button.GetComponentInChildren<Text>();
+
+        // Disable all buttons after answer is selected
+        GameObject[] buttonObjects = GameObject.FindGameObjectsWithTag("UserInput");
+        foreach (GameObject _button in buttonObjects) {
+            _button.GetComponent<Button>().interactable = false;
+        }
+
+        if (isCorrect) {
+            image.color = Scheme.Green;
 			_gameShow.CorrectAnswer();
-		} else {			
-			_gameShow.WrongAnswer();
-		}		
-	}
-
+		} else {
+            image.color = Scheme.Red;
+            _gameShow.WrongAnswer();
+		}
+        text.color = Color.white;
+    }
 }
