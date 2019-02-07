@@ -45,30 +45,31 @@ public class MultipleChoice : MonoBehaviour {
 		_gameShow.StartQuestion();
 	}
 
-	void MakeAnswerButtons() {		
-		List<float> positions = new List<float>();
+	void MakeAnswerButtons() {        
+		List<float> positionsX = new List<float>();
+        List<float> positionsY = new List<float>();
 
         if (_current.answers.Count() == 2) {
-			positions.Add(-150);
-			positions.Add(150);
+			positionsX.Add(-150);
+			positionsX.Add(150);
         } else if (_current.answers.Count() == 3) {
-			positions.Add(-225);
-			positions.Add(0);
-			positions.Add(225);
+			positionsX.Add(-225);
+			positionsX.Add(0);
+			positionsX.Add(225);
         }
 
 		foreach (MCAnswers answer in _current.answers) {
-			int r = Random.Range(0, positions.Count);			
+			int r = Random.Range(0, positionsX.Count);			
 			GameObject button = Instantiate(buttonPrefab);
 			button.transform.SetParent(userInput.transform);
 						
-			button.transform.localPosition = new Vector3(positions[r], 0, 0);
+			button.transform.localPosition = new Vector3(positionsX[r], 0, 0);
 			button.transform.localScale = Vector3.one;
 			button.tag = "UserInput";
 			
 			button.GetComponent<Button>().onClick.AddListener(() => SelectAnswer(answer.correctAnswer));
 			button.GetComponentInChildren<Text>().text = answer.choice;
-			positions.Remove(positions[r]);
+			positionsX.Remove(positionsX[r]);
 		}
 	}
 
