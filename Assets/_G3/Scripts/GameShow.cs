@@ -21,6 +21,8 @@ public class GameShow : MonoBehaviour {
     [SerializeField] private AudioClip correctSound, wrongSound, timerSound;
     [SerializeField] private List<GameObject> categories;
 
+    private Category lastCategory = null, previousCategory;
+
     public int Correct {
         get { return correct; }
     }
@@ -85,29 +87,42 @@ public class GameShow : MonoBehaviour {
             if (categories.Count > 0) {
                 int r = rnd.Next(categories.Count);
                 Category category = categories[r].GetComponent<Category>();
-                if (category.Count > 0) {
-                    category.SetQuestion();
 
-                    timerImage.fillAmount = 1f;
-                    timeLeft = countdown;
-                    timerStarted = true;
+                if (lastCategory != null) previousCategory = lastCategory;                
+                lastCategory = category;
 
-                    audioSource.PlayOneShot(timerSound);
-                } else {
-                    // Out of questions for category
-                    categories.Remove(categories[r]);
+                // Triple repeat
+                if (category == lastCategory && category == previousCategory) {                    
                     NewQuestion();
-                }
+                } else {
+                    if (category.Count > 0) {
+                        category.SetQuestion();
+
+                        timerImage.fillAmount = 1f;
+                        timeLeft = countdown;
+                        timerStarted = true;
+
+                        audioSource.PlayOneShot(timerSound);
+                    } else {
+                        // Out of questions for category
+                        categories.Remove(categories[r]);
+                        NewQuestion();
+                    }
+                }                
             } else {
-                GameOver(true);
+                GameOver();
             }
         } else {
             GameOver();
         }
     }
 
-    private void GameOver(bool noQuestions = false) {
-        Debug.Log("Game Over! " + "Out of questions? " + noQuestions);
+    private void GameOver() {
+        Debug.Log("Game Over!");
+        if (categories.Count == 0) {
+            Debug.Log("Out of questions!");
+        }
+        Debug.Log("Player Speed: " + speed);
     }
 
     private void StopTimer() {
@@ -137,9 +152,9 @@ public class GameShow : MonoBehaviour {
 	}
 
     void RemoveUIChildren() {
-        GameObject userInput = GameObject.Find("Canvas/UserInput");
-        foreach (Transform child in userInput.transform) {
-            Destroy(child.gameObject);
+        GameObject[] inputs = GameObject.FindGameObjectsWithTag("UserInput");
+        foreach (GameObject input in inputs) {
+            Destroy(input);
         }
     }
 

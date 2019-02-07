@@ -88,7 +88,7 @@ public class MultipleChoice : MonoBehaviour, Category {
         }
 
         foreach (string answer in answers) {            
-            int r = Random.Range(0, positions.Count);
+            int r = Random.Range(0, positions.Count);            
             GameObject button = Instantiate(buttonPrefab);
             button.tag = "UserInput";                        
             button.transform.SetParent(userInput.transform);

@@ -13,7 +13,8 @@ public class TrueorFalse : MonoBehaviour, Category {
     private string _category = "True of False";
 	
 	private TFQuestions _current;
-	private List<TFQuestions> unanswered;    
+	private List<TFQuestions> unanswered;
+    private System.Random rnd = new System.Random();
 
     [SerializeField]
     private TFQuestions[] _questions;
@@ -47,27 +48,39 @@ public class TrueorFalse : MonoBehaviour, Category {
 	}
    
 	void MakeButtons() {
+        List<Vector3> positions = new List<Vector3>();
+        positions.Add(new Vector3(0, 30, 0));
+        positions.Add(new Vector3(0, -30, 0));
+        positions.OrderBy(x => rnd.Next()).ToList();
+
         GameObject trueButton = Instantiate(buttonPrefab);
         trueButton.tag = "UserInput";                        
         trueButton.transform.SetParent(userInput.transform);
-        trueButton.transform.localPosition = new Vector3(0, 30, 0);
+        trueButton.transform.localPosition = positions[0];
         trueButton.transform.localScale = Vector3.one;
-
-        trueButton.GetComponent<Image>().color = Scheme.Blue;        
+        
         trueButton.GetComponentInChildren<Text>().text = "True";        
         trueButton.GetComponentInChildren<Text>().color = Color.white;
         trueButton.GetComponent<Button>().onClick.AddListener(() => SelectAnswer(true));
 
         GameObject falseButton = Instantiate(buttonPrefab);
-        falseButton.tag = "UserInput";        
+        falseButton.tag = "UserInput";
         falseButton.transform.SetParent(userInput.transform);
-        falseButton.transform.localPosition = new Vector3(0, -30, 0);
+        falseButton.transform.localPosition = positions[1];
         falseButton.transform.localScale = Vector3.one;
-
-        falseButton.GetComponent<Image>().color = Scheme.Red;
-        falseButton.GetComponentInChildren<Text>().text = "False";        
+        
+        falseButton.GetComponentInChildren<Text>().text = "False";
         falseButton.GetComponentInChildren<Text>().color = Color.white;
-        falseButton.GetComponent<Button>().onClick.AddListener(() => SelectAnswer(false));                
+        falseButton.GetComponent<Button>().onClick.AddListener(() => SelectAnswer(false));
+
+        // Random Swap Chance
+        if (Random.Range(0f, 100f) < 10) {
+            trueButton.GetComponent<Image>().color = Scheme.Red;
+            falseButton.GetComponent<Image>().color = Scheme.Blue;
+        } else {
+            trueButton.GetComponent<Image>().color = Scheme.Blue;
+            falseButton.GetComponent<Image>().color = Scheme.Red;
+        }
     }
 
 	void SelectAnswer(bool answer) {
