@@ -13,7 +13,7 @@ public class GameShow : MonoBehaviour {
     private bool timerStarted = false;
     private int correct, strikes, speed;
     private System.Random rnd = new System.Random();
-    private float timeLeft, countdown = 10.0f, waitTime = 1.0f;
+    private float timeLeft, countdown = 10.0f, waitTime = 1.5f;
     
     [SerializeField] private Image timerImage;
     [SerializeField] private Text categoryText, questionText;
@@ -21,7 +21,7 @@ public class GameShow : MonoBehaviour {
     [SerializeField] private AudioClip correctSound, wrongSound, timerSound;
     [SerializeField] private List<GameObject> categories;
 
-    private Category lastCategory = null, previousCategory;
+    private Category lastCategory = null, previousCategory = null;
 
     public int Correct {
         get { return correct; }
@@ -39,7 +39,7 @@ public class GameShow : MonoBehaviour {
     public string Question {
         get { return questionText.text; }
         set { questionText.text = value; }
-    }        
+    } 
 
     // Use this for initialization
     void Start () {        
@@ -92,7 +92,7 @@ public class GameShow : MonoBehaviour {
                 lastCategory = category;
 
                 // Triple repeat
-                if (category == lastCategory && category == previousCategory) {                    
+                if (category == lastCategory && category == previousCategory && categories.Count > 1) {                    
                     NewQuestion();
                 } else {
                     if (category.Count > 0) {
