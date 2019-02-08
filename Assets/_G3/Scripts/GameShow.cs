@@ -1,6 +1,5 @@
 ﻿#pragma warning disable 0649
 
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
@@ -39,7 +38,10 @@ public class GameShow : MonoBehaviour {
     public string Question {
         get { return questionText.text; }
         set { questionText.text = value; }
-    } 
+    }
+
+    private void Awake () {        
+    }
 
     // Use this for initialization
     void Start () {        
