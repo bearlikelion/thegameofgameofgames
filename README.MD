@@ -3,7 +3,8 @@
 ![The Game of Game of Games Logo](./Documentation/images/logo.png)
 
 A game created by [Mark Arneman](https://arneman.me) for the [#TVGameJam](https://itch.io/jam/tvgamejam).
-Play it in your browser [here](https://bearlikelion.itch.io/the-game-of-game-of-games)!
+
+**Play it in your browser [here](https://bearlikelion.itch.io/the-game-of-game-of-games)!**
 
 ## About the game
 
