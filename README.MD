@@ -18,8 +18,8 @@ This is my first game entry ever, as well as my first *released* Unity project! 
 ### Data Classes
 
 ![Data Classes](./Documentation/images/dataclass.png)
-The questions are entered by [System.Serializable] classes within Unity's Inspector
 
+The questions are entered by [System.Serializable] classes within Unity's Inspector
 
 ## License
 [MIT](./LICENSE.md) License
