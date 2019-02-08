@@ -71,28 +71,17 @@ public class FillinBlank : MonoBehaviour, Category {
                 _gameShow.CorrectAnswer();
             } else {
                 answer.SetActive(true);
-                List<string> solution = _current.question.Split('_').ToList<string>();
-                string _solution = "";
+                int underscores = _current.question.Count(f => f == '_');
+                string _replace = "";
 
-                // TODO: Dynamically replace _ characters with correct blank
-
-                bool replaced = false;
-                for (int i = 0; i < solution.Count; i++) {
-                    Debug.Log(solution[i]);
-                    if (solution[i] == "" && !replaced) {
-                        replaced = true;
-                        solution[i] = _current.blank;
-                    } else if (solution[i] == "" && replaced) {
-                        solution.Remove(solution[i]);
-                    } else {
-                        _solution += solution[i];
-                    }
+                for (int i = 0; i < underscores; i++) {
+                    _replace += "_";
                 }
-                Debug.Log(_solution);
 
-                // answer.GetComponent<Text>().DOText(solution, 1f);
+                string solution = _current.question.Replace(_replace, "<i>"+_current.blank+"</i>");
+                answer.GetComponent<Text>().DOText(solution, 1f);
                 _gameShow.WrongAnswer();
             }
-        }        
+        }
     }    
 }

@@ -14,17 +14,16 @@ public class Credits : MonoBehaviour {
     public Text creditsLogo;
     
 
-    private GameManager _gameManager;
+    private GameShow _gameShow;
     public int correct = 5;
     public int strikes = 3;
 
     // Use this for initialization
     void Start () {
         if (GameObject.Find("--- GameManager ---")) {
-            _gameManager = GameObject.Find("--- GameManager ---").GetComponent<GameManager>();   
-            _gameManager.StopSound();         
-            correct = _gameManager.correctAnswers;
-            strikes = _gameManager.strikeCount;            
+            _gameShow = GameObject.Find("GameShow").GetComponent<GameShow>();
+            correct = _gameShow.Correct;
+            strikes = _gameShow.Strikes;
         }
 
         ellen.transform.DOShakeRotation(1, new Vector3(10f, 90f, 0f), 1).SetLoops(-1, LoopType.Yoyo).SetSpeedBased();
