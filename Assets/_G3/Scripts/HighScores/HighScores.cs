@@ -61,18 +61,18 @@ public class HighScores : MonoBehaviour {
         foreach (Entry player in scores.dreamlo.leaderboard.entry) {
             GameObject childScore = Instantiate(textPrefab, highscores.transform);
             childScore.GetComponent<Text>().text = player.name + " - " + player.score + "(" + player.seconds + ")";
-        }        
-    }    
+        }
+    }
 
     IEnumerator SendScores (string playerName, int playerScore) {
-        string url = "http://dreamlo.com/lb/" + Secret.PrivateKey + "/add/" + playerName + "/" + playerScore;
+        string url = "https://dreamlo.com/lb/" + Secret.PrivateKey + "/add/" + playerName + "/" + playerScore;
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url)) {
             yield return webRequest.SendWebRequest();
         }
     }
-    
+
     IEnumerator LoadScores () {
-        string url = "http://dreamlo.com/lb/" + Secret.PublicKey + "/json";
+        string url = "https://dreamlo.com/lb/" + Secret.PublicKey + "/json";
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url)) {
             yield return webRequest.SendWebRequest();
             leaderboard = webRequest.downloadHandler.text;
