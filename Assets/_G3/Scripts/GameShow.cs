@@ -7,20 +7,20 @@ using System.Collections.Generic;
 
 public class GameShow : MonoBehaviour {
 
+    private bool timerStarted = false, readyCount = false, ticked = false;
+    private float timeLeft, countdown = 10.0f, waitTime = 1.5f, readyTimer = 3.0f;
+
     private Text timerText;
     private AudioSource audioSource;
     private GameManager _gameManager;
-    private bool timerStarted = false;
     private System.Random rnd = new System.Random();
-    private float timeLeft, countdown = 10.0f, waitTime = 1.5f;
+    private Category lastCategory = null, previousCategory = null;
 
     [SerializeField] private Image timerImage;
+    [SerializeField] private GameObject correctPanel, wrongPanel, countdownPanel;
+    [SerializeField] private AudioClip correctSound, wrongSound, timerSound, clockTick;
     [SerializeField] private Text categoryText, questionText, correctScore, strikeScore;
-    [SerializeField] private GameObject correctPanel, wrongPanel;
-    [SerializeField] private AudioClip correctSound, wrongSound, timerSound;
     [SerializeField] private List<GameObject> categories;
-
-    private Category lastCategory = null, previousCategory = null;
 
     public string Category {
         get { return categoryText.text; }
@@ -34,15 +34,69 @@ public class GameShow : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        questionText.text = "";
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         timerText = timerImage.GetComponentInChildren<Text>();
         audioSource = GetComponent<AudioSource>();
-        NewQuestion();
+        readyCount = true;
     }
 
     void Update () {
+        if (readyCount) {
+            StartCountdown();
+        }
         if (timerStarted) {
             CountdownTimer();
+        }
+    }
+
+    private void StartCountdown() {
+        readyTimer -= Time.deltaTime;
+        if (!ticked) {
+            ticked = true;
+            StartCoroutine(TickClock());
+        }
+        if (readyTimer > 0) {
+            countdownPanel.transform.Find("Text").GetComponent<Text>().text = Mathf.Round(readyTimer).ToString();
+        } else if(readyTimer < 0) {
+            countdownPanel.SetActive(false);
+            readyCount = false;
+            NewQuestion();
+        }
+    }
+
+    private void NewQuestion () {
+        if (_gameManager.strikes < 3) {
+            if (categories.Count > 0) {
+                int r = rnd.Next(categories.Count);
+                Category category = categories[r].GetComponent<Category>();
+
+                if (lastCategory != null) previousCategory = lastCategory;
+                lastCategory = category;
+
+                // Triple repeat
+                if (category == lastCategory && category == previousCategory && categories.Count > 1) {
+                    NewQuestion();
+                } else {
+                    if (category.Count > 0) {
+                        category.SetQuestion();
+
+                        timerImage.fillAmount = 1f;
+                        timeLeft = countdown;
+                        timerStarted = true;
+
+                        audioSource.PlayOneShot(timerSound);
+                    } else {
+                        // Out of questions for category
+                        categories.Remove(categories[r]);
+                        NewQuestion();
+                    }
+                }
+            } else {
+                _gameManager.GameOver();
+            }
+        } else {
+            _gameManager.GameOver();
         }
     }
 
@@ -81,41 +135,6 @@ public class GameShow : MonoBehaviour {
         wrongPanel.SetActive(true);
         StartCoroutine(NextQuestion());
 	}
-
-    private void NewQuestion () {
-        if (_gameManager.strikes < 3) {
-            if (categories.Count > 0) {
-                int r = rnd.Next(categories.Count);
-                Category category = categories[r].GetComponent<Category>();
-
-                if (lastCategory != null) previousCategory = lastCategory;
-                lastCategory = category;
-
-                // Triple repeat
-                if (category == lastCategory && category == previousCategory && categories.Count > 1) {
-                    NewQuestion();
-                } else {
-                    if (category.Count > 0) {
-                        category.SetQuestion();
-
-                        timerImage.fillAmount = 1f;
-                        timeLeft = countdown;
-                        timerStarted = true;
-
-                        audioSource.PlayOneShot(timerSound);
-                    } else {
-                        // Out of questions for category
-                        categories.Remove(categories[r]);
-                        NewQuestion();
-                    }
-                }
-            } else {
-                _gameManager.GameOver();
-            }
-        } else {
-            _gameManager.GameOver();
-        }
-    }
 
     private void StopTimer() {
         audioSource.Stop();
@@ -166,4 +185,10 @@ public class GameShow : MonoBehaviour {
         HideResult();
         NewQuestion();
 	}
+
+    IEnumerator TickClock () {
+        audioSource.PlayOneShot(clockTick);
+        yield return new WaitForSeconds(1f);
+        ticked = false;
+    }
 }

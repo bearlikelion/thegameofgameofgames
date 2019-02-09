@@ -4,14 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MultipleChoice : MonoBehaviour, Category {	
-	
+public class MultipleChoice : MonoBehaviour, Category {
+
 	public GameObject buttonPrefab;
 
-	private GameShow _gameShow;		
+	private GameShow _gameShow;
 	private GameObject userInput;
     private string _category = "Multiple Choice";
-	
+
+    private int previousRandom;
 	private MCQuestions _current;
 	private List<MCQuestions> unanswered;
     private System.Random rnd = new System.Random();
@@ -34,16 +35,16 @@ public class MultipleChoice : MonoBehaviour, Category {
 
 		if (unanswered == null) {
 			unanswered = _questions.ToList<MCQuestions>();
-		}        
+		}
 	}
 
-    public void SetQuestion () {        
+    public void SetQuestion () {
 		int r = Random.Range(0, unanswered.Count);
 		_current = unanswered[r];
 		unanswered.Remove(unanswered[r]); // Remove question from list
 
 		_gameShow.Category = _category;
-		_gameShow.Question = _current.question;		
+		_gameShow.Question = _current.question;
 		MakeAnswerButtons();
 	}
 
@@ -52,14 +53,20 @@ public class MultipleChoice : MonoBehaviour, Category {
         List<Vector3> positions = new List<Vector3>();
         string[] choices = _current.choices.OrderBy(x => rnd.Next()).ToArray();
 
-        answers.Add(_current.answer);        
+        answers.Add(_current.answer);
         int randomChoices = Random.Range(1, _current.choices.Count());
-        if (randomChoices > 6) randomChoices = 6; // Cannot have more than 6 choices
+        if (randomChoices > 6) {
+            randomChoices = 6; // Cannot have more than 6 choices
+        } else if (randomChoices == previousRandom) {
+            randomChoices = Random.Range(previousRandom+1, _current.choices.Count());
+        }
 
-        for (int i = 0; i < randomChoices; i++) {            
+        previousRandom = randomChoices;
+
+        for (int i = 0; i < randomChoices; i++) {
             answers.Add(choices[i]);
         }
-        
+
         if (answers.Count() == 2) {
             positions.Add(new Vector3(-150, 0, 0));
             positions.Add(new Vector3(150, 0, 0));
@@ -87,10 +94,10 @@ public class MultipleChoice : MonoBehaviour, Category {
             positions.Add(new Vector3(225, -30, 0));
         }
 
-        foreach (string answer in answers) {            
-            int r = Random.Range(0, positions.Count);            
+        foreach (string answer in answers) {
+            int r = Random.Range(0, positions.Count);
             GameObject button = Instantiate(buttonPrefab);
-            button.tag = "UserInput";                        
+            button.tag = "UserInput";
             button.transform.SetParent(userInput.transform);
             button.transform.localPosition = positions[r];
             button.transform.localScale = Vector3.one;

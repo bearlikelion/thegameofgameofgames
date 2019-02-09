@@ -14,20 +14,20 @@ public class MenuLogo : MonoBehaviour {
     Outline outline;
 
     // Use this for initialization
-    void Start () {                        
-        logoRect.DOLocalMoveY(48, 2).OnComplete(SpreadOutline);
+    void Start () {
+        startRect.DOLocalMoveY(-200, 2).From();
+        logoRect.DOLocalMoveY(325, 2).From().OnComplete(SpreadOutline);
         outline = logoRect.gameObject.GetComponent<Outline>();
-        startRect.DOLocalMoveY(-98, 2);
     }
-	
+
 	// Update is called once per frame
-	void Update () {        
-        if (outlineCB == true && outline.effectDistance.x < 200) {                        
+	void Update () {
+        if (outlineCB == true && outline.effectDistance.x < 200) {
             outline.effectDistance = new Vector2(Mathf.MoveTowards(outline.effectDistance.x, 200, Time.deltaTime * speed), 0);
         }
-    }    
+    }
 
-    void SpreadOutline() {        
-        outlineCB = true;                
+    void SpreadOutline() {
+        outlineCB = true;
     }
 }

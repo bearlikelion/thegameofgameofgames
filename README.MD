@@ -15,6 +15,7 @@ This is my first game entry ever, as well as my first *released* Unity project! 
 * [Unity 2017 LTS](https://unity3d.com/)
 * Audio from [Freesound](https://freesound.org/)
 * Animations using [DOTween](http://dotween.demigiant.com/)
+* Highscores powered by [dreamlo](http://dreamlo.com)
 
 ### Data Classes
 

@@ -1,17 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
-	public System.Guid guid;
-	public string playerName;
-	public int correct, strikes, speed;
+	public string playerName = "";
+	public int correct = 0, strikes = 0, speed = 0;
+	private System.Guid guid;
+
+	public string Guid {
+		get { return guid.ToString(); }
+	}
 
 	// Use this for initialization
 	void Start () {
-		guid = System.Guid.NewGuid();
-		Debug.Log(guid.ToString());
+		if (guid.ToString() == "") {
+			guid = System.Guid.NewGuid();
+			Debug.Log(guid.ToString());
+		}
 	}
 
 	public void GameOver() {
@@ -19,7 +26,8 @@ public class GameManager : MonoBehaviour {
         if (strikes < 3) {
             Debug.Log("Ran out of questions");
         }
-        Debug.Log("Player Speed: " + speed);
+
+		SceneManager.LoadScene("HighScore");
     }
 
 }
