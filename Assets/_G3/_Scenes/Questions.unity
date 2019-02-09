@@ -835,10 +835,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bee7bc7d5024c470783a8f28416476e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timerImage: {fileID: 140889548}
   correctPanel: {fileID: 77605872}
   wrongPanel: {fileID: 367437361}
   countdownPanel: {fileID: 823043107}
+  timer: {fileID: 1413377031}
   correctSound: {fileID: 8300000, guid: b8414f6fe40ad3d40be2a922cfb1387e, type: 3}
   wrongSound: {fileID: 8300000, guid: 7391cbef755f6e5438368e343c54308c, type: 3}
   timerSound: {fileID: 8300000, guid: 43d394703eaf7a243b2fcf376fbe2870, type: 3}
@@ -1348,7 +1348,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1413377032
 RectTransform:
   m_ObjectHideFlags: 0

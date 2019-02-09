@@ -8,14 +8,14 @@ using UnityEngine.UI;
 
 public class FillinBlank : MonoBehaviour, Category {
 
-    public GameObject answerPrefab, inputFieldPrefab;    
+    public GameObject answerPrefab, inputFieldPrefab;
 
-	private GameShow _gameShow;		
+	private GameShow _gameShow;
 	private GameObject answer, userInput;
-    private string _category = "Fill in the Blank";    
-	
+    private string _category = "Fill in the Blank";
+
 	private FBlank _current;
-	private List<FBlank> unanswered;    
+	private List<FBlank> unanswered;
 
     [SerializeField]
     private FBlank[] _questions;
@@ -35,10 +35,10 @@ public class FillinBlank : MonoBehaviour, Category {
 
 		if (unanswered == null) {
 			unanswered = _questions.ToList<FBlank>();
-		}        
+		}
 	}
 
-    public void SetQuestion () {        
+    public void SetQuestion () {
 		int r = Random.Range(0, unanswered.Count);
 		_current = unanswered[r];
 		unanswered.Remove(unanswered[r]); // Remove question from list
@@ -47,27 +47,27 @@ public class FillinBlank : MonoBehaviour, Category {
         _gameShow.Question = _current.question;
 		MakeInputField();
 	}
-   
+
     void MakeInputField () {
         answer = Instantiate(answerPrefab, userInput.transform);
-        answer.GetComponent<Text>().text = _current.question;        
+        answer.GetComponent<Text>().text = _current.question;
         answer.tag = "UserInput";
         answer.SetActive(false);
 
         GameObject inputFieldGO = Instantiate(inputFieldPrefab, userInput.transform);
-        InputField inputField = inputFieldGO.GetComponent<InputField>();        
+        InputField inputField = inputFieldGO.GetComponent<InputField>();
         inputField.ActivateInputField();
         inputField.tag = "UserInput";
-        inputField.Select();        
+        inputField.Select();
 
-        inputField.GetComponent<InputField>().onEndEdit.AddListener(delegate { SubmitGuess(inputField); });        
+        inputField.GetComponent<InputField>().onEndEdit.AddListener(delegate { SubmitGuess(inputField); });
     }
 
     void SubmitGuess (InputField input) {
         if (input.text != "") {
             input.interactable = false;
-            
-            if (input.text == _current.blank) {
+
+            if (input.text.ToLower() == _current.blank.ToLower()) {
                 _gameShow.CorrectAnswer();
             } else {
                 answer.SetActive(true);
@@ -83,5 +83,5 @@ public class FillinBlank : MonoBehaviour, Category {
                 _gameShow.WrongAnswer();
             }
         }
-    }    
+    }
 }

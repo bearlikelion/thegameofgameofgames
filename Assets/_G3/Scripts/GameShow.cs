@@ -11,13 +11,13 @@ public class GameShow : MonoBehaviour {
     private float timeLeft, countdown = 10.0f, waitTime = 1.5f, readyTimer = 3.0f;
 
     private Text timerText;
+    private Image timerImage;
     private AudioSource audioSource;
     private GameManager _gameManager;
     private System.Random rnd = new System.Random();
     private Category lastCategory = null, previousCategory = null;
 
-    [SerializeField] private Image timerImage;
-    [SerializeField] private GameObject correctPanel, wrongPanel, countdownPanel;
+    [SerializeField] private GameObject correctPanel, wrongPanel, countdownPanel, timer;
     [SerializeField] private AudioClip correctSound, wrongSound, timerSound, clockTick;
     [SerializeField] private Text categoryText, questionText, correctScore, strikeScore;
     [SerializeField] private List<GameObject> categories;
@@ -36,7 +36,8 @@ public class GameShow : MonoBehaviour {
     void Start () {
         questionText.text = "";
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        timerText = timerImage.GetComponentInChildren<Text>();
+        timerText = timer.GetComponentInChildren<Text>();
+        timerImage = timer.GetComponent<Image>();
         audioSource = GetComponent<AudioSource>();
         readyCount = true;
     }
@@ -81,6 +82,9 @@ public class GameShow : MonoBehaviour {
                     if (category.Count > 0) {
                         category.SetQuestion();
 
+                        if (!timer.activeSelf) {
+                            timer.SetActive(true);
+                        }
                         timerImage.fillAmount = 1f;
                         timeLeft = countdown;
                         timerStarted = true;

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,8 +26,8 @@ public class HighScores : MonoBehaviour {
     [System.Serializable]
     public class Entry {
         public string name;
-        public string score;
-        public string seconds;
+        public int score;
+        public int seconds;
         public string text;
         public string date;
     }
@@ -50,22 +51,35 @@ public class HighScores : MonoBehaviour {
     void DisplayScores () {
         Rootobject scores = new Rootobject();
         scores = JsonUtility.FromJson<Rootobject>(leaderboard);
+
         loading.SetActive(false);
 
-        foreach (Entry player in scores.dreamlo.leaderboard.entry) {
-            GameObject childScore = Instantiate(scoreEntry, content.transform);
-            // TODO: Populate score entry prefab
-            childScore.transform.Find("Name").GetComponent<Text>().text = player.text;
-            childScore.transform.Find("Correct").GetComponent<Text>().text = player.score;
-            childScore.transform.Find("Speed").GetComponent<Text>().text = player.seconds;
+        List<Entry> entries = new List<Entry>();
 
-            if (player.name == _gameManager.Guid) {
+        foreach (Entry player in scores.dreamlo.leaderboard.entry) {
+            entries.Add(player);
+        }
+
+        entries = entries.OrderByDescending(x => x.score).ThenByDescending(x => x.seconds).ToList();
+
+        Debug.Log(entries.Count);
+
+        foreach (Entry player in entries) {
+            GameObject childScore = Instantiate(scoreEntry, content.transform);
+            childScore.transform.Find("Name").GetComponent<Text>().text = player.text;
+            childScore.transform.Find("Correct").GetComponent<Text>().text = player.score.ToString();
+            childScore.transform.Find("Speed").GetComponent<Text>().text = player.seconds.ToString();
+
+            if (player.text == _gameManager.Guid) {
                 childScore.GetComponent<Image>().color = new Color32(80, 160, 89, 200);
             }
         }
     }
 
-    void PlayAgain() {
+    public void PlayAgain() {
+        _gameManager.correct = 0;
+        _gameManager.strikes = 0;
+
         if (_gameManager.playerName != "") {
             SceneManager.LoadScene("Questions");
         } else {
@@ -74,7 +88,7 @@ public class HighScores : MonoBehaviour {
     }
 
     IEnumerator SendScores (string guid, int playerScore, int speed, string playerName) {
-        string url = "https://dreamlo.com/lb/" + Secret.PrivateKey + "/add-json-score-desc-seconds-desc/" + guid + "/" + playerScore + "/" + speed + "/" + playerName;
+        string url = "https://dreamlo.com/lb/" + Secret.PrivateKey + "/add-json/" + guid + "/" + playerScore + "/" + speed + "/" + playerName;
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url)) {
             yield return webRequest.SendWebRequest();
             leaderboard = webRequest.downloadHandler.text;
@@ -83,10 +97,11 @@ public class HighScores : MonoBehaviour {
     }
 
     IEnumerator LoadScores () {
-        string url = "https://dreamlo.com/lb/" + Secret.PublicKey + "/json-score-desc-seconds-desc";
+        string url = "https://dreamlo.com/lb/" + Secret.PublicKey + "/json";
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url)) {
             yield return webRequest.SendWebRequest();
             leaderboard = webRequest.downloadHandler.text;
+            Debug.Log("Got scores");
             DisplayScores();
         }
     }

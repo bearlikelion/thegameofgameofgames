@@ -58,7 +58,7 @@ public class MultipleChoice : MonoBehaviour, Category {
         if (randomChoices > 6) {
             randomChoices = 6; // Cannot have more than 6 choices
         } else if (randomChoices == previousRandom) {
-            randomChoices = Random.Range(previousRandom+1, _current.choices.Count());
+            randomChoices = Random.Range(previousRandom, _current.choices.Count()+1);
         }
 
         previousRandom = randomChoices;
@@ -95,7 +95,7 @@ public class MultipleChoice : MonoBehaviour, Category {
         }
 
         foreach (string answer in answers) {
-            int r = Random.Range(0, positions.Count);
+            int r = Random.Range(0, positions.Count+1);
             GameObject button = Instantiate(buttonPrefab);
             button.tag = "UserInput";
             button.transform.SetParent(userInput.transform);
