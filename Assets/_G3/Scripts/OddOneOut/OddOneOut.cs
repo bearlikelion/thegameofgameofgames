@@ -4,21 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MultipleChoice : MonoBehaviour, Category {
+public class OddOneOut : MonoBehaviour, Category {
 
-	public GameObject buttonPrefab;
+	public GameObject answerPrefab, buttonPrefab;
 
 	private GameShow _gameShow;
-	private GameObject userInput;
-    private string _category = "Multiple Choice";
+	private GameObject userInput, answerButton;
+    private string _category = "Odd One Out";
 
     private int previousRandom;
-	private MCQuestions _current;
-	private List<MCQuestions> unanswered;
+	private OOQuestions _current;
+	private List<OOQuestions> unanswered;
     private System.Random rnd = new System.Random();
 
     [SerializeField]
-    private MCQuestions[] _questions;
+    private OOQuestions[] _questions;
 
     public string Category {
         get { return _category; }
@@ -34,7 +34,7 @@ public class MultipleChoice : MonoBehaviour, Category {
 		userInput = GameObject.Find("Canvas/UserInput");
 
 		if (unanswered == null) {
-			unanswered = _questions.ToList<MCQuestions>();
+			unanswered = _questions.ToList<OOQuestions>();
 		}
 	}
 
@@ -44,7 +44,8 @@ public class MultipleChoice : MonoBehaviour, Category {
 		unanswered.Remove(unanswered[r]); // Remove question from list
 
 		_gameShow.Category = _category;
-		_gameShow.Question = _current.question;
+		_gameShow.Question = "Which of these is not like the other?";
+        // _gameShow.Question = _current.question;
 		MakeAnswerButtons();
 	}
 
@@ -54,16 +55,8 @@ public class MultipleChoice : MonoBehaviour, Category {
         string[] choices = _current.choices.OrderBy(x => rnd.Next()).ToArray();
 
         answers.Add(_current.answer);
-        int randomChoices = Random.Range(1, _current.choices.Count()+1);
-        if (randomChoices > 6) {
-            randomChoices = 6; // Cannot have more than 6 choices
-        } else if (randomChoices == previousRandom) {
-            randomChoices = Random.Range(previousRandom, _current.choices.Count()+1);
-        }
 
-        previousRandom = randomChoices;
-
-        for (int i = 0; i < randomChoices; i++) {
+        for (int i = 0; i < _current.choices.Count(); i++) {
             answers.Add(choices[i]);
         }
 
@@ -95,7 +88,7 @@ public class MultipleChoice : MonoBehaviour, Category {
         }
 
         foreach (string answer in answers) {
-            int r = Random.Range(0, positions.Count+1);
+            int r = Random.Range(0, positions.Count);
             GameObject button = Instantiate(buttonPrefab);
             button.tag = "UserInput";
             button.transform.SetParent(userInput.transform);
@@ -106,6 +99,12 @@ public class MultipleChoice : MonoBehaviour, Category {
             button.GetComponent<Button>().onClick.AddListener(() => SelectAnswer(button, answers.First() == answer));
             positions.Remove(positions[r]);
         }
+
+        answerButton = Instantiate(answerPrefab, userInput.transform);
+        answerButton.transform.localPosition = new Vector3(0, 65f, 0);
+        answerButton.GetComponent<Text>().text = _current.question;
+        answerButton.tag = "UserInput";
+        answerButton.SetActive(false);
     }
 
 	void SelectAnswer(GameObject button, bool isCorrect) {
@@ -117,6 +116,9 @@ public class MultipleChoice : MonoBehaviour, Category {
         foreach (GameObject _button in buttonObjects) {
             _button.GetComponent<Button>().interactable = false;
         }
+
+        // Show question
+        answerButton.SetActive(true);
 
         if (isCorrect) {
             image.color = Scheme.Green;

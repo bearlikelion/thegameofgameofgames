@@ -52,27 +52,31 @@ public class HighScores : MonoBehaviour {
         Rootobject scores = new Rootobject();
         scores = JsonUtility.FromJson<Rootobject>(leaderboard);
 
-        loading.SetActive(false);
+        if (scores.dreamlo.leaderboard.entry != null) {
+            loading.SetActive(false);
 
-        List<Entry> entries = new List<Entry>();
+            List<Entry> entries = new List<Entry>();
 
-        foreach (Entry player in scores.dreamlo.leaderboard.entry) {
-            entries.Add(player);
-        }
-
-        entries = entries.OrderByDescending(x => x.score).ThenByDescending(x => x.seconds).ToList();
-
-        Debug.Log(entries.Count);
-
-        foreach (Entry player in entries) {
-            GameObject childScore = Instantiate(scoreEntry, content.transform);
-            childScore.transform.Find("Name").GetComponent<Text>().text = player.text;
-            childScore.transform.Find("Correct").GetComponent<Text>().text = player.score.ToString();
-            childScore.transform.Find("Speed").GetComponent<Text>().text = player.seconds.ToString();
-
-            if (player.text == _gameManager.Guid) {
-                childScore.GetComponent<Image>().color = new Color32(80, 160, 89, 200);
+            foreach (Entry player in scores.dreamlo.leaderboard.entry) {
+                entries.Add(player);
             }
+
+            entries = entries.OrderByDescending(x => x.score).ThenByDescending(x => x.seconds).ToList();
+
+            Debug.Log(entries.Count);
+
+            foreach (Entry player in entries) {
+                GameObject childScore = Instantiate(scoreEntry, content.transform);
+                childScore.transform.Find("Name").GetComponent<Text>().text = player.text;
+                childScore.transform.Find("Correct").GetComponent<Text>().text = player.score.ToString();
+                childScore.transform.Find("Speed").GetComponent<Text>().text = player.seconds.ToString();
+
+                if (player.text == _gameManager.Guid) {
+                    childScore.GetComponent<Image>().color = new Color32(80, 160, 89, 200);
+                }
+            }
+        } else {
+            loading.GetComponent<Text>().text = "No Highscores";
         }
     }
 

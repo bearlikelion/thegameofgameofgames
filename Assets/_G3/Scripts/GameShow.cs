@@ -7,7 +7,8 @@ using System.Collections.Generic;
 
 public class GameShow : MonoBehaviour {
 
-    private bool timerStarted = false, readyCount = false, ticked = false;
+    public bool skipReady;
+    private bool timerStarted = false, ticked = false, readyCount = false;
     private float timeLeft, countdown = 10.0f, waitTime = 1.5f, readyTimer = 3.0f;
 
     private Text timerText;
@@ -39,7 +40,11 @@ public class GameShow : MonoBehaviour {
         timerText = timer.GetComponentInChildren<Text>();
         timerImage = timer.GetComponent<Image>();
         audioSource = GetComponent<AudioSource>();
-        readyCount = true;
+        if (!skipReady) {
+            readyCount = true;
+        } else {
+            NewQuestion();
+        }
     }
 
     void Update () {
@@ -53,6 +58,10 @@ public class GameShow : MonoBehaviour {
 
     private void StartCountdown() {
         readyTimer -= Time.deltaTime;
+        if (!countdownPanel.activeSelf) {
+            countdownPanel.SetActive(true);
+        }
+
         if (!ticked) {
             ticked = true;
             StartCoroutine(TickClock());
@@ -97,7 +106,8 @@ public class GameShow : MonoBehaviour {
                     }
                 }
             } else {
-                _gameManager.GameOver();
+                Debug.Log("Out of questions");
+                // _gameManager.GameOver();
             }
         } else {
             _gameManager.GameOver();
