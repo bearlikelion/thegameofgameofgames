@@ -7,12 +7,12 @@ using UnityEngine.UI;
 
 public class Descramble : MonoBehaviour, Category {
 
-    public GameObject answerPrefab, inputFieldPrefab;    
+    public GameObject answerPrefab, inputFieldPrefab;
 
-	private GameShow _gameShow;		
+	private GameShow _gameShow;
 	private GameObject answer, userInput;
-    private string _category = "Descramble the Word", _scrambled;    
-	
+    private string _category = "Descramble the Word", _scrambled;
+
 	private DSWords _current;
 	private List<DSWords> unanswered;
     private System.Random rnd = new System.Random();
@@ -35,37 +35,42 @@ public class Descramble : MonoBehaviour, Category {
 
 		if (unanswered == null) {
 			unanswered = _words.ToList<DSWords>();
-		}        
+		}
 	}
 
-    public void SetQuestion () {        
+    public void SetQuestion () {
 		int r = Random.Range(0, unanswered.Count);
 		_current = unanswered[r];
 		unanswered.Remove(unanswered[r]); // Remove question from list
 
+        string scrambled = ScrambleWord(_current.word);
+        if (scrambled == _current.word) {
+            ScrambleWord(_current.word);
+        }
+
 		_gameShow.Category = _category;
-        _gameShow.Question = ScrambleWord(_current.word);
+        _gameShow.Question = scrambled;
 		MakeInputField();
 	}
-   
+
     void MakeInputField () {
         answer = Instantiate(answerPrefab, userInput.transform);
-        answer.GetComponent<Text>().text = "The answer was: " + _scrambled;        
+        answer.GetComponent<Text>().text = "The answer was: " + _scrambled;
         answer.tag = "UserInput";
         answer.SetActive(false);
 
         GameObject inputFieldGO = Instantiate(inputFieldPrefab, userInput.transform);
-        InputField inputField = inputFieldGO.GetComponent<InputField>();        
+        InputField inputField = inputFieldGO.GetComponent<InputField>();
         inputField.ActivateInputField();
         inputField.tag = "UserInput";
-        inputField.Select();        
+        inputField.Select();
 
-        inputField.GetComponent<InputField>().onEndEdit.AddListener(delegate { SubmitGuess(inputField); });        
+        inputField.GetComponent<InputField>().onEndEdit.AddListener(delegate { SubmitGuess(inputField); });
     }
 
     void SubmitGuess (InputField input) {
         if (input.text != "") {
-            input.interactable = false;            
+            input.interactable = false;
 
             if (input.text.ToLower() == _current.word.ToLower()) {
                 _gameShow.CorrectAnswer();
@@ -74,12 +79,12 @@ public class Descramble : MonoBehaviour, Category {
                 answer.GetComponent<Text>().DOText("The  answer was: " + _current.word, 1f);
                 _gameShow.WrongAnswer();
             }
-        }        
+        }
     }
 
     string ScrambleWord (string word) {
         int index = 0;
-        char[] chars = new char[word.Length];        
+        char[] chars = new char[word.Length];
 
         while (word.Length > 0) {
             int next = rnd.Next(0, word.Length - 1);
