@@ -56,7 +56,7 @@ public class OddOneOut : MonoBehaviour, Category {
 
         answers.Add(_current.answer);
 
-        for (int i = 0; i < _current.choices.Count(); i++) {
+        for (int i = 0; i < 3; i++) {
             answers.Add(choices[i]);
         }
 

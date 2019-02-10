@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		if (guid.ToString() == "") {
+		if (guid.ToString() == "" || guid.ToString() == "00000000-0000-0000-0000-000000000000") {
 			guid = System.Guid.NewGuid();
 			Debug.Log(guid.ToString());
 		}

@@ -43,10 +43,11 @@ public class Descramble : MonoBehaviour, Category {
 		_current = unanswered[r];
 		unanswered.Remove(unanswered[r]); // Remove question from list
 
-        string scrambled = ScrambleWord(_current.word);
-        if (scrambled == _current.word) {
-            ScrambleWord(_current.word);
-        }
+        string scrambled = "";
+        do
+        {
+            scrambled = ScrambleWord(_current.word);
+        } while (scrambled == _current.word);
 
 		_gameShow.Category = _category;
         _gameShow.Question = scrambled;

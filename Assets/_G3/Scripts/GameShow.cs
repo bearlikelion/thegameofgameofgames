@@ -8,20 +8,22 @@ using System.Collections.Generic;
 
 public class GameShow : MonoBehaviour {
 
-    public bool skipReady;
-    private string categoryWas;
+    public bool skipReady, shuffleCategories;
+    public int questionLimit = 5;
+
     private int questionCount = 0;
     private bool timerStarted = false, ticked = false, readyCount = false;
-    private float timeLeft, countdown = 10.0f, waitTime = 2f, readyTimer = 3.0f;
+    private float timeLeft, countdown = 10.0f, waitTime = 1.5f, readyTimer = 3.0f;
 
     private Text timerText;
     private Image timerImage;
+    private Category _category;
     private AudioSource audioSource;
     private GameManager _gameManager;
+    private List<GameObject> categoryChoice;
     private System.Random rnd = new System.Random();
-    private Category lastCategory = null, previousCategory = null;
 
-    [SerializeField] private GameObject correctPanel, wrongPanel, countdownPanel, timer;
+    [SerializeField] private GameObject correctPanel, wrongPanel, countdownPanel, timer, buttonPrefab, userInput;
     [SerializeField] private AudioClip correctSound, wrongSound, timerSound, clockTick;
     [SerializeField] private Text categoryText, questionText, correctScore, strikeScore;
     [SerializeField] private List<GameObject> categories;
@@ -36,6 +38,10 @@ public class GameShow : MonoBehaviour {
         set { questionText.text = value; }
     }
 
+    public float Timer {
+        set { countdown = value; }
+    }
+
     // Use this for initialization
     void Start () {
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -47,12 +53,7 @@ public class GameShow : MonoBehaviour {
         correctScore.text = "";
         strikeScore.text = "";
 
-        if (!skipReady) {
-            readyCount = true;
-        } else {
-            // NewQuestion();
-            SelectCategory();
-        }
+        SelectCategory();
     }
 
     void Update () {
@@ -65,53 +66,116 @@ public class GameShow : MonoBehaviour {
     }
 
     private void SelectCategory() {
-        List<GameObject> categoryChoice = categories.OrderBy(x => rnd.Next()).ToList();
+        Debug.Log("Select Category");
+        List<string> category = new List<string>();
+        questionText.text = "";
+        shuffleCategories = false;
 
-        Debug.Log(categoryChoice[0].name);
-        Debug.Log(categoryChoice[1].name);
-        // TODO: make sure neither random are categoryWas
+        for (int i = 0; i < categories.Count; i++) {
+            Category _cat = categories[i].GetComponent<Category>();
+            if (_cat.Count == 0) {
+                categories.Remove(categories[i]);
+            }
+        }
+
+        if (categories.Count < 3) {
+            _gameManager.GameOver();
+        }
+        if (categoryChoice == null || categoryChoice.Count < 3) {
+            categoryChoice = categories.OrderBy(x => rnd.Next()).ToList();
+        }
+
+        categoryText.text = "Select a Category";
+        timer.SetActive(false);
+
+        int l = 0;
+        foreach (GameObject _go in categoryChoice) {
+            if (l < 3) {
+                category.Add(_go.name);
+                l++;
+            } else {
+                break;
+            }
+        }
+        category.Add("Hard Mode: Shuffle All Categories");
+
         // TODO: build category buttons
+        List<Vector3> positions = new List<Vector3>();
+        positions.Add(new Vector3(-225, 0, 0));
+        positions.Add(new Vector3(0, 0, 0));
+        positions.Add(new Vector3(225, 0, 0));
+        positions.Add(new Vector3(0, 0, 0));
+
+        for (int i = 0; i < positions.Count; i++) {
+            string catString = category[i];
+            if (i == 3) {
+                GameObject button = Instantiate(buttonPrefab, GameObject.Find("Canvas/QuestionPanel").transform);
+                button.GetComponentInChildren<Text>().text = catString;
+                button.tag = "UserInput";
+                button.GetComponent<RectTransform>().sizeDelta = new Vector2(450, 75);
+                button.GetComponent<Image>().color = Scheme.Red;
+                button.GetComponent<Button>().onClick.AddListener(() => CategoryIs(catString));
+            } else {
+                GameObject button = Instantiate(buttonPrefab, userInput.transform);
+                button.transform.localPosition = positions[i];
+                button.tag = "UserInput";
+
+                button.GetComponentInChildren<Text>().text = catString;
+                button.GetComponent<Button>().onClick.AddListener(() => CategoryIs(catString));
+            }
+        }
     }
 
-    public void CategoryIs(){
-        // TODO:
+    void CategoryIs(string category){
+        if (category == "Hard Mode: Shuffle All Categories") {
+            shuffleCategories = true;
+        } else {
+            for (int i=0; i < categories.Count; i++){
+                if (categories[i].name == category) {
+                    _category = categories[i].GetComponent<Category>();
+                }
+            }
+
+            for (int i=0; i < categoryChoice.Count; i++){
+                if (categoryChoice[i].name == category) {
+                categoryChoice.Remove(categoryChoice[i]);
+                }
+            }
+        }
+
+        questionCount = 0;
+        RemoveUIChildren();
+        if (shuffleCategories) {
+            readyCount = true;
+        } else {
+            NewQuestion();
+        }
     }
 
     private void NewQuestion () {
         if (_gameManager.strikes < 3) {
-            if (categories.Count > 0) {
-                // TODO: Shuffle category
-                int r = rnd.Next(categories.Count);
-                Category category = categories[r].GetComponent<Category>();
+            if (shuffleCategories) {
+                int r = Random.Range(0, categories.Count);
+                _category = categories[r].GetComponent<Category>();
 
-                if (lastCategory != null) previousCategory = lastCategory;
-                lastCategory = category;
-
-                // Triple repeat
-                if (category == lastCategory && category == previousCategory && categories.Count > 1) {
-                    NewQuestion();
-                } else {
-                    if (category.Count > 0) {
-                        category.SetQuestion();
-
-                        if (!timer.activeSelf) {
-                            timer.SetActive(true);
-                        }
-                        timerImage.fillAmount = 1f;
-                        timeLeft = countdown;
-                        timerStarted = true;
-
-                        audioSource.PlayOneShot(timerSound);
-                    } else {
-                        // Out of questions for category
-                        categories.Remove(categories[r]);
-                        NewQuestion();
-                    }
+                if (_category.Count == 0) {
+                    categories.Remove(categories[r]);
+                    int rr = Random.Range(0, categories.Count);
+                    _category = categories[rr].GetComponent<Category>();
                 }
-            } else {
-                Debug.Log("Out of questions");
-                // _gameManager.GameOver();
             }
+            _category.SetQuestion();
+
+            if (!timer.activeSelf) {
+                timer.SetActive(true);
+            }
+
+            timerImage.fillAmount = 1f;
+            timeLeft = countdown;
+            timerStarted = true;
+
+            audioSource.PlayOneShot(timerSound);
+            questionCount++;
         } else {
             _gameManager.GameOver();
         }
@@ -150,7 +214,12 @@ public class GameShow : MonoBehaviour {
 
         wrongPanel.GetComponentInChildren<Text>().text = strikeText;
         wrongPanel.SetActive(true);
-        StartCoroutine(NextQuestion());
+
+        if (shuffleCategories) {
+            StartCoroutine(NextQuestion());
+        } else {
+            StartCoroutine(CategorySelect());
+        }
 	}
 
     private void StopTimer() {
@@ -173,8 +242,7 @@ public class GameShow : MonoBehaviour {
         } else if(readyTimer < 0) {
             countdownPanel.SetActive(false);
             readyCount = false;
-            // NewQuestion();
-            SelectCategory();
+            NewQuestion();
         }
     }
 
@@ -220,7 +288,21 @@ public class GameShow : MonoBehaviour {
 		yield return new WaitForSeconds(waitTime);
         RemoveUIChildren();
         HideResult();
-        NewQuestion();
+
+        if (shuffleCategories) {
+            NewQuestion();
+        } else if (questionCount < questionLimit && _category.Count > 0) {
+            NewQuestion();
+        } else {
+            SelectCategory();
+        }
+	}
+
+    IEnumerator CategorySelect() {
+		yield return new WaitForSeconds(waitTime);
+        RemoveUIChildren();
+        HideResult();
+        SelectCategory();
 	}
 
     IEnumerator TickClock () {

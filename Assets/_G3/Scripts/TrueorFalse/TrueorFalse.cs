@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TrueorFalse : MonoBehaviour, Category {	
-	
+public class TrueorFalse : MonoBehaviour, Category {
+
 	public GameObject buttonPrefab;
 
-	private GameShow _gameShow;		
+	private GameShow _gameShow;
 	private GameObject userInput;
     private string _category = "True of False";
-	
+
 	private TFQuestions _current;
 	private List<TFQuestions> unanswered;
     private System.Random rnd = new System.Random();
@@ -34,32 +34,32 @@ public class TrueorFalse : MonoBehaviour, Category {
 
 		if (unanswered == null) {
 			unanswered = _questions.ToList<TFQuestions>();
-		}        
+		}
 	}
 
-    public void SetQuestion () {        
+    public void SetQuestion () {
 		int r = Random.Range(0, unanswered.Count);
 		_current = unanswered[r];
 		unanswered.Remove(unanswered[r]); // Remove question from list
 
 		_gameShow.Category = _category;
-		_gameShow.Question = _current.question;		
+		_gameShow.Question = _current.question;
 		MakeButtons();
 	}
-   
+
 	void MakeButtons() {
         List<Vector3> positions = new List<Vector3>();
-        positions.Add(new Vector3(0, 30, 0));
-        positions.Add(new Vector3(0, -30, 0));
+        positions.Add(new Vector3(0, 40, 0));
+        positions.Add(new Vector3(0, -40, 0));
         positions.OrderBy(x => rnd.Next()).ToList();
 
         GameObject trueButton = Instantiate(buttonPrefab);
-        trueButton.tag = "UserInput";                        
+        trueButton.tag = "UserInput";
         trueButton.transform.SetParent(userInput.transform);
         trueButton.transform.localPosition = positions[0];
         trueButton.transform.localScale = Vector3.one;
-        
-        trueButton.GetComponentInChildren<Text>().text = "True";        
+
+        trueButton.GetComponentInChildren<Text>().text = "True";
         trueButton.GetComponentInChildren<Text>().color = Color.white;
         trueButton.GetComponent<Button>().onClick.AddListener(() => SelectAnswer(true));
 
@@ -68,7 +68,7 @@ public class TrueorFalse : MonoBehaviour, Category {
         falseButton.transform.SetParent(userInput.transform);
         falseButton.transform.localPosition = positions[1];
         falseButton.transform.localScale = Vector3.one;
-        
+
         falseButton.GetComponentInChildren<Text>().text = "False";
         falseButton.GetComponentInChildren<Text>().color = Color.white;
         falseButton.GetComponent<Button>().onClick.AddListener(() => SelectAnswer(false));

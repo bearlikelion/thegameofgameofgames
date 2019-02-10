@@ -69,7 +69,7 @@ public class Analogies : MonoBehaviour, Category {
             }
         }
 
-        string analogy = one[0] + " : " + one[1] + " :: " + two[0] + " : " + two[1];
+        string analogy = one[0] + " : " + one[1] + " <i>as</i> " + two[0] + " : " + two[1];
 
         _gameShow.Category = _category;
         _gameShow.Question = analogy;

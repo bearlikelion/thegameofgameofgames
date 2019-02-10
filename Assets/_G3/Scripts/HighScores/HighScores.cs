@@ -37,6 +37,7 @@ public class HighScores : MonoBehaviour {
     private string leaderboard = "";
     private GameManager _gameManager;
 
+    // TOOD: Fix High Scores
     void Start () {
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
@@ -51,6 +52,9 @@ public class HighScores : MonoBehaviour {
     void DisplayScores () {
         Rootobject scores = new Rootobject();
         scores = JsonUtility.FromJson<Rootobject>(leaderboard);
+
+        Debug.Log(leaderboard);
+        Debug.Log(scores);
 
         if (scores.dreamlo.leaderboard.entry != null) {
             loading.SetActive(false);

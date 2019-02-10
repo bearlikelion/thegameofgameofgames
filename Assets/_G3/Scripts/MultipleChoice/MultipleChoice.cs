@@ -12,7 +12,6 @@ public class MultipleChoice : MonoBehaviour, Category {
 	private GameObject userInput;
     private string _category = "Multiple Choice";
 
-    private int previousRandom;
 	private MCQuestions _current;
 	private List<MCQuestions> unanswered;
     private System.Random rnd = new System.Random();
@@ -54,53 +53,20 @@ public class MultipleChoice : MonoBehaviour, Category {
         string[] choices = _current.choices.OrderBy(x => rnd.Next()).ToArray();
 
         answers.Add(_current.answer);
-        int randomChoices = Random.Range(1, _current.choices.Count()+1);
-        if (randomChoices > 6) {
-            randomChoices = 6; // Cannot have more than 6 choices
-        } else if (randomChoices == previousRandom) {
-            randomChoices = Random.Range(previousRandom, _current.choices.Count()+1);
-        }
-
-        previousRandom = randomChoices;
-
-        for (int i = 0; i < randomChoices; i++) {
+        for (int i = 0; i < 3; i++) {
             answers.Add(choices[i]);
         }
 
-        if (answers.Count() == 2) {
-            positions.Add(new Vector3(-150, 0, 0));
-            positions.Add(new Vector3(150, 0, 0));
-        } else if (answers.Count() == 3) {
-            positions.Add(new Vector3(-225, 0, 0));
-            positions.Add(new Vector3(0, 0, 0));
-            positions.Add(new Vector3(225, 0, 0));
-        } else if (answers.Count() == 4) {
-            positions.Add(new Vector3(-150, 50, 0));
-            positions.Add(new Vector3(-150, -50, 0));
-            positions.Add(new Vector3(150, 50, 0));
-            positions.Add(new Vector3(150, -50, 0));
-        } else if (answers.Count() == 5) {
-            positions.Add(new Vector3(-225, 50, 0));
-            positions.Add(new Vector3(-225, -50, 0));
-            positions.Add(new Vector3(0, 0, 0));
-            positions.Add(new Vector3(225, 50, 0));
-            positions.Add(new Vector3(225, -50, 0));
-        } else if (answers.Count() == 6) {
-            positions.Add(new Vector3(-225, 50, 0));
-            positions.Add(new Vector3(-225, -50, 0));
-            positions.Add(new Vector3(0, 50, 0));
-            positions.Add(new Vector3(0, -50, 0));
-            positions.Add(new Vector3(225, 50, 0));
-            positions.Add(new Vector3(225, -50, 0));
-        }
+        positions.Add(new Vector3(-150, 40, 0));
+        positions.Add(new Vector3(-150, -40, 0));
+        positions.Add(new Vector3(150, 40, 0));
+        positions.Add(new Vector3(150, -40, 0));
 
         foreach (string answer in answers) {
-            int r = Random.Range(0, positions.Count+1);
-            GameObject button = Instantiate(buttonPrefab);
-            button.tag = "UserInput";
-            button.transform.SetParent(userInput.transform);
+            int r = Random.Range(0, positions.Count);
+            GameObject button = Instantiate(buttonPrefab, userInput.transform);
             button.transform.localPosition = positions[r];
-            button.transform.localScale = Vector3.one;
+            button.tag = "UserInput";
 
             button.GetComponentInChildren<Text>().text = answer;
             button.GetComponent<Button>().onClick.AddListener(() => SelectAnswer(button, answers.First() == answer));
