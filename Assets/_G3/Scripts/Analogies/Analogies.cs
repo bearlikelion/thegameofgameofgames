@@ -8,14 +8,14 @@ using UnityEngine.UI;
 
 public class Analogies : MonoBehaviour, Category {
 
-    public GameObject answerPrefab, inputFieldPrefab;    
+    public GameObject answerPrefab, inputFieldPrefab;
 
-	private GameShow _gameShow;		
+	private GameShow _gameShow;
 	private GameObject answer, userInput;
     private string _category = "Complete the Analogy", blank, aText;
-	
+
 	private AGPrompts _current;
-	private List<AGPrompts> unanswered;    
+	private List<AGPrompts> unanswered;
 
     [SerializeField]
     private AGPrompts[] _questions;
@@ -35,15 +35,14 @@ public class Analogies : MonoBehaviour, Category {
 
 		if (unanswered == null) {
 			unanswered = _questions.ToList<AGPrompts>();
-		}        
+		}
 	}
 
-    public void SetQuestion () {        
+    public void SetQuestion () {
 		int r = Random.Range(0, unanswered.Count);
 		_current = unanswered[r];
 		unanswered.Remove(unanswered[r]); // Remove question from list
 
-        // TODO: Random Analogy blanks
         List<string> one = _current.one.Split(':').ToList<string>();
         List<string> two = _current.two.Split(':').ToList<string>();
 
@@ -73,7 +72,7 @@ public class Analogies : MonoBehaviour, Category {
         string analogy = one[0] + " : " + one[1] + " :: " + two[0] + " : " + two[1];
 
         _gameShow.Category = _category;
-        _gameShow.Question = analogy; 
+        _gameShow.Question = analogy;
 		MakeInputField();
 	}
 
@@ -89,25 +88,25 @@ public class Analogies : MonoBehaviour, Category {
 
         return _return;
     }
-   
+
     void MakeInputField () {
         answer = Instantiate(answerPrefab, userInput.transform);
-        answer.GetComponent<Text>().text = "The answer was: " + blank; // TODO: Reveal Answer
+        answer.GetComponent<Text>().text = "The answer was: " + blank;
         answer.tag = "UserInput";
         answer.SetActive(false);
 
         GameObject inputFieldGO = Instantiate(inputFieldPrefab, userInput.transform);
-        InputField inputField = inputFieldGO.GetComponent<InputField>();        
+        InputField inputField = inputFieldGO.GetComponent<InputField>();
         inputField.ActivateInputField();
         inputField.tag = "UserInput";
-        inputField.Select();        
+        inputField.Select();
 
-        inputField.GetComponent<InputField>().onEndEdit.AddListener(delegate { SubmitGuess(inputField); });        
+        inputField.GetComponent<InputField>().onEndEdit.AddListener(delegate { SubmitGuess(inputField); });
     }
 
     void SubmitGuess (InputField input) {
         if (input.text != "") {
-            input.interactable = false;                      
+            input.interactable = false;
 
             if (input.text.ToLower() == aText.ToLower()) {
                 _gameShow.CorrectAnswer();
@@ -116,6 +115,6 @@ public class Analogies : MonoBehaviour, Category {
                 answer.GetComponent<Text>().DOText("The answer was: " + aText, 1f);
                 _gameShow.WrongAnswer();
             }
-        }        
-    }    
+        }
+    }
 }
