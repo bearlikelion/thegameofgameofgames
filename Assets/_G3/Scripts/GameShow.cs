@@ -2,14 +2,17 @@
 
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
 public class GameShow : MonoBehaviour {
 
     public bool skipReady;
+    private string categoryWas;
+    private int questionCount = 0;
     private bool timerStarted = false, ticked = false, readyCount = false;
-    private float timeLeft, countdown = 10.0f, waitTime = 1.5f, readyTimer = 3.0f;
+    private float timeLeft, countdown = 10.0f, waitTime = 2f, readyTimer = 3.0f;
 
     private Text timerText;
     private Image timerImage;
@@ -35,15 +38,20 @@ public class GameShow : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        questionText.text = "";
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         timerText = timer.GetComponentInChildren<Text>();
         timerImage = timer.GetComponent<Image>();
         audioSource = GetComponent<AudioSource>();
+
+        questionText.text = "";
+        correctScore.text = "";
+        strikeScore.text = "";
+
         if (!skipReady) {
             readyCount = true;
         } else {
-            NewQuestion();
+            // NewQuestion();
+            SelectCategory();
         }
     }
 
@@ -56,28 +64,23 @@ public class GameShow : MonoBehaviour {
         }
     }
 
-    private void StartCountdown() {
-        readyTimer -= Time.deltaTime;
-        if (!countdownPanel.activeSelf) {
-            countdownPanel.SetActive(true);
-        }
+    private void SelectCategory() {
+        List<GameObject> categoryChoice = categories.OrderBy(x => rnd.Next()).ToList();
 
-        if (!ticked) {
-            ticked = true;
-            StartCoroutine(TickClock());
-        }
-        if (readyTimer > 0) {
-            countdownPanel.transform.Find("Text").GetComponent<Text>().text = Mathf.Round(readyTimer).ToString();
-        } else if(readyTimer < 0) {
-            countdownPanel.SetActive(false);
-            readyCount = false;
-            NewQuestion();
-        }
+        Debug.Log(categoryChoice[0].name);
+        Debug.Log(categoryChoice[1].name);
+        // TODO: make sure neither random are categoryWas
+        // TODO: build category buttons
+    }
+
+    public void CategoryIs(){
+        // TODO:
     }
 
     private void NewQuestion () {
         if (_gameManager.strikes < 3) {
             if (categories.Count > 0) {
+                // TODO: Shuffle category
                 int r = rnd.Next(categories.Count);
                 Category category = categories[r].GetComponent<Category>();
 
@@ -117,15 +120,15 @@ public class GameShow : MonoBehaviour {
 	public void CorrectAnswer() {
 		Debug.Log("Correct!");
 
-        _gameManager.correct++;
         StopTimer();
+        _gameManager.correct++;
         audioSource.PlayOneShot(correctSound);
 
         correctPanel.SetActive(true);
         _gameManager.speed += (int) Mathf.Round(timeLeft);
 
         if (_gameManager.correct > 0) {
-            correctScore.text = "Correct: <color='#ffffff'>"+_gameManager.correct+"</color>";
+            correctScore.text += "✔️";
         }
 
         StartCoroutine(NextQuestion());
@@ -140,7 +143,7 @@ public class GameShow : MonoBehaviour {
         audioSource.PlayOneShot(wrongSound);
 
         for (int i = 0; i < _gameManager.strikes; i++) {
-            strikeText += " [X] ";
+            strikeText += " X ";
         }
 
         strikeScore.text = strikeText;
@@ -153,6 +156,26 @@ public class GameShow : MonoBehaviour {
     private void StopTimer() {
         audioSource.Stop();
         timerStarted = false;
+    }
+
+    private void StartCountdown() {
+        readyTimer -= Time.deltaTime;
+        if (!countdownPanel.activeSelf) {
+            countdownPanel.SetActive(true);
+        }
+
+        if (!ticked) {
+            ticked = true;
+            StartCoroutine(TickClock());
+        }
+        if (readyTimer > 0) {
+            countdownPanel.transform.Find("Text").GetComponent<Text>().text = Mathf.Round(readyTimer).ToString();
+        } else if(readyTimer < 0) {
+            countdownPanel.SetActive(false);
+            readyCount = false;
+            // NewQuestion();
+            SelectCategory();
+        }
     }
 
 	private void CountdownTimer() {

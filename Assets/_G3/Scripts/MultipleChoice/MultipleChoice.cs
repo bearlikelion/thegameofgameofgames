@@ -75,23 +75,23 @@ public class MultipleChoice : MonoBehaviour, Category {
             positions.Add(new Vector3(0, 0, 0));
             positions.Add(new Vector3(225, 0, 0));
         } else if (answers.Count() == 4) {
-            positions.Add(new Vector3(-150, 30, 0));
-            positions.Add(new Vector3(-150, -30, 0));
-            positions.Add(new Vector3(150, 30, 0));
-            positions.Add(new Vector3(150, -30, 0));
+            positions.Add(new Vector3(-150, 50, 0));
+            positions.Add(new Vector3(-150, -50, 0));
+            positions.Add(new Vector3(150, 50, 0));
+            positions.Add(new Vector3(150, -50, 0));
         } else if (answers.Count() == 5) {
-            positions.Add(new Vector3(-225, 30, 0));
-            positions.Add(new Vector3(-225, -30, 0));
+            positions.Add(new Vector3(-225, 50, 0));
+            positions.Add(new Vector3(-225, -50, 0));
             positions.Add(new Vector3(0, 0, 0));
-            positions.Add(new Vector3(225, 30, 0));
-            positions.Add(new Vector3(225, -30, 0));
+            positions.Add(new Vector3(225, 50, 0));
+            positions.Add(new Vector3(225, -50, 0));
         } else if (answers.Count() == 6) {
-            positions.Add(new Vector3(-225, 30, 0));
-            positions.Add(new Vector3(-225, -30, 0));
-            positions.Add(new Vector3(0, 30, 0));
-            positions.Add(new Vector3(0, -30, 0));
-            positions.Add(new Vector3(225, 30, 0));
-            positions.Add(new Vector3(225, -30, 0));
+            positions.Add(new Vector3(-225, 50, 0));
+            positions.Add(new Vector3(-225, -50, 0));
+            positions.Add(new Vector3(0, 50, 0));
+            positions.Add(new Vector3(0, -50, 0));
+            positions.Add(new Vector3(225, 50, 0));
+            positions.Add(new Vector3(225, -50, 0));
         }
 
         foreach (string answer in answers) {

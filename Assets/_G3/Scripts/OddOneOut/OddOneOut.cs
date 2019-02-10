@@ -68,23 +68,23 @@ public class OddOneOut : MonoBehaviour, Category {
             positions.Add(new Vector3(0, 0, 0));
             positions.Add(new Vector3(225, 0, 0));
         } else if (answers.Count() == 4) {
-            positions.Add(new Vector3(-150, 30, 0));
-            positions.Add(new Vector3(-150, -30, 0));
-            positions.Add(new Vector3(150, 30, 0));
-            positions.Add(new Vector3(150, -30, 0));
+            positions.Add(new Vector3(-150, 40, 0));
+            positions.Add(new Vector3(-150, -40, 0));
+            positions.Add(new Vector3(150, 40, 0));
+            positions.Add(new Vector3(150, -40, 0));
         } else if (answers.Count() == 5) {
-            positions.Add(new Vector3(-225, 30, 0));
-            positions.Add(new Vector3(-225, -30, 0));
+            positions.Add(new Vector3(-225, 40, 0));
+            positions.Add(new Vector3(-225, -40, 0));
             positions.Add(new Vector3(0, 0, 0));
-            positions.Add(new Vector3(225, 30, 0));
-            positions.Add(new Vector3(225, -30, 0));
+            positions.Add(new Vector3(225, 40, 0));
+            positions.Add(new Vector3(225, -40, 0));
         } else if (answers.Count() == 6) {
-            positions.Add(new Vector3(-225, 30, 0));
-            positions.Add(new Vector3(-225, -30, 0));
-            positions.Add(new Vector3(0, 30, 0));
-            positions.Add(new Vector3(0, -30, 0));
-            positions.Add(new Vector3(225, 30, 0));
-            positions.Add(new Vector3(225, -30, 0));
+            positions.Add(new Vector3(-225, 40, 0));
+            positions.Add(new Vector3(-225, -40, 0));
+            positions.Add(new Vector3(0, 40, 0));
+            positions.Add(new Vector3(0, -40, 0));
+            positions.Add(new Vector3(225, 40, 0));
+            positions.Add(new Vector3(225, -40, 0));
         }
 
         foreach (string answer in answers) {
@@ -101,7 +101,6 @@ public class OddOneOut : MonoBehaviour, Category {
         }
 
         answerButton = Instantiate(answerPrefab, userInput.transform);
-        answerButton.transform.localPosition = new Vector3(0, 65f, 0);
         answerButton.GetComponent<Text>().text = _current.question;
         answerButton.tag = "UserInput";
         answerButton.SetActive(false);
