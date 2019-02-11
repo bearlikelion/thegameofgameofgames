@@ -13,12 +13,12 @@ public class GameManager : MonoBehaviour {
 		get { return guid.ToString(); }
 	}
 
-	// Use this for initialization
-	void Start () {
-		if (guid.ToString() == "" || guid.ToString() == "00000000-0000-0000-0000-000000000000") {
-			guid = System.Guid.NewGuid();
-			Debug.Log(guid.ToString());
-		}
+    void Awake () {
+        DontDestroyOnLoad(gameObject);
+    }
+    
+    void Start () {
+        GenerateGUID();		
 	}
 
 	public void GameOver() {
@@ -28,6 +28,11 @@ public class GameManager : MonoBehaviour {
         }
 
 		SceneManager.LoadScene("HighScore");
+    }
+
+    void GenerateGUID() {
+        guid = System.Guid.NewGuid();
+        Debug.Log(guid.ToString());
     }
 
 }

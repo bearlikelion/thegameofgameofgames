@@ -6,7 +6,8 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class IntroControl : MonoBehaviour {
-    public GameObject ellen;
+    public bool showStarted = false;
+    public GameObject ellen, hiddenLogo;
     public Button startButton;
     public RectTransform ready1, ready2;
 
@@ -15,9 +16,10 @@ public class IntroControl : MonoBehaviour {
     private GameManager _gameManager;
     private GameObject menu, intro, risingPlatform;
 
-    public bool showStarted = false;
+    private float textDelay = 3.0f;
 
-	private void Start() {
+
+    private void Start() {
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
         menu = GameObject.Find("Canvas/Menu");
@@ -52,37 +54,65 @@ public class IntroControl : MonoBehaviour {
     }
 
 	// Begin the show
-	private void BeginShow() {
-        Debug.Log("Lets start the show!");
+	public void BeginShow() {                      
         showStarted = true;
         menu.SetActive(false);
+        hiddenLogo.SetActive(true);
         _gameManager.playerName = inputField.text;
 
-        ellen.transform.DOShakeRotation(25f, new Vector3(0, 90, 0), 1).SetLoops(-1, LoopType.Yoyo).SetSpeedBased();
-        ellen.transform.DOPunchPosition(new Vector3(0.5f, 0, 0), 25f, 3).SetSpeedBased().SetLoops(-1, LoopType.Yoyo);
-        risingPlatform.transform.DOMoveY(3, 5f).OnComplete(IntroPanel);
+        // Ellen Dance
+        ellen.transform.DOShakeRotation(1f, new Vector3(0, 135f, 0), 1).SetLoops(-1);
+        ellen.transform.DOPunchPosition(new Vector3(0.25f, 0, 0), 1f, 1).SetLoops(-1);
+        
+        risingPlatform.transform.DOMoveY(3, 3f).OnComplete(IntroPanel);
+    }
+
+    public void LoadQuestionScene () {
+        SceneManager.LoadScene("Questions");
     }
 
     private void IntroPanel() {
-        intro.transform.DOScale(Vector3.one, 1).OnComplete(IntroText);
+        intro.transform.DOScale(Vector3.one, 1f).OnComplete(StartIntroText);        
+    }
+    
+    private void StartIntroText() {
+        string introText = "Hi " + _gameManager.playerName + "! I am Ellen DeCube, and welcome to: \n <b>The Game of Game of Games!</b>";
+        text.DOText(introText, textDelay).OnComplete(IntroText1);
+    }
+    
+    private void IntroText1() {
+        StartCoroutine(WriteIntro1());        
     }
 
-    private void IntroText() {
-        string intro = "Hi "+_gameManager.playerName+"! I'm Ellen DeCube, and welcome to my Game of Game of Games! Today we are going play some trivia games for a chance to win... <i>bragging rights</i>. <b>Are you ready?!</b>";
-        text.DOText(intro, 25f).SetEase(Ease.Unset).SetSpeedBased().OnComplete(ReadyCheck);
+    IEnumerator WriteIntro1 () {        
+        yield return new WaitForSeconds(3f);
+        text.text = "";
+        string introText = "Select a category and answer the related questions.\n One wrong is a <b>strike</b>\n Three strikes and you lose!";
+        text.DOText(introText, textDelay).OnComplete(IntroText2);
+    }
+
+    private void IntroText2 () {
+        StartCoroutine(WriteIntro2());
+    }
+
+    IEnumerator WriteIntro2 () {
+        yield return new WaitForSeconds(3f);
+        text.text = "";
+        string introText = "For a challenge, try playing with shuffled categories!";
+        text.DOText(introText, textDelay).OnComplete(ReadyCheck);
     }
 
     private void ReadyCheck() {
-        ready1.DOLocalMoveX(-150, 1);
-        ready2.DOLocalMoveX(150, 1);
+        StartCoroutine(PromptReady());
     }
 
-	private void StartQuestions() {
+    IEnumerator PromptReady() {
+        yield return new WaitForSeconds(3f);
         text.text = "";
-        text.DOText("Perfect! Let's get to it!", 25f).SetEase(Ease.Unset).SetSpeedBased().OnComplete(LoadQuestionScene);
-	}
+        string introText = "Are you ready?!";
+        text.DOText(introText, 1f);
 
-    private void LoadQuestionScene() {
-        SceneManager.LoadScene("Questions");
+        ready1.DOLocalMoveX(-175, 1);
+        ready2.DOLocalMoveX(175, 1);        
     }
 }

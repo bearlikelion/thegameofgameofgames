@@ -1,6 +1,4 @@
 ﻿using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,8 +20,8 @@ public class MenuLogo : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-        if (outlineCB == true && outline.effectDistance.x < 200) {
-            outline.effectDistance = new Vector2(Mathf.MoveTowards(outline.effectDistance.x, 200, Time.deltaTime * speed), 0);
+        if (outlineCB == true && outline.effectDistance.x < 550) {
+            outline.effectDistance = new Vector2(Mathf.MoveTowards(outline.effectDistance.x, 550, Time.deltaTime * speed), 0);
         }
     }
 

@@ -51,7 +51,7 @@ public class TrueorFalse : MonoBehaviour, Category {
         List<Vector3> positions = new List<Vector3>();
         positions.Add(new Vector3(0, 40, 0));
         positions.Add(new Vector3(0, -40, 0));
-        positions.OrderBy(x => rnd.Next()).ToList();
+        positions = positions.OrderBy(x => rnd.Next()).ToList();
 
         GameObject trueButton = Instantiate(buttonPrefab);
         trueButton.tag = "UserInput";

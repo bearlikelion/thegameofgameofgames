@@ -1394,8 +1394,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.53750914}
-  m_AnchoredPosition: {x: 0.00048828125, y: 1.1000061}
-  m_SizeDelta: {x: 0.099975586, y: -0.30000305}
+  m_AnchoredPosition: {x: 0.00048828125, y: 0.625}
+  m_SizeDelta: {x: -11.02, y: -1.25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1265672398
 CanvasRenderer:
@@ -1989,7 +1989,8 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 114399731090590796, guid: 98ea274e6022c4b69a11d8a7ff37c39f, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 98ea274e6022c4b69a11d8a7ff37c39f, type: 2}
   m_IsPrefabParent: 0
 --- !u!1001 &2080735130
