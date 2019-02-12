@@ -74,7 +74,7 @@ public class TrueorFalse : MonoBehaviour, Category {
         falseButton.GetComponent<Button>().onClick.AddListener(() => SelectAnswer(false));
 
         // Random Swap Chance
-        if (Random.Range(0f, 100f) < 10) {
+        if (Random.Range(0f, 100f) < 5) {
             trueButton.GetComponent<Image>().color = Scheme.Red;
             falseButton.GetComponent<Image>().color = Scheme.Blue;
         } else {

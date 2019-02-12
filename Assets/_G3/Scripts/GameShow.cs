@@ -99,7 +99,7 @@ public class GameShow : MonoBehaviour {
         }
         category.Add("Hard Mode: Shuffle All Categories");
 
-        // TODO: build category buttons
+        // build category buttons
         List<Vector3> positions = new List<Vector3>();
         positions.Add(new Vector3(-225, 0, 0));
         positions.Add(new Vector3(0, 0, 0));
@@ -109,6 +109,7 @@ public class GameShow : MonoBehaviour {
         for (int i = 0; i < positions.Count; i++) {
             string catString = category[i];
             if (i == 3) {
+                // Hard Mode button
                 GameObject button = Instantiate(buttonPrefab, GameObject.Find("Canvas/QuestionPanel").transform);
                 button.GetComponentInChildren<Text>().text = catString;
                 button.tag = "UserInput";
@@ -156,13 +157,7 @@ public class GameShow : MonoBehaviour {
         if (_gameManager.strikes < 3) {
             if (shuffleCategories) {
                 int r = Random.Range(0, categories.Count);
-                _category = categories[r].GetComponent<Category>();
-
-                if (_category.Count == 0) {
-                    categories.Remove(categories[r]);
-                    int rr = Random.Range(0, categories.Count);
-                    _category = categories[rr].GetComponent<Category>();
-                }
+                _category = categories[r].GetComponent<Category>();                
             }
             _category.SetQuestion();
 
