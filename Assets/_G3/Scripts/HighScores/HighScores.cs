@@ -54,7 +54,7 @@ public class HighScores : MonoBehaviour {
         Rootobject scores = new Rootobject();
         scores = JsonUtility.FromJson<Rootobject>(leaderboard);
 
-        if (scores.dreamlo.leaderboard.entry != null) { 
+        if (scores.dreamlo.leaderboard.entry != null) {
             loading.SetActive(false);
 
             List<Entry> entries = new List<Entry>();
@@ -98,7 +98,7 @@ public class HighScores : MonoBehaviour {
         string url = "https://dreamlo.com/lb/" + Secret.PrivateKey + "/add/Alex/0/0/Alex";
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url)) {
             yield return webRequest.SendWebRequest();
-            
+
         }
 
         url = "https://dreamlo.com/lb/" + Secret.PrivateKey + "/add-json/Bob/0/0/Bob";
@@ -106,7 +106,7 @@ public class HighScores : MonoBehaviour {
             yield return webRequest.SendWebRequest();
             leaderboard = webRequest.downloadHandler.text;
             DisplayScores();
-        }        
+        }
     }
 
     IEnumerator SendScores (string guid, int playerScore, int speed, string playerName) {
