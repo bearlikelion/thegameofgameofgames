@@ -27,7 +27,7 @@ The game treats each correct answer as a point, and stores the time remaining fo
 
 ### Data Classes
 
-![Data Classes](./Documentation/images/dataclass.png)
+![Data Classes](./Documentation/Screenshots/dataclass.png)
 
 The questions are entered by [System.Serializable] classes within Unity's Inspector making them easy to change from within the editor.
 
