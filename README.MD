@@ -35,7 +35,10 @@ The questions are entered by [System.Serializable] classes within Unity's Inspec
 
 The 'Secret' class is meant to keep the Dreamlo private keys out of the public git repository. There is a Secret.cs.example file to be renamed to Secret.cs and modified with your information.
 
-### Leaderboard
+### Web Leaderboard
+* [Bootstrap 4](https://github.com/twbs/bootstrap)
+* [lscache](https://github.com/pamelafox/lscache) to cache Dreamlo JSON Response
+* [thenBy](https://github.com/Teun/thenBy.js) to sort scores
 
 
 ## License
