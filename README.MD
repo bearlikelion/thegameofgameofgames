@@ -1,6 +1,6 @@
 # The Game of Game of Games
 
-![The Game of Game of Games Logo](./Documentation/images/logo.png)
+![The Game of Game of Games Logo](./Screenshots/MainMenu.png)
 
 A game created by [Mark Arneman](https://arneman.me) for the [#TVGameJam](https://itch.io/jam/tvgamejam).
 
@@ -27,7 +27,7 @@ The game treats each correct answer as a point, and stores the time remaining fo
 
 ### Data Classes
 
-![Data Classes](./Documentation/images/dataclass.png)
+![Data Classes](./Screenshots/dataclass.png)
 
 The questions are entered by [System.Serializable] classes within Unity's Inspector making them easy to change from within the editor.
 

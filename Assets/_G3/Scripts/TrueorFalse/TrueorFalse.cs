@@ -13,8 +13,7 @@ public class TrueorFalse : MonoBehaviour, Category {
     private string _category = "True of False";
 
     private TFQuestions _current;
-    private List<TFQuestions> unanswered;
-    private System.Random rnd = new System.Random();
+    private List<TFQuestions> unanswered;    
 
     [SerializeField]
     private TFQuestions[] _questions;
