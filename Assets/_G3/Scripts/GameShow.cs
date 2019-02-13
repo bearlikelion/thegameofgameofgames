@@ -155,27 +155,23 @@ public class GameShow : MonoBehaviour {
         }
     }
 
-    private void NewQuestion () {
-        if (_gameManager.strikes < 3) {
-            if (shuffleCategories) {
-                int r = Random.Range(0, categories.Count);
-                _category = categories[r].GetComponent<Category>();
-            }
-            _category.SetQuestion();
-
-            if (!timer.activeSelf) {
-                timer.SetActive(true);
-            }
-
-            timerImage.fillAmount = 1f;
-            timeLeft = countdown;
-            timerStarted = true;
-
-            audioSource.PlayOneShot(timerSound);
-            questionCount++;
-        } else {
-            _gameManager.GameOver();
+    private void NewQuestion () {        
+        if (shuffleCategories) {
+            int r = Random.Range(0, categories.Count);
+            _category = categories[r].GetComponent<Category>();
         }
+        _category.SetQuestion();
+
+        if (!timer.activeSelf) {
+            timer.SetActive(true);
+        }
+
+        timerImage.fillAmount = 1f;
+        timeLeft = countdown;
+        timerStarted = true;
+
+        audioSource.PlayOneShot(timerSound);
+        questionCount++;        
     }
 
 	public void CorrectAnswer() {
@@ -212,7 +208,9 @@ public class GameShow : MonoBehaviour {
         wrongPanel.GetComponentInChildren<Text>().text = strikeText;
         wrongPanel.SetActive(true);
 
-        if (shuffleCategories) {
+        if (_gameManager.strikes == 3) {
+            StartCoroutine(EndGame());
+        } else if (shuffleCategories) {
             StartCoroutine(NextQuestion());
         } else {
             StartCoroutine(CategorySelect());
@@ -226,6 +224,7 @@ public class GameShow : MonoBehaviour {
 
     private void StartCountdown() {
         readyTimer -= Time.deltaTime;
+
         if (!countdownPanel.activeSelf) {
             countdownPanel.SetActive(true);
         }
@@ -234,6 +233,7 @@ public class GameShow : MonoBehaviour {
             ticked = true;
             StartCoroutine(TickClock());
         }
+
         if (readyTimer > 0) {
             countdownPanel.transform.Find("Text").GetComponent<Text>().text = Mathf.Round(readyTimer).ToString();
         } else if(readyTimer < 0) {
@@ -281,6 +281,11 @@ public class GameShow : MonoBehaviour {
         }
     }
 
+    IEnumerator EndGame() {
+        yield return new WaitForSeconds(waitTime);
+        _gameManager.GameOver();
+    }
+
 	IEnumerator NextQuestion() {
 		yield return new WaitForSeconds(waitTime);
         RemoveUIChildren();
@@ -304,7 +309,7 @@ public class GameShow : MonoBehaviour {
 
     IEnumerator TickClock () {
         audioSource.PlayOneShot(clockTick);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.75f);
         ticked = false;
     }
 }

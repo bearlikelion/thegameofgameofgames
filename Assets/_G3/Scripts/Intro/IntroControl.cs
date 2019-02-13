@@ -44,6 +44,14 @@ public class IntroControl : MonoBehaviour {
         if (inputField.isFocused && inputField.text != "" && Input.GetKey(KeyCode.Return)) {
             BeginShow();
         }
+
+        if (showStarted && Input.GetKeyDown(KeyCode.Escape)) {
+            if (_gameManager.isGameOver) {
+                _gameManager.ShowScores();
+            } else {
+                LoadQuestionScene();
+            }            
+        }
     }
 
     public void EnableStart() {

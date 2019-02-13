@@ -65,8 +65,6 @@ public class HighScores : MonoBehaviour {
 
             entries = entries.OrderByDescending(x => x.score).ThenByDescending(x => x.seconds).ToList();
 
-            Debug.Log(entries.Count);
-
             foreach (Entry player in entries) {
                 GameObject childScore = Instantiate(scoreEntry, content.transform);
                 childScore.transform.Find("Name").GetComponent<Text>().text = player.text;
@@ -77,9 +75,9 @@ public class HighScores : MonoBehaviour {
                     childScore.GetComponent<Image>().color = new Color32(80, 160, 89, 200);
                 }
             }
-        } else {
-            // loading.GetComponent<Text>().text = "No Highscores";
+        } else {            
             StartCoroutine(Fake2Scores());
+            // loading.GetComponent<Text>().text = "No Highscores";
         }
     }
 
