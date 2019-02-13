@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="h-100">
   <head>
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
@@ -11,29 +11,42 @@
 	<title>The Game of Game of Games Leaderboards</title>
 
 	<style type="text/css">
-	.dreamloLBTable { border-collapse:collapse;text-align:center;width: 200px; }
-	.dreamloLBTable th { border-bottom: 1px solid #EEEEEE;font-weight:bold;margin:0;padding:4px; }
-	.dreamloLBTable td { border-bottom: 1px solid#EEEEEE;margin:0;padding:4px; }
+		.footer {
+		  background-color: #f5f5f5;
+		}
 	</style>
   </head>
-  <body>
-	<div class="container">
-		<h1><p class="text-center">The Game of Game of Games Leaderboard</p></h1>
+  <body class="d-flex flex-column h-100">
+  	<main role="main" class="flex-shrink-0">
+		<div class="container">
+			<h1><p class="text-center">The Game of Game of Games Leaderboard</p></h1>
 
-		<table class="table">
-		  <thead>
-			<tr>	          
-			  <th scope="col">Name</th>
-			  <th scope="col">Correct</th>
-			  <th scope="col">Speed</th>
-			</tr>
-		  </thead>
-		  <tbody id="records_table">
-		  </tbody>
-		</table>
+			<table class="table table-hover">
+			  <thead class="thead-light">
+				<tr>	          
+				  <th scope="col">Name</th>
+				  <th></th>
+				  <th scope="col">Correct</th>				  
+				  <th scope="col">Speed</th>
+				</tr>
+			  </thead>
+			  <tbody id="records_table">
+			  </tbody>
+			</table>
 
-		<h2 class="loading"><p class="text-center">Loading</p></h2>
-	</div>	  
+			<div class="loading d-flex justify-content-center">			
+			  	<div class="spinner-border" role="status">  	
+			    	<span class="sr-only">Loading...</span>
+			  	</div>
+			</div>		
+		</div>
+	</main>
+
+	<footer class="footer mt-auto py-3">
+	  <div class="container">
+	    <span class="text-muted">Developed by <a href="https://arneman.me" target="_blank">Mark</a> for the <a href="https://bearlikelion.itch.io/the-game-of-game-of-games">#TVGameJam</a>. Powered by <a href="https://dreamlo.com" target="_blank">Dreamlo.</a></span>
+	  </div>
+	</footer> 
 
 	<!-- <script src="https://www.dreamlo.com/lb/5c5dd477b639870c248d3350/js" type="text/javascript"></script> -->
 
@@ -41,69 +54,68 @@
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script> 
+	<script type="text/javascript" src="lscache.min.js"></script>
+
+	<script type="text/javascript">
+	  var _paq = window._paq || [];
+	  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+	  _paq.push(['trackPageView']);
+	  _paq.push(['enableLinkTracking']);
+	  (function() {
+	    var u="//stats.arneman.me/";
+	    _paq.push(['setTrackerUrl', u+'anal.php']);
+	    _paq.push(['setSiteId', '2']);
+	    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+	    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'anal.js'; s.parentNode.insertBefore(g,s);
+	  })();
+	</script>	
+
+	
+	<img src="https://stats.arneman.me/anal.php?idsite=2&amp;rec=1" style="border:0" alt="" />	
+						
+	<script type="text/javascript">
+	//<![CDATA[
+	var owa_baseUrl = 'http://wa.arneman.me/';
+	var owa_cmds = owa_cmds || [];
+	owa_cmds.push(['setSiteId', '7939fe2c9a05013cdd0f3ac71d6e3f44']);
+	owa_cmds.push(['trackPageView']);
+	owa_cmds.push(['trackClicks']);
+
+	(function() {
+		var _owa = document.createElement('script'); _owa.type = 'text/javascript'; _owa.async = true;
+		owa_baseUrl = ('https:' == document.location.protocol ? window.owa_baseSecUrl || owa_baseUrl.replace(/http:/, 'https:') : owa_baseUrl );
+		_owa.src = owa_baseUrl + 'modules/base/js/owanal.js';
+		var _owa_s = document.getElementsByTagName('script')[0]; _owa_s.parentNode.insertBefore(_owa, _owa_s);
+	}());
+	//]]>
+	</script>							
 
 	<script>
-		(function($) {
-		  var oKeyDeferredMap = {};
-		   
-		  function fnReadData(sKey) {
-		    var sValue = window.localStorage.getItem(sKey);
-		    return sValue ? JSON.parse(sValue) : sValue;
-		  }
-		   
-		  function fnWriteData(sKey, oData) {
-		    var sValue = JSON.stringify(oData);
-		    window.localStorage.setItem(sKey, sValue);
-		  }
-		   
-		  $.cachedAjaxPromise = function(sUrl, oAjaxOptions) {
-		    var oDeferred = oKeyDeferredMap[sUrl];
-		    var sValue;
-		     
-		    if (!oDeferred) {
-		      oDeferred = new jQuery.Deferred();
-		      oKeyDeferredMap[sUrl] = oDeferred;
-		      sValue = fnReadData(sUrl);
-		       
-		      if (sValue) {
-		        oDeferred.resolve(sValue);
-		      }
-		       
-		      if (!oAjaxOptions) {
-		        oAjaxOptions = {};
-		      }
-		       
-		      $.extend(oAjaxOptions, {
-		        error: function(oXHR, sTextStatus, sErrorThrown) {
-		          console.log('customer info request failed: ' + sErrorThrown);
-		          oDeferred.resolve(null);
-		        },
-		        success: function(oData) {
-		          // making assumption that data is JSON
-		          fnWriteData(sUrl, oData);
-		          oDeferred.resolve(oData);
-		        }
-		      });
-		       
-		      $.ajax(sUrl, oAjaxOptions);
-		    }
-		     
-		    return oDeferred.promise();
-		  };
-		}(jQuery));
+		var url = 'https://www.dreamlo.com/lb/5c5dd477b639870c248d3350/json';
 
-		oPromise = $.cachedAjaxPromise('/someURL').done(function(data) {
-  			$( ".loading" ).remove();
+		if (cachedJson = lscache.get(url)) {
+			console.log("Loaded from cache");
+			ShowScores(cachedJson);
+		} else {
+			console.log("Fetch Scores");
+			$.getJSON(url).done(function (data) {
+				lscache.set(url, data);
+				ShowScores(data);
+			});
+		}		
+
+		function ShowScores(data) {
+			$( ".loading" ).remove();
 			$.each(data.dreamlo.leaderboard.entry, function(i, item) {
 				console.log(item);
 				var $tr = $('<tr>').append(
-					$('<td>').text(item.text),
+					$('<td colspan="2">').text(item.text),
 					$('<td>').text(item.score),
 					$('<td>').text(item.seconds)
 				).appendTo("#records_table");
 			});
-		});
+		}
 	</script>
   </body>
 </html>
