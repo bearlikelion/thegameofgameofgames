@@ -8,8 +8,8 @@ using System.Collections.Generic;
 
 public class GameShow : MonoBehaviour {
 
-    public bool skipReady, shuffleCategories;
     public int questionLimit = 5;
+    public bool shuffleCategories;
 
     private int questionCount = 0;
     private string challengeString = "Hard Mode: Shuffle All Categories";

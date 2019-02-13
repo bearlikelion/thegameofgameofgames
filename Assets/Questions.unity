@@ -530,14 +530,6 @@ MonoBehaviour:
   _questions:
   - question: Stone ____ Steve Austin
     blank: cold
-  - question: Cat in the ___
-    blank: hat
-  - question: A spoonful of _____
-    blank: sugar
-  - question: "David\u2019s father has three sons: Snap, Crackle, and _____"
-    blank: David
-  - question: My anaconda dont want none unless you got ____ hun
-    blank: buns
 --- !u!1 &367437361
 GameObject:
   m_ObjectHideFlags: 0
@@ -650,12 +642,6 @@ MonoBehaviour:
     - Steel
     - Titanium
     - Brass
-  - question: Which planet is not a gas giant
-    answer: Mercury
-    choices:
-    - Uranus
-    - Saturn
-    - Jupiter
 --- !u!4 &435970077
 Transform:
   m_ObjectHideFlags: 0
@@ -811,14 +797,6 @@ MonoBehaviour:
   _questions:
   - one: 'Dog : Puppy'
     two: 'Cat : Kitten'
-  - one: 'Moon : Night'
-    two: 'Sun : Day'
-  - one: 'Sing : Sang'
-    two: 'Sleep : Slept'
-  - one: 'Cup : Coffee'
-    two: 'Soup : Bowl'
-  - one: 'Flow : River'
-    two: 'Still : Pool'
 --- !u!4 &613867590
 Transform:
   m_ObjectHideFlags: 0
@@ -907,9 +885,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bee7bc7d5024c470783a8f28416476e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skipReady: 1
+  questionLimit: 5
   shuffleCategories: 0
-  questionLimit: 3
   correctPanel: {fileID: 77605872}
   wrongPanel: {fileID: 367437361}
   countdownPanel: {fileID: 823043107}
@@ -1122,7 +1099,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4852940753719718, guid: 2997de1329f734443b351eb28203759f, type: 2}
       propertyPath: m_RootOrder
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2997de1329f734443b351eb28203759f, type: 2}
@@ -1308,35 +1285,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1156053488
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 1156053489}
-  m_Layer: 0
-  m_Name: '--------'
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1156053489
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1156053488}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1265672396
 GameObject:
@@ -1473,48 +1422,6 @@ MonoBehaviour:
     type: 2}
   _words:
   - word: space
-  - word: light
-  - word: plant
-  - word: jump
-  - word: chair
-  - word: trunk
-  - word: bacon
-  - word: smoke
-  - word: drive
-  - word: ghost
-  - word: knife
-  - word: guide
-  - word: magots
-  - word: fairy
-  - word: game
---- !u!1 &1493582544
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 1493582545}
-  m_Layer: 0
-  m_Name: Shuffle
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1493582545
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1493582544}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1679456224
 GameObject:
   m_ObjectHideFlags: 0
@@ -1803,58 +1710,65 @@ MonoBehaviour:
     - Plastic
     - End
     - Needle
-  - question: "What is the body\u2019s biggest organ?"
+  - question: What is the body's biggest organ?
     answer: Skin
     choices:
     - Stomach
     - Brain
     - Large Intestine
     - Small Intestine
+    - Liver
   - question: How long can a snail sleep for?
     answer: 3 Years
     choices:
     - 5 Hours
     - 2 Days
     - 1 Week
+    - 525,600 Minutes
   - question: Which animal cannot jump?
     answer: Elephants
     choices:
     - Fish
     - Penguins
     - Turtles
-  - question: Which is not a branch of the federal government?
+    - Mice
+    - Snakes
+  - question: Which is not a branch of the United States federal government?
     answer: Conservative
     choices:
     - Legislative
     - Executive
     - Judicial
-  - question: 'Where was the fortune cookie invented? '
+  - question: Where was the fortune cookie invented?
     answer: America
     choices:
-    - Canada
-    - China
     - Japan
-  - question: What's the capital of Pennsylvania?
-    answer: Harrisburg
+    - China
+    - Canada
+  - question: Which is not a branch of the United States federal government?
+    answer: Conservative
     choices:
-    - Philadelphia
-    - Pittsburgh
-    - Scranton
-  - question: What state is Mount Rushmore in?
-    answer: South Dakota
+    - Legislative
+    - Executive
+    - Judicial
+  - question: Which is not a branch of the United States federal government?
+    answer: Conservative
     choices:
-    - North Dakota
-    - Wyoming
-    - Montana
-  - question: How many glasses of milk can a cow give within their lifetime?
-    answer: 200,000
+    - Legislative
+    - Executive
+    - Judicial
+  - question: Which is not a branch of the United States federal government?
+    answer: Conservative
     choices:
-    - 500
-    - 1,000
-    - 50,000
-    - 100,000
-    - 500,000
-    - 1,000,000
+    - Legislative
+    - Executive
+    - Judicial
+  - question: Which is not a branch of the United States federal government?
+    answer: Conservative
+    choices:
+    - Legislative
+    - Executive
+    - Judicial
 --- !u!1 &1997408326
 GameObject:
   m_ObjectHideFlags: 0
@@ -1886,34 +1800,6 @@ MonoBehaviour:
     type: 2}
   _questions:
   - question: The color orange is named after the fruit
-    isTrue: 1
-  - question: George Washington had wooden teeth
-    isTrue: 0
-  - question: Some turtles can breathe through their butts
-    isTrue: 1
-  - question: Goldfish have a memory of 3 seconds
-    isTrue: 0
-  - question: Some turtles can breathe through their butts
-    isTrue: 1
-  - question: 'Ostriches bury their heads underground '
-    isTrue: 1
-  - question: Your nose is important when it comes to staying balanced
-    isTrue: 0
-  - question: One quarter of human bones are in their feet
-    isTrue: 1
-  - question: Sharks have to come up to the surface to breathe.
-    isTrue: 0
-  - question: The Koala has fingerprints that are indistinguishable to humans
-    isTrue: 1
-  - question: Nearly three percent of the ice in Antarctic glaciers is penguin urine
-    isTrue: 1
-  - question: Ellen Degeneres is distantly related to Madonna.
-    isTrue: 1
-  - question: "The surface of the sun is hotter than Earth\u2019s core."
-    isTrue: 0
-  - question: Benjamin Franklin invented the bicycle
-    isTrue: 0
-  - question: "An ostrich\u2019s eye is bigger than it's brain"
     isTrue: 1
 --- !u!4 &1997408328
 Transform:
@@ -2016,7 +1902,7 @@ Prefab:
     - target: {fileID: 224184728643313212, guid: 9c6b69a7331fd462d9259ec27f2242ad,
         type: 2}
       propertyPath: m_RootOrder
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 224184728643313212, guid: 9c6b69a7331fd462d9259ec27f2242ad,
         type: 2}
