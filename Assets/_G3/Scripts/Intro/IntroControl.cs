@@ -34,6 +34,10 @@ public class IntroControl : MonoBehaviour {
         if (showStarted) {
             BeginShow();
         }
+
+        if (_gameManager.isGameOver) {
+            QueueEllen();
+        }
 	}
 
     private void Update() {
@@ -54,8 +58,12 @@ public class IntroControl : MonoBehaviour {
     }
 
 	// Begin the show
-	public void BeginShow() {                      
+	public void BeginShow() {
         showStarted = true;
+        QueueEllen();
+    }
+
+    void QueueEllen() {
         menu.SetActive(false);
         hiddenLogo.SetActive(true);
         _gameManager.playerName = inputField.text;
@@ -63,7 +71,7 @@ public class IntroControl : MonoBehaviour {
         // Ellen Dance
         ellen.transform.DOShakeRotation(1f, new Vector3(0, 135f, 0), 1).SetLoops(-1);
         ellen.transform.DOPunchPosition(new Vector3(0.25f, 0, 0), 1f, 1).SetLoops(-1);
-        
+
         risingPlatform.transform.DOMoveY(3, 3f).OnComplete(IntroPanel);
     }
 
@@ -72,19 +80,44 @@ public class IntroControl : MonoBehaviour {
     }
 
     private void IntroPanel() {
-        intro.transform.DOScale(Vector3.one, 1f).OnComplete(StartIntroText);        
+        if (_gameManager.isGameOver) {
+            Debug.Log("End of the show bro");
+            intro.transform.DOScale(Vector3.one, 1f).OnComplete(EndGameText);
+        } else {
+            intro.transform.DOScale(Vector3.one, 1f).OnComplete(StartIntroText);
+        }
     }
-    
+
+    private void EndGameText() {
+        string endText = "";
+        if (_gameManager.strikes < 3) {
+            endText = "Wow!! " + _gameManager.playerName + " you managed to make it through without getting three strikes!! \n Lets see the <b>leaderboards</b>";
+        } else {
+            endText = "Aww sorry " + _gameManager.playerName + ", but three strikes and you're out! \n Lets see the <b>leaderboards</b>";
+        }
+
+        text.DOText(endText, textDelay).OnComplete(GoToLeaderboard);
+    }
+
+    private void GoToLeaderboard() {
+        StartCoroutine(ShowScores());
+    }
+
+    IEnumerator ShowScores () {
+        yield return new WaitForSeconds(3f);
+        _gameManager.ShowScores();
+    }
+
     private void StartIntroText() {
         string introText = "Hi " + _gameManager.playerName + "! I am Ellen DeCube, and welcome to: \n <b>The Game of Game of Games!</b>";
         text.DOText(introText, textDelay).OnComplete(IntroText1);
     }
-    
+
     private void IntroText1() {
-        StartCoroutine(WriteIntro1());        
+        StartCoroutine(WriteIntro1());
     }
 
-    IEnumerator WriteIntro1 () {        
+    IEnumerator WriteIntro1 () {
         yield return new WaitForSeconds(3f);
         text.text = "";
         string introText = "Select a category and answer the related questions.\n One wrong is a <b>strike</b>\n Three strikes and you lose!";
@@ -113,6 +146,6 @@ public class IntroControl : MonoBehaviour {
         text.DOText(introText, 1f);
 
         ready1.DOLocalMoveX(-175, 1);
-        ready2.DOLocalMoveX(175, 1);        
+        ready2.DOLocalMoveX(175, 1);
     }
 }

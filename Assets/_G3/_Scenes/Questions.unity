@@ -530,14 +530,6 @@ MonoBehaviour:
   _questions:
   - question: Stone ____ Steve Austin
     blank: cold
-  - question: Cat in the ___
-    blank: hat
-  - question: A spoonful of _____
-    blank: sugar
-  - question: "David\u2019s father has three sons: Snap, Crackle, and _____"
-    blank: David
-  - question: My anaconda dont want none unless you got ____ hun
-    blank: buns
 --- !u!1 &367437361
 GameObject:
   m_ObjectHideFlags: 0
@@ -650,12 +642,6 @@ MonoBehaviour:
     - Steel
     - Titanium
     - Brass
-  - question: Which planet is not a gas giant
-    answer: Mercury
-    choices:
-    - Uranus
-    - Saturn
-    - Jupiter
 --- !u!4 &435970077
 Transform:
   m_ObjectHideFlags: 0
@@ -811,14 +797,6 @@ MonoBehaviour:
   _questions:
   - one: 'Dog : Puppy'
     two: 'Cat : Kitten'
-  - one: 'Moon : Night'
-    two: 'Sun : Day'
-  - one: 'Sing : Sang'
-    two: 'Sleep : Slept'
-  - one: 'Cup : Coffee'
-    two: 'Soup : Bowl'
-  - one: 'Flow : River'
-    two: 'Still : Pool'
 --- !u!4 &613867590
 Transform:
   m_ObjectHideFlags: 0
@@ -1473,20 +1451,6 @@ MonoBehaviour:
     type: 2}
   _words:
   - word: space
-  - word: light
-  - word: plant
-  - word: jump
-  - word: chair
-  - word: trunk
-  - word: bacon
-  - word: smoke
-  - word: drive
-  - word: ghost
-  - word: knife
-  - word: guide
-  - word: magots
-  - word: fairy
-  - word: game
 --- !u!1 &1493582544
 GameObject:
   m_ObjectHideFlags: 0
@@ -1763,98 +1727,6 @@ MonoBehaviour:
     - Ben Kingsley
     - Ben Stein
     - Ben Folds
-  - question: Who is the ape-like character that throws barrels at enemies?
-    answer: Donkey Kong
-    choices:
-    - Donkey King
-    - King Kong
-    - Dunkey
-    - Harambe
-    - Donkey Karl
-  - question: Which is not a mammal?
-    answer: Iguana
-    choices:
-    - Human
-    - Whale
-    - Dolphin
-    - Giraffe
-    - Aardvark
-    - Wolverine
-    - Platypus
-  - question: A group of Unicorns is known as?
-    answer: A Blessing
-    choices:
-    - A Curse
-    - A Myth
-    - A Legend
-    - A Dream
-  - question: Which animal is known to kill more people than plane crashes?
-    answer: Donkey
-    choices:
-    - Shark
-    - Baby Shark
-    - Lion
-    - Bear
-    - Tiger
-  - question: What is the tiny plastic covering of the tip of a shoelace called?
-    answer: Aglet
-    choices:
-    - Tip
-    - Plastic
-    - End
-    - Needle
-  - question: "What is the body\u2019s biggest organ?"
-    answer: Skin
-    choices:
-    - Stomach
-    - Brain
-    - Large Intestine
-    - Small Intestine
-  - question: How long can a snail sleep for?
-    answer: 3 Years
-    choices:
-    - 5 Hours
-    - 2 Days
-    - 1 Week
-  - question: Which animal cannot jump?
-    answer: Elephants
-    choices:
-    - Fish
-    - Penguins
-    - Turtles
-  - question: Which is not a branch of the federal government?
-    answer: Conservative
-    choices:
-    - Legislative
-    - Executive
-    - Judicial
-  - question: 'Where was the fortune cookie invented? '
-    answer: America
-    choices:
-    - Canada
-    - China
-    - Japan
-  - question: What's the capital of Pennsylvania?
-    answer: Harrisburg
-    choices:
-    - Philadelphia
-    - Pittsburgh
-    - Scranton
-  - question: What state is Mount Rushmore in?
-    answer: South Dakota
-    choices:
-    - North Dakota
-    - Wyoming
-    - Montana
-  - question: How many glasses of milk can a cow give within their lifetime?
-    answer: 200,000
-    choices:
-    - 500
-    - 1,000
-    - 50,000
-    - 100,000
-    - 500,000
-    - 1,000,000
 --- !u!1 &1997408326
 GameObject:
   m_ObjectHideFlags: 0
@@ -1886,34 +1758,6 @@ MonoBehaviour:
     type: 2}
   _questions:
   - question: The color orange is named after the fruit
-    isTrue: 1
-  - question: George Washington had wooden teeth
-    isTrue: 0
-  - question: Some turtles can breathe through their butts
-    isTrue: 1
-  - question: Goldfish have a memory of 3 seconds
-    isTrue: 0
-  - question: Some turtles can breathe through their butts
-    isTrue: 1
-  - question: 'Ostriches bury their heads underground '
-    isTrue: 1
-  - question: Your nose is important when it comes to staying balanced
-    isTrue: 0
-  - question: One quarter of human bones are in their feet
-    isTrue: 1
-  - question: Sharks have to come up to the surface to breathe.
-    isTrue: 0
-  - question: The Koala has fingerprints that are indistinguishable to humans
-    isTrue: 1
-  - question: Nearly three percent of the ice in Antarctic glaciers is penguin urine
-    isTrue: 1
-  - question: Ellen Degeneres is distantly related to Madonna.
-    isTrue: 1
-  - question: "The surface of the sun is hotter than Earth\u2019s core."
-    isTrue: 0
-  - question: Benjamin Franklin invented the bicycle
-    isTrue: 0
-  - question: "An ostrich\u2019s eye is bigger than it's brain"
     isTrue: 1
 --- !u!4 &1997408328
 Transform:

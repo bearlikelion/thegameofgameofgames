@@ -12,6 +12,7 @@ public class GameShow : MonoBehaviour {
     public int questionLimit = 5;
 
     private int questionCount = 0;
+    private string challengeString = "Hard Mode: Shuffle All Categories";
     private bool timerStarted = false, ticked = false, readyCount = false;
     private float timeLeft, countdown = 10.0f, waitTime = 1.5f, readyTimer = 3.0f;
 
@@ -78,7 +79,8 @@ public class GameShow : MonoBehaviour {
             }
         }
 
-        if (categories.Count < 3) {
+        if (categories.Count < 1) {
+            Debug.Log("Out of categories!");
             _gameManager.GameOver();
         }
         if (categoryChoice == null || categoryChoice.Count < 3) {
@@ -97,7 +99,7 @@ public class GameShow : MonoBehaviour {
                 break;
             }
         }
-        category.Add("Hard Mode: Shuffle All Categories");
+        category.Add(challengeString);
 
         // build category buttons
         List<Vector3> positions = new List<Vector3>();
@@ -106,10 +108,9 @@ public class GameShow : MonoBehaviour {
         positions.Add(new Vector3(225, 0, 0));
         positions.Add(new Vector3(0, 0, 0));
 
-        for (int i = 0; i < positions.Count; i++) {
-            string catString = category[i];
-            if (i == 3) {
-                // Hard Mode button
+        foreach (string catString in category) {
+            // Hard Mode button
+            if (catString == challengeString) {
                 GameObject button = Instantiate(buttonPrefab, GameObject.Find("Canvas/QuestionPanel").transform);
                 button.GetComponentInChildren<Text>().text = catString;
                 button.tag = "UserInput";
@@ -118,8 +119,9 @@ public class GameShow : MonoBehaviour {
                 button.GetComponent<Button>().onClick.AddListener(() => CategoryIs(catString));
             } else {
                 GameObject button = Instantiate(buttonPrefab, userInput.transform);
-                button.transform.localPosition = positions[i];
+                button.transform.localPosition = positions.First();
                 button.tag = "UserInput";
+                positions.RemoveAt(0);
 
                 button.GetComponentInChildren<Text>().text = catString;
                 button.GetComponent<Button>().onClick.AddListener(() => CategoryIs(catString));
@@ -139,7 +141,7 @@ public class GameShow : MonoBehaviour {
 
             for (int i=0; i < categoryChoice.Count; i++){
                 if (categoryChoice[i].name == category) {
-                categoryChoice.Remove(categoryChoice[i]);
+                    categoryChoice.Remove(categoryChoice[i]);
                 }
             }
         }
@@ -157,7 +159,7 @@ public class GameShow : MonoBehaviour {
         if (_gameManager.strikes < 3) {
             if (shuffleCategories) {
                 int r = Random.Range(0, categories.Count);
-                _category = categories[r].GetComponent<Category>();                
+                _category = categories[r].GetComponent<Category>();
             }
             _category.SetQuestion();
 
