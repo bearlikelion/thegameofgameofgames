@@ -160,18 +160,26 @@ public class GameShow : MonoBehaviour {
             int r = Random.Range(0, categories.Count);
             _category = categories[r].GetComponent<Category>();
         }
-        _category.SetQuestion();
+        if (_category.Count > 0) {
+            _category.SetQuestion();
 
-        if (!timer.activeSelf) {
-            timer.SetActive(true);
+            if (!timer.activeSelf) {
+                timer.SetActive(true);
+            }
+
+            timerImage.fillAmount = 1f;
+            timeLeft = countdown;
+            timerStarted = true;
+
+            audioSource.PlayOneShot(timerSound);
+            questionCount++;
+        } else {
+            if (shuffleCategories) {
+                NewQuestion();
+            } else {
+                SelectCategory();
+            }
         }
-
-        timerImage.fillAmount = 1f;
-        timeLeft = countdown;
-        timerStarted = true;
-
-        audioSource.PlayOneShot(timerSound);
-        questionCount++;        
     }
 
 	public void CorrectAnswer() {

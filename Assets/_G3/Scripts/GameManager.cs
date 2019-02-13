@@ -5,21 +5,33 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
+    public static GameManager instance;
+
     public bool isGameOver = false;
     public string playerName = "";
     public int correct = 0, strikes = 0, speed = 0;
-    private string guid;
+    private string guid = "";
 
     public string Guid {
         get { return guid; }
     }
+    
 
     void Awake () {
+        if (instance == null) {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        } else if (instance != this) {
+            Destroy(gameObject);
+        }
+
         DontDestroyOnLoad(gameObject);
     }
 
     void Start () {
-        GenerateGUID();
+        if (guid == "") {
+            GenerateGUID();
+        }
     }
 
     public void ShowScores() {

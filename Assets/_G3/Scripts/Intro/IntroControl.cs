@@ -45,7 +45,7 @@ public class IntroControl : MonoBehaviour {
             BeginShow();
         }
 
-        if (showStarted && Input.GetKeyDown(KeyCode.Escape)) {
+        if (showStarted && Input.GetKeyDown(KeyCode.Escape) || _gameManager.isGameOver && Input.GetKeyDown(KeyCode.Escape)) {
             if (_gameManager.isGameOver) {
                 _gameManager.ShowScores();
             } else {
@@ -67,14 +67,16 @@ public class IntroControl : MonoBehaviour {
 
 	// Begin the show
 	public void BeginShow() {
-        showStarted = true;
+        if (_gameManager.playerName == "" && inputField.text != "") {
+            _gameManager.playerName = inputField.text;
+        }
+        showStarted = true;        
         QueueEllen();
     }
 
     void QueueEllen() {
         menu.SetActive(false);
-        hiddenLogo.SetActive(true);
-        _gameManager.playerName = inputField.text;
+        hiddenLogo.SetActive(true);        
 
         // Ellen Dance
         ellen.transform.DOShakeRotation(1f, new Vector3(0, 135f, 0), 1).SetLoops(-1);

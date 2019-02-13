@@ -71,7 +71,7 @@ public class HighScores : MonoBehaviour {
                 childScore.transform.Find("Correct").GetComponent<Text>().text = player.score.ToString();
                 childScore.transform.Find("Speed").GetComponent<Text>().text = player.seconds.ToString();
 
-                if (player.text == _gameManager.Guid) {
+                if (player.name == _gameManager.Guid) {
                     childScore.GetComponent<Image>().color = new Color32(80, 160, 89, 200);
                 }
             }
