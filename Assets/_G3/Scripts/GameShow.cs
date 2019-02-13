@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 public class GameShow : MonoBehaviour {
 
-    public int questionLimit = 5;
+    public int questionLimit = 3;
     public bool shuffleCategories;
 
     private int questionCount = 0;
@@ -66,11 +66,24 @@ public class GameShow : MonoBehaviour {
         }
     }
 
+    private void IncreaseDifficulty () {
+        if (_gameManager.correct > 5) {
+            questionLimit = 4;
+        } else if (_gameManager.correct > 10) {
+            questionLimit = 5;
+        } else if (_gameManager.correct > 15) {
+            questionLimit = 7;
+        }
+    }
+
     private void SelectCategory() {
         Debug.Log("Select Category");
-        List<string> category = new List<string>();
+
+        IncreaseDifficulty();        
+        
         questionText.text = "";
         shuffleCategories = false;
+        List<string> category = new List<string>();
 
         for (int i = 0; i < categories.Count; i++) {
             Category _cat = categories[i].GetComponent<Category>();
@@ -155,7 +168,7 @@ public class GameShow : MonoBehaviour {
         }
     }
 
-    private void NewQuestion () {        
+    private void NewQuestion () {    
         if (shuffleCategories) {
             int r = Random.Range(0, categories.Count);
             _category = categories[r].GetComponent<Category>();

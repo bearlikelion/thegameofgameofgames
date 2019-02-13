@@ -16,7 +16,8 @@ public class IntroControl : MonoBehaviour {
     private GameManager _gameManager;
     private GameObject menu, intro, risingPlatform;
 
-    private float textDelay = 3.0f;
+    [SerializeField]
+    private float textDelay = 1.5f;
 
 
     private void Start() {
@@ -101,9 +102,9 @@ public class IntroControl : MonoBehaviour {
     private void EndGameText() {
         string endText = "";
         if (_gameManager.strikes < 3) {
-            endText = "Wow!! " + _gameManager.playerName + " you managed to make it through without getting three strikes!! \n Lets see the <b>leaderboards</b>";
+            endText = "Wow!! " + _gameManager.playerName + " you managed to make it through without getting three strikes!! \n Let's check the <b>scoreboard</b>!";
         } else {
-            endText = "Aww sorry " + _gameManager.playerName + ", but three strikes and you're out! \n Lets see the <b>leaderboards</b>";
+            endText = "Aww sorry " + _gameManager.playerName + ", but three strikes and you're out! \n Why don't we check the <b>scoreboard</b>";
         }
 
         text.DOText(endText, textDelay).OnComplete(GoToLeaderboard);
@@ -114,7 +115,7 @@ public class IntroControl : MonoBehaviour {
     }
 
     IEnumerator ShowScores () {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(textDelay);
         _gameManager.ShowScores();
     }
 
@@ -128,9 +129,9 @@ public class IntroControl : MonoBehaviour {
     }
 
     IEnumerator WriteIntro1 () {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(textDelay);
         text.text = "";
-        string introText = "Select a category and answer the related questions.\n One wrong is a <b>strike</b>\n Three strikes and you lose!";
+        string introText = "Select a category and answer the related questions.\n One wrong is a <b>strike</b>\n Three strikes and you're out!";
         text.DOText(introText, textDelay).OnComplete(IntroText2);
     }
 
@@ -139,7 +140,7 @@ public class IntroControl : MonoBehaviour {
     }
 
     IEnumerator WriteIntro2 () {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(textDelay);
         text.text = "";
         string introText = "For a challenge, try playing with shuffled categories!";
         text.DOText(introText, textDelay).OnComplete(ReadyCheck);
@@ -150,7 +151,7 @@ public class IntroControl : MonoBehaviour {
     }
 
     IEnumerator PromptReady() {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(textDelay);
         text.text = "";
         string introText = "Are you ready?!";
         text.DOText(introText, 1f);

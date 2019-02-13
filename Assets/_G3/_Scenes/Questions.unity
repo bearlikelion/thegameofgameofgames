@@ -696,6 +696,160 @@ MonoBehaviour:
     - Uranus
     - Saturn
     - Jupiter
+  - question: Which is not a currency
+    answer: Ounce
+    choices:
+    - Dollar
+    - Peso
+    - Euro
+    - Yen
+  - question: Which is not a topic of mathmatics
+    answer: Thermodynamics
+    choices:
+    - Geometry
+    - Calculus
+    - Algebra
+  - question: What animal does not lay eggs
+    answer: Whale
+    choices:
+    - Fish
+    - Snake
+    - Crocodile
+  - question: Which planet is not a gas giant
+    answer: Mercury
+    choices:
+    - Uranus
+    - Saturn
+    - Jupiter
+  - question: Which is not a spice
+    answer: Salt
+    choices:
+    - Black Pepper
+    - Chilli
+    - Coriander
+    - Jir
+  - question: Which is not a piece of furniture
+    answer: Computer
+    choices:
+    - Table
+    - Chair
+    - Cupboard
+    - Bed
+  - question: Which is not a color of the rainbow
+    answer: Pink
+    choices:
+    - Red
+    - Yellow
+    - Violet
+    - Green
+    - Orange
+  - question: Which is not a baby animal
+    answer: Goat
+    choices:
+    - Calf
+    - Kitten
+    - Puppy
+    - Foal
+  - question: Which does not collect water
+    answer: Tap
+    choices:
+    - Bucket
+    - Bottle
+    - Glass
+    - Pitcher
+  - question: Which one is not naturally occuring
+    answer: Dam
+    choices:
+    - Hill
+    - Valley
+    - River
+    - Mountain
+  - question: Which is not part of a classroom
+    answer: Playground
+    choices:
+    - Desk
+    - Blackboard
+    - Chalk
+    - Students
+  - question: Which month does not have 31 days
+    answer: June
+    choices:
+    - August
+    - December
+    - January
+    - October
+  - question: Which one is not a relation
+    answer: Friend
+    choices:
+    - Parent
+    - Child
+    - Uncle
+    - Aunt
+    - Cousin
+  - question: Which one grows above ground
+    answer: Cabbage
+    choices:
+    - Radish
+    - Ginger
+    - Turmeric
+    - Potato
+  - question: Which one is not part of a language
+    answer: Page
+    choices:
+    - Paragraph
+    - Sentence
+    - Words
+    - Alphabets
+  - question: Which planet is not a Greek or Roman God
+    answer: Earth
+    choices:
+    - Venus
+    - Saturn
+    - Mercury
+  - question: Which is not a unit of measuring distance
+    answer: Acre
+    choices:
+    - Mile
+    - Feet
+    - Meter
+    - Yard
+  - question: Which country is not in Asia
+    answer: France
+    choices:
+    - Japan
+    - Nepal
+    - China
+  - question: Which is not lighter than water
+    answer: Stone
+    choices:
+    - Wood
+    - Cork
+    - Paper
+  - question: Which is not related to the sea
+    answer: Oasis
+    choices:
+    - Island
+    - Coast
+    - Harbour
+  - question: Which is not a gas
+    answer: Iodine
+    choices:
+    - Hydrogen
+    - Oxygen
+    - Nitrogen
+  - question: Which is not a cat
+    answer: Fox
+    choices:
+    - Lion
+    - Tiger
+    - Leopard
+    - Panther
+  - question: Which is not a writing utencil
+    answer: Calculator
+    choices:
+    - Pen
+    - Pencil
+    - Marker
 --- !u!4 &435970077
 Transform:
   m_ObjectHideFlags: 0
@@ -1540,29 +1694,14 @@ MonoBehaviour:
   - word: binge
   - word: glare
   - word: 'nurse '
-  - word: igloo
   - word: north
   - word: south
-  - word: doctor
   - word: switch
   - word: solar
   - word: gravity
-  - word: school
-  - word: energy
   - word: phone
-  - word: turtle
-  - word: north
   - word: wasp
   - word: desk
-  - word: wife
-  - word: woman
-  - word: hint
-  - word: pride
-  - word: flag
-  - word: smoke
-  - word: rainbow
-  - word: equal
-  - word: friend
 --- !u!1 &1679456224
 GameObject:
   m_ObjectHideFlags: 0

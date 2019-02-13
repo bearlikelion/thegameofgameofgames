@@ -19,15 +19,18 @@
   <body class="d-flex flex-column h-100">
   	<main role="main" class="flex-shrink-0">
 		<div class="container">
-			<h1><p class="text-center">The Game of Game of Games Leaderboard</p></h1>
+			<h1><p class="text-center">The Game of Game of Games Online Leaderboard</p></h1>
+
+			<hr />
+			
 
 			<table class="table table-hover">
-			  <thead class="thead-light">
+			  <thead>
 				<tr>	          
 				  <th scope="col">Name</th>
 				  <th></th>
-				  <th scope="col">Correct</th>				  
-				  <th scope="col">Speed</th>
+				  <th class="text-center" scope="col">Correct</th>				  
+				  <th class="text-center" scope="col">Speed</th>
 				</tr>
 			  </thead>
 			  <tbody id="records_table">
@@ -44,7 +47,14 @@
 
 	<footer class="footer mt-auto py-3">
 	  <div class="container">
-	    <span class="text-muted">Developed by <a href="https://arneman.me" target="_blank">Mark</a> for the <a href="https://bearlikelion.itch.io/the-game-of-game-of-games">#TVGameJam</a>. Powered by <a href="https://dreamlo.com" target="_blank">Dreamlo.</a></span>
+	  	<div class="row">
+		  	<div class="col text-muted text-left">
+		  		<span>Developed by <a href="https://arneman.me" target="_blank">Mark</a> for the <a href="https://bearlikelion.itch.io/the-game-of-game-of-games">#TVGameJam</a>. Powered by <a href="https://dreamlo.com" target="_blank">Dreamlo.</a></span>
+		  	</div>	    
+		  	<div class="col text-muted text-right">
+		  		<span>Scores from: <span class="timestamp"></span></span>	
+		  	</div>	   
+		</div>
 	  </div>
 	</footer> 
 
@@ -92,27 +102,30 @@
 	</script>							
 
 	<script>
-		var url = 'https://www.dreamlo.com/lb/5c5dd477b639870c248d3350/json';
+		var url = 'https://www.dreamlo.com/lb/5c5dd477b639870c248d3350/json';		
+		lscache.remove(url); // DEBUG
 
 		if (cachedJson = lscache.get(url)) {
-			console.log("Loaded from cache");
+			console.log("Loaded from cache");			
 			ShowScores(cachedJson);
 		} else {
 			console.log("Fetch Scores");
-			$.getJSON(url).done(function (data) {
-				lscache.set(url, data);
+			$.getJSON(url).done(function (data) {				
+				lscache.set(url, data, 2);				
+				lscache.set('timestamp', new Date().toLocaleTimeString(), 2);
 				ShowScores(data);
 			});
 		}		
 
 		function ShowScores(data) {
 			$( ".loading" ).remove();
+			$(".timestamp").text(lscache.get('timestamp'));
 			$.each(data.dreamlo.leaderboard.entry, function(i, item) {
 				console.log(item);
 				var $tr = $('<tr>').append(
 					$('<td colspan="2">').text(item.text),
-					$('<td>').text(item.score),
-					$('<td>').text(item.seconds)
+					$('<td class="text-center">').text(item.score),
+					$('<td class="text-center">').text(item.seconds)
 				).appendTo("#records_table");
 			});
 		}

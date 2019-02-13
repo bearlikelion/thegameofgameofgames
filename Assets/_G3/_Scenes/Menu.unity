@@ -416,6 +416,7 @@ MonoBehaviour:
   startButton: {fileID: 1921448448}
   ready1: {fileID: 1042970293}
   ready2: {fileID: 1317518525}
+  textDelay: 1.5
 --- !u!82 &216031030
 AudioSource:
   m_ObjectHideFlags: 0
@@ -780,11 +781,6 @@ Prefab:
     - target: {fileID: 4980736962818758, guid: f60434e2d6c1b904f82925bd0bb1d42f, type: 2}
       propertyPath: m_RootOrder
       value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 108879779451098134, guid: f60434e2d6c1b904f82925bd0bb1d42f,
-        type: 2}
-      propertyPath: m_DrawHalo
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f60434e2d6c1b904f82925bd0bb1d42f, type: 2}
