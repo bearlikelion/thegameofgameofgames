@@ -21,6 +21,7 @@ public class HighScores : MonoBehaviour {
     [System.Serializable]
     public class Leaderboard {
         public Entry[] entry;
+        public Entry single;
     }
 
     [System.Serializable]
@@ -53,9 +54,6 @@ public class HighScores : MonoBehaviour {
         Rootobject scores = new Rootobject();
         scores = JsonUtility.FromJson<Rootobject>(leaderboard);
 
-        Debug.Log(leaderboard);
-        Debug.Log(scores);
-
         if (scores.dreamlo.leaderboard.entry != null) {
             loading.SetActive(false);
 
@@ -67,20 +65,19 @@ public class HighScores : MonoBehaviour {
 
             entries = entries.OrderByDescending(x => x.score).ThenByDescending(x => x.seconds).ToList();
 
-            Debug.Log(entries.Count);
-
             foreach (Entry player in entries) {
                 GameObject childScore = Instantiate(scoreEntry, content.transform);
                 childScore.transform.Find("Name").GetComponent<Text>().text = player.text;
                 childScore.transform.Find("Correct").GetComponent<Text>().text = player.score.ToString();
                 childScore.transform.Find("Speed").GetComponent<Text>().text = player.seconds.ToString();
 
-                if (player.text == _gameManager.Guid) {
+                if (player.name == _gameManager.Guid) {
                     childScore.GetComponent<Image>().color = new Color32(80, 160, 89, 200);
                 }
             }
-        } else {
-            loading.GetComponent<Text>().text = "No Highscores";
+        } else {            
+            StartCoroutine(Fake2Scores());
+            // loading.GetComponent<Text>().text = "No Highscores";
         }
     }
 
@@ -92,6 +89,21 @@ public class HighScores : MonoBehaviour {
             SceneManager.LoadScene("Questions");
         } else {
             SceneManager.LoadScene("Menu");
+        }
+    }
+
+    IEnumerator Fake2Scores() {
+        string url = "https://dreamlo.com/lb/" + Secret.PrivateKey + "/add/Alex/0/0/Alex";
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(url)) {
+            yield return webRequest.SendWebRequest();
+
+        }
+
+        url = "https://dreamlo.com/lb/" + Secret.PrivateKey + "/add-json/Bob/0/0/Bob";
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(url)) {
+            yield return webRequest.SendWebRequest();
+            leaderboard = webRequest.downloadHandler.text;
+            DisplayScores();
         }
     }
 

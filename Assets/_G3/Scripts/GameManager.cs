@@ -5,34 +5,49 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
-	public string playerName = "";
-	public int correct = 0, strikes = 0, speed = 0;
-	private System.Guid guid;
+    public static GameManager instance;
 
-	public string Guid {
-		get { return guid.ToString(); }
-	}
+    public bool isGameOver = false;
+    public string playerName = "";
+    public int correct = 0, strikes = 0, speed = 0;
+    private string guid = "";
 
-    void Awake () {
-        DontDestroyOnLoad(gameObject);
+    public string Guid {
+        get { return guid; }
     }
     
-    void Start () {
-        GenerateGUID();		
-	}
 
-	public void GameOver() {
-        Debug.Log("Game Over!");
-        if (strikes < 3) {
-            Debug.Log("Ran out of questions");
+    void Awake () {
+        if (instance == null) {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        } else if (instance != this) {
+            Destroy(gameObject);
         }
 
-		SceneManager.LoadScene("HighScore");
+        DontDestroyOnLoad(gameObject);
     }
 
-    void GenerateGUID() {
-        guid = System.Guid.NewGuid();
-        Debug.Log(guid.ToString());
+    void Start () {
+        if (guid == "") {
+            GenerateGUID();
+        }
     }
 
+    public void ShowScores() {
+        Debug.Log("Go to: Leaderboard"); // BRAVE CAPTAIN NUTCRACKER
+        SceneManager.LoadScene("HighScore");
+    }
+
+    public void GameOver () {
+        Debug.Log("Game Over!");
+        isGameOver = true;
+        SceneManager.LoadScene("Menu");
+        // SceneManager.LoadScene("HighScore");
+    }
+
+    void GenerateGUID () {
+        guid = System.Convert.ToBase64String(System.Guid.NewGuid().ToByteArray()); // Short GUID
+        Debug.Log(guid);
+    }
 }

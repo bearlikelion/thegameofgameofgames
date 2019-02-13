@@ -34,9 +34,7 @@ QualitySettings:
     asyncUploadBufferSize: 4
     resolutionScalingFixedDPIFactor: 1
     excludedTargetPlatforms:
-    - Standalone
     - iPhone
-    - WebGL
   - serializedVersion: 2
     name: Low
     pixelLightCount: 0
@@ -65,9 +63,7 @@ QualitySettings:
     asyncUploadBufferSize: 4
     resolutionScalingFixedDPIFactor: 1
     excludedTargetPlatforms:
-    - WebGL
     - iPhone
-    - Standalone
   - serializedVersion: 2
     name: Medium
     pixelLightCount: 1
@@ -96,9 +92,7 @@ QualitySettings:
     asyncUploadBufferSize: 4
     resolutionScalingFixedDPIFactor: 1
     excludedTargetPlatforms:
-    - WebGL
     - iPhone
-    - Standalone
   - serializedVersion: 2
     name: High
     pixelLightCount: 2

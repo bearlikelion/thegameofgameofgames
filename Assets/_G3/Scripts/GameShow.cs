@@ -8,10 +8,11 @@ using System.Collections.Generic;
 
 public class GameShow : MonoBehaviour {
 
-    public bool skipReady, shuffleCategories;
-    public int questionLimit = 5;
+    public int questionLimit = 3;
+    public bool shuffleCategories;
 
     private int questionCount = 0;
+    private string challengeString = "Hard Mode: Shuffle All Categories";
     private bool timerStarted = false, ticked = false, readyCount = false;
     private float timeLeft, countdown = 10.0f, waitTime = 1.5f, readyTimer = 3.0f;
 
@@ -65,11 +66,24 @@ public class GameShow : MonoBehaviour {
         }
     }
 
+    private void IncreaseDifficulty () {
+        if (_gameManager.correct > 5) {
+            questionLimit = 4;
+        } else if (_gameManager.correct > 10) {
+            questionLimit = 5;
+        } else if (_gameManager.correct > 15) {
+            questionLimit = 7;
+        }
+    }
+
     private void SelectCategory() {
         Debug.Log("Select Category");
-        List<string> category = new List<string>();
+
+        IncreaseDifficulty();        
+        
         questionText.text = "";
         shuffleCategories = false;
+        List<string> category = new List<string>();
 
         for (int i = 0; i < categories.Count; i++) {
             Category _cat = categories[i].GetComponent<Category>();
@@ -78,7 +92,8 @@ public class GameShow : MonoBehaviour {
             }
         }
 
-        if (categories.Count < 3) {
+        if (categories.Count < 1) {
+            Debug.Log("Out of categories!");
             _gameManager.GameOver();
         }
         if (categoryChoice == null || categoryChoice.Count < 3) {
@@ -97,18 +112,18 @@ public class GameShow : MonoBehaviour {
                 break;
             }
         }
-        category.Add("Hard Mode: Shuffle All Categories");
+        category.Add(challengeString);
 
-        // TODO: build category buttons
+        // build category buttons
         List<Vector3> positions = new List<Vector3>();
         positions.Add(new Vector3(-225, 0, 0));
         positions.Add(new Vector3(0, 0, 0));
         positions.Add(new Vector3(225, 0, 0));
         positions.Add(new Vector3(0, 0, 0));
 
-        for (int i = 0; i < positions.Count; i++) {
-            string catString = category[i];
-            if (i == 3) {
+        foreach (string catString in category) {
+            // Hard Mode button
+            if (catString == challengeString) {
                 GameObject button = Instantiate(buttonPrefab, GameObject.Find("Canvas/QuestionPanel").transform);
                 button.GetComponentInChildren<Text>().text = catString;
                 button.tag = "UserInput";
@@ -117,8 +132,9 @@ public class GameShow : MonoBehaviour {
                 button.GetComponent<Button>().onClick.AddListener(() => CategoryIs(catString));
             } else {
                 GameObject button = Instantiate(buttonPrefab, userInput.transform);
-                button.transform.localPosition = positions[i];
+                button.transform.localPosition = positions.First();
                 button.tag = "UserInput";
+                positions.RemoveAt(0);
 
                 button.GetComponentInChildren<Text>().text = catString;
                 button.GetComponent<Button>().onClick.AddListener(() => CategoryIs(catString));
@@ -138,7 +154,7 @@ public class GameShow : MonoBehaviour {
 
             for (int i=0; i < categoryChoice.Count; i++){
                 if (categoryChoice[i].name == category) {
-                categoryChoice.Remove(categoryChoice[i]);
+                    categoryChoice.Remove(categoryChoice[i]);
                 }
             }
         }
@@ -152,18 +168,12 @@ public class GameShow : MonoBehaviour {
         }
     }
 
-    private void NewQuestion () {
-        if (_gameManager.strikes < 3) {
-            if (shuffleCategories) {
-                int r = Random.Range(0, categories.Count);
-                _category = categories[r].GetComponent<Category>();
-
-                if (_category.Count == 0) {
-                    categories.Remove(categories[r]);
-                    int rr = Random.Range(0, categories.Count);
-                    _category = categories[rr].GetComponent<Category>();
-                }
-            }
+    private void NewQuestion () {    
+        if (shuffleCategories) {
+            int r = Random.Range(0, categories.Count);
+            _category = categories[r].GetComponent<Category>();
+        }
+        if (_category.Count > 0) {
             _category.SetQuestion();
 
             if (!timer.activeSelf) {
@@ -177,7 +187,11 @@ public class GameShow : MonoBehaviour {
             audioSource.PlayOneShot(timerSound);
             questionCount++;
         } else {
-            _gameManager.GameOver();
+            if (shuffleCategories) {
+                NewQuestion();
+            } else {
+                SelectCategory();
+            }
         }
     }
 
@@ -215,7 +229,9 @@ public class GameShow : MonoBehaviour {
         wrongPanel.GetComponentInChildren<Text>().text = strikeText;
         wrongPanel.SetActive(true);
 
-        if (shuffleCategories) {
+        if (_gameManager.strikes == 3) {
+            StartCoroutine(EndGame());
+        } else if (shuffleCategories) {
             StartCoroutine(NextQuestion());
         } else {
             StartCoroutine(CategorySelect());
@@ -229,6 +245,7 @@ public class GameShow : MonoBehaviour {
 
     private void StartCountdown() {
         readyTimer -= Time.deltaTime;
+
         if (!countdownPanel.activeSelf) {
             countdownPanel.SetActive(true);
         }
@@ -237,6 +254,7 @@ public class GameShow : MonoBehaviour {
             ticked = true;
             StartCoroutine(TickClock());
         }
+
         if (readyTimer > 0) {
             countdownPanel.transform.Find("Text").GetComponent<Text>().text = Mathf.Round(readyTimer).ToString();
         } else if(readyTimer < 0) {
@@ -284,6 +302,11 @@ public class GameShow : MonoBehaviour {
         }
     }
 
+    IEnumerator EndGame() {
+        yield return new WaitForSeconds(waitTime);
+        _gameManager.GameOver();
+    }
+
 	IEnumerator NextQuestion() {
 		yield return new WaitForSeconds(waitTime);
         RemoveUIChildren();
@@ -307,7 +330,7 @@ public class GameShow : MonoBehaviour {
 
     IEnumerator TickClock () {
         audioSource.PlayOneShot(clockTick);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.75f);
         ticked = false;
     }
 }
