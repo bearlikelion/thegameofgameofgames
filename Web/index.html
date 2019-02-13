@@ -29,6 +29,11 @@
 	        </tr>
 	      </thead>
 	      <tbody id="records_table">
+	      	<tr class="loading">
+	      		<td></td>
+	      		<td><h1>Loading</h1></td>
+	      		<td></td>
+	      	</tr>	      	
 	      </tbody>
 	    </table>
 	</div>	  
@@ -48,6 +53,7 @@
 		console.log();
 
 		$(function() {
+			$( ".loading" ).remove();
 		    $.each(response.dreamlo.leaderboard.entry, function(i, item) {
 		    	console.log(item);
 		        var $tr = $('<tr>').append(
