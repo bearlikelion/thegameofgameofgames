@@ -1,134 +1,158 @@
 <!doctype html>
 <html lang="en" class="h-100">
   <head>
-	<!-- Required meta tags -->
-	<meta charset="utf-8">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
 
-	<title>The Game of Game of Games Leaderboards</title>
+    <title>The Game of Game of Games Leaderboards</title>
 
-	<style type="text/css">
-		.footer {
-		  background-color: #f5f5f5;
-		}
-	</style>
+    <style type="text/css">
+        .footer {
+          background-color: #f5f5f5;
+        }
+    </style>
   </head>
   <body class="d-flex flex-column h-100">
-  	<main role="main" class="flex-shrink-0">
-		<div class="container">
-			<h1><p class="text-center">The Game of Game of Games Online Leaderboard</p></h1>
+    <main role="main" class="flex-shrink-0">
+        <div class="container">
+            <h1><p class="text-center">The Game of Game of Games</p></h1>
 
-			<hr />
-			
+            <hr />
 
-			<table class="table table-hover">
-			  <thead>
-				<tr>	          
-				  <th scope="col">Name</th>
-				  <th></th>
-				  <th class="text-center" scope="col">Correct</th>				  
-				  <th class="text-center" scope="col">Speed</th>
-				</tr>
-			  </thead>
-			  <tbody id="records_table">
-			  </tbody>
-			</table>
+            <div class="row">
+                <div class="col">
+                    <p>The Game of Game of Games is my entry into the <a href="https://itch.io/jam/tvgamejam">#TVGameJam</a>.</p>
+                    <p>This was a <strong>solo development effort as well as my first released</strong> Unity project!</p>
+                        It is inspired by the television show, <a href="https://www.nbc.com/ellens-game-of-games">Ellen's Game of Games</a>.</p>
 
-			<div class="loading d-flex justify-content-center">			
-			  	<div class="spinner-border" role="status">  	
-			    	<span class="sr-only">Loading...</span>
-			  	</div>
-			</div>		
-		</div>
-	</main>
+                    <p>The player is prompted to select a category and answer the corresponding questions within a ten second time limit. If they get an answer wrong, they fail the category and must choose another.  Three wrong strikes and game over. There is also a challenge mode that endlessly shuffles categories until the three strike limit is reached.</p>
 
-	<footer class="footer mt-auto py-3">
-	  <div class="container">
-	  	<div class="row">
-		  	<div class="col text-muted text-left">
-		  		<span>Developed by <a href="https://arneman.me" target="_blank">Mark</a> for the <a href="https://bearlikelion.itch.io/the-game-of-game-of-games">#TVGameJam</a>. Powered by <a href="https://dreamlo.com" target="_blank">Dreamlo.</a></span>
-		  	</div>	    
-		  	<div class="col text-muted text-right">
-		  		<span>Scores from: <span class="timestamp"></span></span>	
-		  	</div>	   
-		</div>
-	  </div>
-	</footer> 
+                    <p>The game treats each correct answer as a point, and stores the time remaining for every correct answer as the player's 'speed.' Scores are submitted to the <a href="https://arneman.me/thegameofgameofgames/">leader board</a> and sorted by questions correct then by speed.</p>
+                </div>
+            </div>
 
-	<!-- <script src="https://www.dreamlo.com/lb/5c5dd477b639870c248d3350/js" type="text/javascript"></script> -->
+            <hr/ >
 
-	<!-- Optional JavaScript -->
-	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script> 
-	<script type="text/javascript" src="lscache.min.js"></script>
+            <div class="row">
+                <div class="col">
+                    <h1><p>Leaderboard</p></h1>
 
-	<script type="text/javascript">
-	  var _paq = window._paq || [];
-	  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-	  _paq.push(['trackPageView']);
-	  _paq.push(['enableLinkTracking']);
-	  (function() {
-	    var u="//stats.arneman.me/";
-	    _paq.push(['setTrackerUrl', u+'anal.php']);
-	    _paq.push(['setSiteId', '2']);
-	    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-	    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'anal.js'; s.parentNode.insertBefore(g,s);
-	  })();
-	</script>	
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th scope="col">Name</th>
+                          <th></th>
+                          <th class="text-center" scope="col">Correct</th>
+                          <th class="text-center" scope="col">Speed</th>
+                        </tr>
+                      </thead>
+                      <tbody id="records_table">
+                      </tbody>
+                    </table>
 
-	
-	<img src="https://stats.arneman.me/anal.php?idsite=2&amp;rec=1" style="border:0" alt="" />	
-						
-	<script type="text/javascript">
-	//<![CDATA[
-	var owa_baseUrl = 'http://wa.arneman.me/';
-	var owa_cmds = owa_cmds || [];
-	owa_cmds.push(['setSiteId', '7939fe2c9a05013cdd0f3ac71d6e3f44']);
-	owa_cmds.push(['trackPageView']);
-	owa_cmds.push(['trackClicks']);
+                    <div class="loading d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
-	(function() {
-		var _owa = document.createElement('script'); _owa.type = 'text/javascript'; _owa.async = true;
-		owa_baseUrl = ('https:' == document.location.protocol ? window.owa_baseSecUrl || owa_baseUrl.replace(/http:/, 'https:') : owa_baseUrl );
-		_owa.src = owa_baseUrl + 'modules/base/js/owanal.js';
-		var _owa_s = document.getElementsByTagName('script')[0]; _owa_s.parentNode.insertBefore(_owa, _owa_s);
-	}());
-	//]]>
-	</script>							
+    <footer class="footer mt-auto py-3">
+      <div class="container">
+        <div class="row">
+            <div class="col text-muted text-left">
+                <span>Developed by <a href="https://arneman.me" target="_blank">Mark</a> for the <a href="https://bearlikelion.itch.io/the-game-of-game-of-games">#TVGameJam</a>. Powered by <a href="https://dreamlo.com" target="_blank">Dreamlo.</a></span>
+            </div>
+            <div class="col text-muted text-right">
+                <span>Scores from: <span class="timestamp"></span></span>
+            </div>
+        </div>
+      </div>
+    </footer>
+    <img src="https://stats.arneman.me/anal.php?idsite=2&amp;rec=1" style="border:0" alt="" />
 
-	<script>
-		var url = 'https://www.dreamlo.com/lb/5c5dd477b639870c248d3350/json';		
-		lscache.remove(url); // DEBUG
+    <!-- <script src="https://www.dreamlo.com/lb/5c5dd477b639870c248d3350/js" type="text/javascript"></script> -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="lscache.min.js"></script>
 
-		if (cachedJson = lscache.get(url)) {
-			console.log("Loaded from cache");			
-			ShowScores(cachedJson);
-		} else {
-			console.log("Fetch Scores");
-			$.getJSON(url).done(function (data) {				
-				lscache.set(url, data, 2);				
-				lscache.set('timestamp', new Date().toLocaleTimeString(), 2);
-				ShowScores(data);
-			});
-		}		
+    <script type="text/javascript">
+      var _paq = window._paq || [];
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function() {
+        var u="//stats.arneman.me/";
+        _paq.push(['setTrackerUrl', u+'anal.php']);
+        _paq.push(['setSiteId', '2']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'anal.js'; s.parentNode.insertBefore(g,s);
+      })();
+    </script>
 
-		function ShowScores(data) {
-			$( ".loading" ).remove();
-			$(".timestamp").text(lscache.get('timestamp'));
-			$.each(data.dreamlo.leaderboard.entry, function(i, item) {
-				console.log(item);
-				var $tr = $('<tr>').append(
-					$('<td colspan="2">').text(item.text),
-					$('<td class="text-center">').text(item.score),
-					$('<td class="text-center">').text(item.seconds)
-				).appendTo("#records_table");
-			});
-		}
-	</script>
+    <script type="text/javascript">
+        //<![CDATA[
+        var owa_baseUrl = 'http://wa.arneman.me/';
+        var owa_cmds = owa_cmds || [];
+        owa_cmds.push(['setSiteId', '7939fe2c9a05013cdd0f3ac71d6e3f44']);
+        owa_cmds.push(['trackPageView']);
+        owa_cmds.push(['trackClicks']);
+
+        (function() {
+            var _owa = document.createElement('script'); _owa.type = 'text/javascript'; _owa.async = true;
+            owa_baseUrl = ('https:' == document.location.protocol ? window.owa_baseSecUrl || owa_baseUrl.replace(/http:/, 'https:') : owa_baseUrl );
+            _owa.src = owa_baseUrl + 'modules/base/js/owanal.js';
+            var _owa_s = document.getElementsByTagName('script')[0]; _owa_s.parentNode.insertBefore(_owa, _owa_s);
+        }());
+        //]]>
+    </script>
+
+    <script>
+        var url = 'https://www.dreamlo.com/lb/5c5dd477b639870c248d3350/json';
+        // lscache.remove(url); // DEBUG
+
+        function sortByKeyDesc(array, key) {
+            return array.sort(function (a, b) {
+                var x = a[key]; var y = b[key];
+                return ((x > y) ? -1 : ((x < y) ? 1 : 0));
+            });
+        }
+
+        function ShowScores(score) {
+            $( ".loading" ).remove();
+            $(".timestamp").text(lscache.get('timestamp'));
+            $.each(score, function(i, item) {
+                // console.log(item);
+                var $tr = $('<tr>').append(
+                    $('<td colspan="2">').text(item.text),
+                    $('<td class="text-center">').text(item.score),
+                    $('<td class="text-center">').text(item.seconds)
+                ).appendTo("#records_table");
+            });
+        }
+
+        if (cachedJson = lscache.get(url)) {
+            console.log("Loaded from cache");
+            ShowScores(cachedJson);
+        } else {
+            console.log("Fetch Fresh Scores");
+            $.getJSON(url).done(function (data) {
+                scores = [];
+                scores = sortByKeyDesc(data.dreamlo.leaderboard.entry, "seconds");
+                scores = sortByKeyDesc(data.dreamlo.leaderboard.entry, "score");
+
+                lscache.set(url, scores, 2);
+                lscache.set('timestamp', new Date().toLocaleTimeString(), 2);
+                ShowScores(scores);
+            });
+        }
+    </script>
   </body>
 </html>
