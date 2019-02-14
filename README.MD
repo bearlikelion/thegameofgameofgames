@@ -4,7 +4,7 @@
 
 A game created by [Mark Arneman](https://arneman.me) for the [#TVGameJam](https://itch.io/jam/tvgamejam).
 
-**Play it in your browser or download it [here](https://bearlikelion.itch.io/the-game-of-game-of-games)!**
+**Play in your browser or download it [here](https://bearlikelion.itch.io/the-game-of-game-of-games)!**
 
 **[View the highscores](https://arneman.me/thegameofgameofgames/) online!**
 
@@ -12,9 +12,11 @@ A game created by [Mark Arneman](https://arneman.me) for the [#TVGameJam](https:
 
 The Game of Game of Games is my entry into the [#TVGameJam](https://itch.io/jam/tvgamejam). This was a **solo development effort as well as my first released** Unity project! It was inspired by the television show, [Ellen's Game of Games](https://www.nbc.com/ellens-game-of-games).
 
-The player is prompted to select a category and answer the corresponding questions within a ten second time limit. If they get an answer wrong, they fail the category and must choose another.  Three wrong strikes and you're out! There is also a challenge mode that endlessly shuffles categories until the three strike limit is reached.
+The project source is available on [GitHub​](https://github.com/bearlikelion/thegameofgameofgames)
 
-The game treats each correct answer as a point, and stores the time remaining for every correct answer as the player's 'speed.' Scores are submitted to the [leaderboard](https://arneman.me/thegameofgameofgames/) and sorted by questions correct then by speed.
+The player is prompted to select a category and answer the corresponding questions within a ten second time limit. If they get one answer wrong they fail the category and must choose another.  Three strikes and you're out! There is also a challenge mode that endlessly shuffles categories until the strike limit is reached.
+
+The game treats each correct answer as a point and stores the time remaining for every correct answer as the player's speed. Scores are submitted to the [leaderboard](https://arneman.me/thegameofgameofgames/) sorted by questions correct and then by speed.
 
 > Thanks to my wonderful wife Carina for helping with design, play testing, and research
 
