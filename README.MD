@@ -10,7 +10,7 @@ A game created by [Mark Arneman](https://arneman.me) for the [#TVGameJam](https:
 
 ## About
 
-The Game of Game of Games is my entry into the [#TVGameJam](https://itch.io/jam/tvgamejam). This was a **solo development effort as well as my first released** Unity project! It was inspired by the television show, [Ellen's Game of Games](https://www.nbc.com/ellens-game-of-games).
+The Game of Game of Games is my entry into the [#TVGameJam](https://itch.io/jam/tvgamejam). This was a **solo development effort as well as my first released game!** It was inspired by the television show, [Ellen's Game of Games](https://www.nbc.com/ellens-game-of-games).
 
 The project source is available on [GitHub​](https://github.com/bearlikelion/thegameofgameofgames)
 
