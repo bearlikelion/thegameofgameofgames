@@ -18,7 +18,7 @@ The player is prompted to select a category and answer the corresponding questio
 
 The game treats each correct answer as a point and stores the time remaining for every correct answer as the player's speed. Scores are submitted to the [leaderboard](https://arneman.me/thegameofgameofgames/) sorted by questions correct and then by speed.
 
-> Thanks to my wonderful wife Carina for helping with design, playtesting, and research
+> Thanks to my wonderful wife Carina for help with design, playtesting, and research
 
 ## Development
 
