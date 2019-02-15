@@ -11,6 +11,10 @@
     <title>The Game of Game of Games</title>
 
     <style type="text/css">
+        .itchio iframe {
+            margin: 0 auto;
+            display: block;
+        }
         .footer {
           background-color: #f5f5f5;
         }
@@ -24,11 +28,20 @@
             <hr />
 
             <div class="row">
+                <div class="col itchio">
+                    <div class="d-none d-md-none d-lg-block">
+                        <iframe src="https://itch.io/embed/366964?bg_color=ffffff&amp;fg_color=222222&amp;link_color=fa5c5c&amp;border_color=645483" width="552" height="167" frameborder="0"></iframe>
+                    </div>
+                    <div class="d-none d-xs-block d-sm-block d-md-block d-lg-none">
+                        <iframe src="https://itch.io/embed/366964?bg_color=ffffff&amp;fg_color=222222&amp;link_color=fa5c5c&amp;border_color=645483" width="208" height="167" frameborder="0"></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="d-none d-lg-block" />
+
+            <div class="row d-none d-lg-block">
                 <div class="col">
-                    <h4 class="text-center"><p>Play in your browser or download it <a href="https://bearlikelion.itch.io/the-game-of-game-of-games">here</a>!</p></h4>
-
-                    <hr />
-
                     <p>The Game of Game of Games is my entry into the <a href="https://itch.io/jam/tvgamejam" target="_blank">#TVGameJam</a>. This was a <strong>solo development effort as well as my first game!</strong> It was inspired by the television show, <a href="https://www.nbc.com/ellens-game-of-games" target="_blank">Ellen's Game of Games</a>.</p>
 
                     <p>The project source is available on <a href="https://github.com/bearlikelion/thegameofgameofgames">GitHub</a></p>
@@ -41,7 +54,7 @@
                 </div>
             </div>
 
-            <hr />
+            <hr class="d-none d-lg-block" />
 
             <div class="row">
                 <div class="col">
