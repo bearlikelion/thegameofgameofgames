@@ -38,6 +38,8 @@ public class HighScores : MonoBehaviour {
     private string leaderboard = "";
     private GameManager _gameManager;
 
+    private static string scoreUrl = "https://dreamlo.gear.host/lb/";
+
     // TOOD: Fix High Scores
     void Start () {
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -75,7 +77,7 @@ public class HighScores : MonoBehaviour {
                     childScore.GetComponent<Image>().color = new Color32(80, 160, 89, 200);
                 }
             }
-        } else {            
+        } else {
             StartCoroutine(Fake2Scores());
             // loading.GetComponent<Text>().text = "No Highscores";
         }
@@ -93,13 +95,13 @@ public class HighScores : MonoBehaviour {
     }
 
     IEnumerator Fake2Scores() {
-        string url = "https://dreamlo.com/lb/" + Secret.PrivateKey + "/add/Alex/0/0/Alex";
+        string url = scoreUrl + Secret.PrivateKey + "/add/Alex/0/0/Alex";
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url)) {
             yield return webRequest.SendWebRequest();
 
         }
 
-        url = "https://dreamlo.com/lb/" + Secret.PrivateKey + "/add-json/Bob/0/0/Bob";
+        url = scoreUrl + Secret.PrivateKey + "/add-json/Bob/0/0/Bob";
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url)) {
             yield return webRequest.SendWebRequest();
             leaderboard = webRequest.downloadHandler.text;
@@ -108,7 +110,7 @@ public class HighScores : MonoBehaviour {
     }
 
     IEnumerator SendScores (string guid, int playerScore, int speed, string playerName) {
-        string url = "https://dreamlo.com/lb/" + Secret.PrivateKey + "/add-json/" + guid + "/" + playerScore + "/" + speed + "/" + playerName;
+        string url = scoreUrl + Secret.PrivateKey + "/add-json/" + guid + "/" + playerScore + "/" + speed + "/" + playerName;
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url)) {
             yield return webRequest.SendWebRequest();
             leaderboard = webRequest.downloadHandler.text;
@@ -117,12 +119,16 @@ public class HighScores : MonoBehaviour {
     }
 
     IEnumerator LoadScores () {
-        string url = "https://dreamlo.com/lb/" + Secret.PublicKey + "/json";
+        string url = scoreUrl + Secret.PublicKey + "/json";
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url)) {
             yield return webRequest.SendWebRequest();
-            leaderboard = webRequest.downloadHandler.text;
-            Debug.Log("Got scores");
-            DisplayScores();
+            if (webRequest.isNetworkError) {
+                Debug.Log(webRequest.error);
+            } else {
+                leaderboard = webRequest.downloadHandler.text;
+                Debug.Log("Got scores");
+                DisplayScores();
+            }
         }
     }
 }
