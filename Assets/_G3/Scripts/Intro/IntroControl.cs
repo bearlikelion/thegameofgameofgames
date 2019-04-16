@@ -17,7 +17,9 @@ public class IntroControl : MonoBehaviour {
     private GameObject menu, intro, risingPlatform;
 
     [SerializeField]
-    private float textDelay = 1.5f;
+    private float textDelay = 3.0f;
+
+    private float textSpeed = 1.0f;
 
 
     private void Start() {
@@ -51,7 +53,7 @@ public class IntroControl : MonoBehaviour {
                 _gameManager.ShowScores();
             } else {
                 LoadQuestionScene();
-            }            
+            }
         }
     }
 
@@ -71,13 +73,13 @@ public class IntroControl : MonoBehaviour {
         if (_gameManager.playerName == "" && inputField.text != "") {
             _gameManager.playerName = inputField.text;
         }
-        showStarted = true;        
+        showStarted = true;
         QueueEllen();
     }
 
     void QueueEllen() {
         menu.SetActive(false);
-        hiddenLogo.SetActive(true);        
+        hiddenLogo.SetActive(true);
 
         // Ellen Dance
         ellen.transform.DOShakeRotation(1f, new Vector3(0, 135f, 0), 1).SetLoops(-1);
@@ -121,7 +123,7 @@ public class IntroControl : MonoBehaviour {
 
     private void StartIntroText() {
         string introText = "Hi " + _gameManager.playerName + "! I am Ellen DeCube, and welcome to: \n <b>The Game of Game of Games!</b>";
-        text.DOText(introText, textDelay).OnComplete(IntroText1);
+        text.DOText(introText, textSpeed).OnComplete(IntroText1);
     }
 
     private void IntroText1() {
@@ -132,7 +134,7 @@ public class IntroControl : MonoBehaviour {
         yield return new WaitForSeconds(textDelay);
         text.text = "";
         string introText = "Select a category and answer the related questions.\n One wrong is a <b>strike</b>\n Three strikes and you're out!";
-        text.DOText(introText, textDelay).OnComplete(IntroText2);
+        text.DOText(introText, textSpeed).OnComplete(IntroText2);
     }
 
     private void IntroText2 () {
@@ -143,7 +145,7 @@ public class IntroControl : MonoBehaviour {
         yield return new WaitForSeconds(textDelay);
         text.text = "";
         string introText = "For a challenge, try playing with shuffled categories!";
-        text.DOText(introText, textDelay).OnComplete(ReadyCheck);
+        text.DOText(introText, textSpeed).OnComplete(ReadyCheck);
     }
 
     private void ReadyCheck() {

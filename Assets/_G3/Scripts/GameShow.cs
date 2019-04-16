@@ -79,8 +79,8 @@ public class GameShow : MonoBehaviour {
     private void SelectCategory() {
         Debug.Log("Select Category");
 
-        IncreaseDifficulty();        
-        
+        IncreaseDifficulty();
+
         questionText.text = "";
         shuffleCategories = false;
         List<string> category = new List<string>();
@@ -119,16 +119,17 @@ public class GameShow : MonoBehaviour {
         positions.Add(new Vector3(-225, 0, 0));
         positions.Add(new Vector3(0, 0, 0));
         positions.Add(new Vector3(225, 0, 0));
-        positions.Add(new Vector3(0, 0, 0));
+        // positions.Add(new Vector3(0, 0, 0));
 
         foreach (string catString in category) {
             // Hard Mode button
             if (catString == challengeString) {
                 GameObject button = Instantiate(buttonPrefab, GameObject.Find("Canvas/QuestionPanel").transform);
+                button.transform.localPosition = Vector3.zero;
                 button.GetComponentInChildren<Text>().text = catString;
                 button.tag = "UserInput";
-                button.GetComponent<RectTransform>().sizeDelta = new Vector2(450, 75);
                 button.GetComponent<Image>().color = Scheme.Red;
+                button.GetComponent<RectTransform>().sizeDelta = new Vector2(450, 75);
                 button.GetComponent<Button>().onClick.AddListener(() => CategoryIs(catString));
             } else {
                 GameObject button = Instantiate(buttonPrefab, userInput.transform);
@@ -168,7 +169,7 @@ public class GameShow : MonoBehaviour {
         }
     }
 
-    private void NewQuestion () {    
+    private void NewQuestion () {
         if (shuffleCategories) {
             int r = Random.Range(0, categories.Count);
             _category = categories[r].GetComponent<Category>();
